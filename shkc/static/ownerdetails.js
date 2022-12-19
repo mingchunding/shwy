@@ -956,3 +956,52 @@ function restore_title_click_event() {
         })
     })
 }
+
+function unhide_reports() {
+    var type=0
+    window.location.href.split('&').forEach(function(kv){p=kv.split('='); if (p[0]=='repo_type') type=parseInt(p[1])})
+    switch (type) {
+    case 1:
+        t=document.querySelector("table.tab3").firstElementChild
+        s = t.firstElementChild.innerHTML.replace(/\n\t*(<!--|-->)\t*/g,'\n')
+        t.firstElementChild.innerHTML = s
+        t.firstElementChild.children[1].hidden = true
+        t.firstElementChild.children[2].hidden = true
+        t.firstElementChild.lastElementChild.removeAttribute('colspan')
+        s = t.firstElementChild.lastElementChild.innerHTML.replace(/\(|\)/g, '').replace(':','<br>')
+        t.firstElementChild.lastElementChild.innerHTML = s
+        t.firstElementChild.lastElementChild.setAttribute('align', 'right')
+        t.firstElementChild.lastElementChild.setAttribute('rowspan', '2')
+        t.children[2].firstElementChild.setAttribute('colspan', '6')
+        s = t.children[5].children[1].innerHTML.replace(/\n\t*<!--\t*|\t*-->\t*\n/g,'\n')
+        t.children[5].children[1].innerHTML = s
+        t.children[5].children[1].setAttribute('colspan', "4")
+        t.children[4].children[1].setAttribute('colspan', "4")
+        break
+    case 2:
+        t = document.querySelector("table.tab2")
+        t.querySelectorAll("tr").forEach(function(r){
+            s=r.innerHTML.replace(/\n\t*(<!-- *| *-->)\t*/g,'')
+            r.innerHTML = s
+        })
+        t.querySelector("tr:first-child").children[1].setAttribute('width', '20%')
+        t.querySelector("tr:first-child").children[2].setAttribute('width', '18%')
+        t.querySelector("tr:first-child").children[3].setAttribute('width', '18%')
+        t.querySelector("tr:first-child").children[4].setAttribute('width', '18%')
+        for (; t.querySelector("tr:last-child").children.length < 5; )
+            t.querySelector("tr:last-child").appendChild(document.createElement("td"))
+        
+        break
+    case 6:
+        document.querySelectorAll("table.tab2").forEach(function(t){
+            t.querySelectorAll("tr").forEach(function(r){
+                s=r.innerHTML.replace(/<!-- *| *-->/g,'')
+                r.innerHTML = s
+            })
+            t.querySelector("tr:last-child").firstElementChild.setAttribute('colspan', '3')
+        })
+        break
+    default:
+        break
+    }
+}
