@@ -1,0 +1,192 @@
+@charset "UTF-8";
+
+body {
+ font-family: "宋体", "Arial", "Times New Roman";
+ font-size: 14px;
+ line-height: normal;
+ background-repeat:repeat;
+ background-attachment:fixed;
+ scrollbar-base-color: color;
+ scrollbar-track-color: #ffffff;
+ scrollbar-face-color: #999999;
+ scrollbar-highlight-color: #ffffff;
+ scrollbar-3dlight-color: #ffffff;
+ scrollbar-darkshadow-color: #ffffff;
+ scrollbar-shadow-color: #E9EDF3;
+ scrollbar-arrow-color: #476C9A;
+
+ }
+
+table.colwidth {max-width: 810px;}
+ /*表头导航条*/
+.navigationCss{font-size:14px;font-family:tahoma;font-weight:bold}
+
+ /*首标题*/
+.TopTitle{text-align:center;mso-bidi-font-weight:normal;font-size:18.0pt;font-family:黑体;mso-ascii-font-family:"Times New Roman";mso-hansi-font-family:"Times New Roman"; font-weight:bold}
+
+/*副标题*/
+.fubold{margin-top:0.5cm;margin-bottom:0.2cm;font-size:16px;font-family:tahoma;font-weight:bold;line-height:28px}
+
+/*标题文本*/
+.titletext { font-family: "宋体", "Arial", "Times New Roman"; font-size: 14px; font-weight: bold; font-style : normal;}
+
+.tab { font-family: "宋体", "Arial", "Times New Roman"; font-size: 18px; width: 645px; padding-left: 0px ; padding-right: 0px; padding-top:0px;padding-bottom: 0px;}
+/*表格文字纵向显示 */
+.tnt{text-align:center;font-weight: bold;}
+
+/*表格的边距*/
+.tab1 {
+	width: 670px;
+	border: 0;
+	cellpadding: 0px;
+	cellspacing: 0px;
+	padding-left: 0px ;
+    padding-right: 0px;
+    padding-top:0px;
+    padding-bottom: 0px;
+}
+/*表格的边距*/
+.tab2 { width: 670px; border:1px solid;cellpadding: 5px; cellspacing: 0px;
+	border-collapse: collapse;
+	padding-left: 0px ;
+    padding-right: 0px;
+    padding-top:0px;
+    padding-bottom: 0px;
+}
+/*表格的边距*/
+.tab3 {
+	/* width: 670px; */
+	border:2px solid;
+	cellpadding: 5px;
+	cellspacing: 0px;
+	border-collapse: collapse;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top:0px;
+	padding-bottom: 0px;
+}
+.tab_dev_top {margin-top:20; text-decoration: none; COLOR: #000000; font-family: "宋体", "Arial", "Times New Roman"; FONT-SIZE: 16px; font-weight: bold;}
+.tab_tr {margin-top:18;margin-bottom:6; text-decoration: none; COLOR: #000000; font-family: "宋体", "Arial", "Times New Roman"; FONT-SIZE: 16px; font-weight: bold;}
+.tab_date {margin-top:18;margin-bottom:6; text-decoration: none; COLOR: #000000; font-family: "宋体", "Arial", "Times New Roman"; FONT-SIZE: 14px;text-align:right;}
+/* 表格tr 文字显示 居中 加黑*/
+.tab_tr1 {
+	
+	text-decoration: none;
+	COLOR: #000000;
+	font-family: "宋体", "Arial", "Times New Roman";
+	FONT-SIZE: 14px;
+	MARGIN-OP: 2PT;
+	font-weight: bold;
+	text-align:center;
+	height: 35;
+	
+}
+/* 表格tr 文字显示 居中 加黑*/
+.tab_title {
+	text-decoration: none;
+	COLOR: #000000;
+	font-family: "宋体", "Arial", "Times New Roman";
+	FONT-SIZE: 16px;
+	text-align:center;
+	height: 35;
+	
+}
+
+/* 表格tr 文字显示 居中 加黑*/
+.tab_text {
+	text-decoration: none;
+	COLOR: #000000;
+	font-family: "宋体", "Arial", "Times New Roman";
+	FONT-SIZE: 16px;
+	text-align:center;
+	height: 35;
+	
+}
+
+
+
+/*文本样式 高度*/
+.tab_td { font-family: "宋体", "Arial", "Times New Roman"; font-size: 16px;  height: 35; }
+.tab_td_left { font-family: "宋体", "Arial", "Times New Roman"; font-size: 16px;  height: 35;text-align:left; }
+.tab_td_center { font-family: "宋体", "Arial", "Times New Roman"; font-size: 16px;  height: 35; text-align:center;}
+.tab_money {font-family: "宋体", "Arial", "Times New Roman";font-size: 16px;height: 35;text-align:right; padding-right: 5;}
+td.tab_money::after {content: ' 元'}}
+.tab_td_app{ font-family: "宋体", "Arial", "Times New Roman"; font-size: 10px;  }
+.tab_little { font-family: "宋体", "Arial", "Times New Roman"; font-size: 12px;  height: 35; }
+.tab_td_oneborder{font-family: "宋体", "Arial", "Times New Roman"; font-size: 16px;  
+display: inline-table;border: 0px ;clip: auto; }
+.tab_td_rightborder{font-family: "宋体", "Arial", "Times New Roman";font-size: 16px;/* display: inline-table; */border: 0px;text-align: right;padding-right: 5px;/* clip: auto; *//* border-right-style:solid; *//* border-right-width:1px; *//* width: fit-content; */}
+
+/*文本样式 无高度*/
+.noh_tab_td { font-family: "宋体", "Arial", "Times New Roman"; font-size: 16px; }
+.noh_tab_td_left { font-family: "宋体", "Arial", "Times New Roman"; font-size: 16px;  text-align:left; }
+.noh_tab_td_center { font-family: "宋体", "Arial", "Times New Roman"; font-size: 16px;  text-align:center;}
+.noh_tab_money { font-family: "宋体", "Arial", "Times New Roman"; font-size: 16px;  text-align:right;}
+.noh_tab_td_app{ font-family: "宋体", "Arial", "Times New Roman"; font-size: 10px;  }
+.noh_tab_little { font-family: "宋体", "Arial", "Times New Roman"; font-size: 12px; }
+ /*首行缩进*/
+.TextIndent{text-align:left;font-size:16px;	font-family:"宋体";"Arial", "Times New Roman"; text-indent:40; height: 25;}
+ 
+  /*首行缩进2*/
+.TextIndent2{text-align:left;font-size:16px;	font-family:"宋体";"Arial", "Times New Roman"; text-indent:90; height: 25;}
+.tab_tr4 { COLOR: #000000; font-family: "宋体", "Arial", "Times New Roman"; FONT-SIZE: 14px;  line-height:  normal; vertical-align: middle; 
+   text-decoration: none;}
+
+/*备注字体*/
+.tab_remark { font-family: "宋体", "Arial", "Times New Roman"; font-size: 12px; }
+/*备注字体缩进*/
+.tab_remark1 { font-family: "宋体", "Arial", "Times New Roman"; font-size: 12px; text-indent:30; }
+/*备注字体*/
+.tab_remark2 { font-family: "宋体", "Arial", "Times New Roman"; font-size: 14px; }
+/*制表单位盖章样式*/
+.tab_unit { font-family: "宋体", "Arial", "Times New Roman"; font-size: 16px; }
+
+/*制表单位盖章样式*/
+.tab_unit1 { font-family: "宋体", "Arial", "Times New Roman"; font-size: 14px; text-indent:30; }
+ 
+/*文本样式 */
+.tab_td2 { font-family: "宋体", "Arial", "Times New Roman"; font-size: 16px; text-align:center; }
+
+/*文本样式 文本框的值居右*/
+.tab_td12 {
+	font-family: "宋体", "Arial", "Times New Roman";
+	font-size: 14px;
+    height: 35;
+	text-align:right;
+}
+
+
+
+/*文本文字居中*/
+.tab_td11 { font-family: "宋体", "Arial", "Times New Roman"; font-size: 16px; text-align: center;
+    line-height:  normal;
+   vertical-align: middle; 
+   text-decoration: none;
+	COLOR: #000000;
+	MARGIN-OP: 2PT;
+	font-weight: bold;
+}
+
+
+/*首标题*/
+.TopTitle {
+	text-align: center;
+	mso-bidi-font-weight: normal;
+	font-size: 18.0pt;
+	font-family: 宋体;
+	mso-ascii-font-family: "Times New Roman";
+	mso-hansi-font-family: "Times New Roman";
+	font-weight: bold;
+}
+
+/*副标题*/
+.fubold {
+	margin-top: 0.5cm;
+	margin-bottom: 0.2cm;
+	font-size: 16px;
+	font-family: tahoma;
+	font-weight: bold;
+	line-height: 28px
+}
+
+ 

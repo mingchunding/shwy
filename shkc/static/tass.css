@@ -1,0 +1,425 @@
+@charset "UTF-8";
+
+.m-account-detail {
+    float: left;
+    margin-bottom: 15px;
+    margin-left: 2%;
+    padding-right: 2%;
+    width: 96%;
+    min-width: 686px
+}
+
+.m-increace-inquiry td {
+    min-width: 290px
+}
+
+#reports .title span::before,
+.m-increace-inquiry tr:last-child td.counting::after,
+.m-collect-info:nth-child(4) .title span::after,
+img:not([src]) {
+    content: url('data:image/gif;base64,R0lGODlhEAAQALMMAKqooJGOhp2bk7e1rZ2bkre1rJCPhqqon8PBudDOxXd1bISCef///wAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQFAAAMACwAAAAAEAAQAAAET5DJyYyhmAZ7sxQEs1nMsmACGJKmSaVEOLXnK1PuBADepCiMg/DQ+/2GRI8RKOxJfpTCIJNIYArS6aRajWYZCASDa41Ow+Fx2YMWOyfpTAQAIfkEBQAADAAsAAAAABAAEAAABE6QyckEoZgKe7MEQMUxhoEd6FFdQWlOqTq15SlT9VQM3rQsjMKO5/n9hANixgjc9SQ/CgKRUSgw0ynFapVmGYkEg3v1gsPibg8tfk7CnggAIfkEBQAADAAsAAAAABAAEAAABE2QycnOoZjaA/IsRWV1goCBoMiUJTW8A0XMBPZmM4Ug3hQEjN2uZygahDyP0RBMEpmTRCKzWGCkUkq1SsFOFQrG1tr9gsPc3jnco4A9EQAh+QQFAAAMACwAAAAAEAAQAAAETpDJyUqhmFqbJ0LMIA7McWDfF5LmAVApOLUvLFMmlSTdJAiM3a73+wl5HYKSEET2lBSFIhMIYKRSimFriGIZiwWD2/WCw+Jt7xxeU9qZCAAh+QQFAAAMACwAAAAAEAAQAAAETZDJyRCimFqbZ0rVxgwF9n3hSJbeSQ2rCWIkpSjddBzMfee7nQ/XCfJ+OQYAQFksMgQBxumkEKLSCfVpMDCugqyW2w18xZmuwZycdDsRACH5BAUAAAwALAAAAAAQABAAAARNkMnJUqKYWpunUtXGIAj2feFIlt5JrWybkdSydNNQMLaND7pC79YBFnY+HENHMRgyhwPGaQhQotGm00oQMLBSLYPQ9QIASrLAq5x0OxEAIfkEBQAADAAsAAAAABAAEAAABE2QycmUopham+da1cYkCfZ94UiW3kmtbJuRlGF0E4Iwto3rut6tA9wFAjiJjkIgZAYDTLNJgUIpgqyAcTgwCuACJssAdL3gpLmbpLAzEQA7');
+}
+
+p.title::after {
+    content: ' \25C0';
+    font-size: 14px;
+}
+
+#reports > .account-title p::before {
+    content: '附：';
+}
+
+#reports > .m-account-detail {
+    counter-reset: report_num
+}
+
+#reports .m-account-detail .account-title p::before {
+    content: '表-' counter(report_num) '：';
+    counter-increment: report_num;
+}
+
+#reports > .m-account-detail .collect-info::before {
+    content: 'func=' attr(func) ', type=' attr(type) ', Date: ' attr(startDate) ' 至 ' attr(endDate);
+    font-size: 16px;
+    font-weight: bold;
+    color: red;
+    display: none
+}
+
+#reports > .m-account-detail .collect-info table.colwidth::before {
+    content: attr(date);
+    display: none
+}
+
+#reports .account-title {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+#reports tbody tr:hover td {
+    background-color: lightblue;
+    cursor: default
+}
+
+.account-title[show='true'] p.title:after,
+p[show='true'].title::after {
+    content: ' \25bc';
+    font-size: 14px;
+    color: green
+}
+
+.details-statistics tbody[flag] {
+    counter-reset: flag_num 0
+}
+
+.details-statistics tbody[flag] tr:not(:last-child) td:first-child::before {
+    counter-increment: flag_num;
+    content: counter(flag_num);
+    float: left;
+    color: red;
+    margin-left: -8px
+}
+
+.title a:not([href])::before {
+    content: '下载详情数据'
+ }
+
+.title a,
+.title span {
+    float: right
+}
+
+.m-increace-inquiry tr:last-child td.counting::after {
+    float: right;
+}
+
+.m-collect-info:nth-child(4) .title span::after {
+    float: left
+}
+
+table {
+    width: 100%
+}
+
+table.tableorg th,td {
+    cursor: default
+}
+
+form {
+    counter-reset: statistics_num;
+    counter-set: page_of_project 3
+}
+
+form .m-account-detail tr:nth-child(1) th {
+    cursor: pointer
+}
+
+#details-list .account-content:hover tr:first-child td:first-child,
+form .m-account-detail tr:nth-child(1) th:hover {
+    background-color: lightgreen
+}
+
+form .m-account-detail th:nth-child(5):hover {
+    background-color: lightyellow
+}
+
+form .m-account-detail th {
+    min-width: 120px
+}
+
+form .m-collect-info:nth-child(3) th:last-child {
+    min-width: 240px
+}
+
+form .m-collect-info:not(:nth-child(3)) th {
+    min-width: 90px
+}
+
+form .m-collect-info:not(:nth-child(3)) th:first-child {
+    min-width: 30px
+}
+
+form .m-account-detail td:last-child:not(:only-child) {
+    text-align: left
+}
+
+form .m-collect-info:not(:nth-child(3)) td:not(:first-child) {
+    text-align: right
+}
+
+form .m-collect-info:not(:nth-child(3)) td:nth-child(4),
+form .m-collect-info:not(:nth-child(3)) td:nth-child(2),
+form .m-collect-info:not(:nth-child(3)) td:nth-child(3) {
+    text-align: center
+}
+
+form .m-collect-info:nth-child(3) .title span:not([class])::before {
+    content: '(过滤显示【'
+}
+
+form .m-collect-info:nth-child(3) .title span:not([class])::after {
+    content: '】相关条目及工程详情)'
+}
+
+form .m-collect-info tr:nth-child(2) th:nth-child(2)::before,
+form .m-collect-info tr:nth-child(2) th:nth-child(3)::before,
+form .m-collect-info tr:nth-child(2) th:nth-child(4)::before {
+    content: '至少 '
+}
+
+form .m-collect-info tr:nth-child(2) th:nth-child(5n+1)::before {
+    content: '包含 '
+}
+
+table.tableorg tr:hover td {
+    background-color: lightblue;
+    cursor: default
+}
+
+input.tass {
+    width: 80px;
+    margin-left: 10px
+}
+
+#filtergo {
+    width: 60px;
+    margin-left: 20px
+}
+
+td, .ipt {
+    font-weight: bold
+}
+
+table {
+    font-size: 12px;
+    padding-right: 15px;
+}
+
+select {
+    border: 0
+}
+
+.details-statistics tbody tr:not(.searchbox):hover td:first-child {
+    background-color: lightgreen;
+    cursor: pointer
+}
+
+tbody tr.searchbox:hover td {
+    background-color: lightpink
+}
+
+.details-statistics tbody td:nth-child(3),
+.details-statistics tbody td:nth-child(4),
+.details-statistics tbody td:nth-child(5) {
+    text-align: right
+}
+
+form .m-collect-info:not(:nth-child(3)) td:nth-child(7)::after,
+form .m-collect-info:not(:nth-child(3)) td:nth-child(5)::after,
+form .m-collect-info:not(:nth-child(3)) td:nth-child(6)::after,
+.details-statistics tbody tr:not(.searchbox) td:nth-child(3)::after,
+.details-statistics tbody tr:not(.searchbox) td:nth-child(4)::after,
+.details-statistics tbody tr:not(.searchbox) td:nth-child(5)::after {
+    content: ' 元'
+}
+
+.details-statistics tbody tr:not(.searchbox) td:nth-child(6)::after {
+    content: ' 家'
+}
+
+.details-statistics .searchbox td::after {
+    contain: ' '
+}
+
+.details-statistics tbody .searchbox td:first-child::before {
+    contain: '名称：'
+}
+
+.details-statistics tbody .searchbox td:last-child::before {
+    contain: '关键字：'
+}
+
+.details-statistics tbody td:last-child {
+    text-align: left;
+}
+
+.details-statistics tbody td:last-child:hover::after {
+    content: '\274E';
+    float: right;
+    cursor: pointer;
+}
+
+.details-statistics tbody tr.searchbox td:last-child::after {
+    content: '\2705';
+    padding: 0;
+    cursor: pointer;
+    float: right
+}
+
+.details-statistics th {
+    min-width: 93px
+}
+
+.details-statistics td:first-child input{
+    width: 80px
+}
+.details-statistics td:last-child input{
+    width: 320px
+}
+.details-statistics th:nth-child(2){
+    min-width: 50px
+}
+
+.details-statistics th:nth-child(3){
+    min-width: 60px
+}
+
+.details-statistics th:last-child {
+    min-width: 400px
+}
+
+.account-title p {
+    cursor: pointer;
+    width: 40%;
+    min-width: 658px
+}
+
+.account-title p:hover {
+    background-color: lightgreen
+}
+
+#details-list table {
+    max-width: 1000px;
+    min-width: 680px
+}
+
+#details-list {
+    float: left;
+    margin-top: 20px;
+}
+
+#details-list .m-account-detail {
+    counter-reset: project_num;
+}
+
+#details-list p::before {
+    content: '附：'
+}
+
+form .m-collect-info:not(:nth-child(3)),
+.details-statistics,
+#reports table.colwidth,
+#details-list .account-content:not([hidden]) {
+    page-break-before: auto;
+    page-break-inside: avoid;
+    page-break-after: auto;
+}
+
+.details-statistics .account-title p::before {
+    counter-increment: statistics_num;
+    content: '统计 ' counter(statistics_num) '：'
+}
+
+.details-statistics .title span::before {
+    content: '实施时间范围：'
+}
+
+.details-statistics td.show:first-child::after {
+    content: '\2713';
+    float: right;
+    color: green
+}
+
+form .collect-info tbody tr.paging td:last-child a {
+    counter-increment: page_of_project;
+}
+
+
+@media print {
+    form .m-collect-info thead tr:not(:first-child),
+    form .m-collect-info:nth-child(3) th:nth-child(4),
+    form .m-collect-info:nth-child(3) th:nth-child(3),
+    form .m-collect-info:nth-child(3) td:nth-child(4),
+    form .m-collect-info:nth-child(3) td:nth-child(3),
+    .details-statistics th:last-child,
+    .details-statistics td:last-child,
+    .details-statistics .searchbox,
+    #details-list tr:last-child,
+    #details-list tr:first-child a{
+        display: none
+    }
+
+    form .collect-info th {
+        min-width: 80px
+    }
+
+    form .collect-info tbody tr:not([hidden]) td:last-child a::after {
+        content: '第' counter(page_of_project) '页';
+        float: right;
+        color: lightgrey
+    }
+
+    #details-list .m-account-detail:not([hidden]) tr:first-child td::after {
+        counter-increment: project_num;
+        content: '【工程-'counter(project_num)'】';
+        float: right;
+        color: lightgrey
+    }
+}
+
+#details-list tr:first-child a {
+    float: right
+}
+
+@media screen {
+    #details-list .m-account-detail:not([hidden]) tr:first-child td::after {
+        counter-increment: project_num;
+        content: '【工程-'counter(project_num)'】';
+        float: left;
+    }
+
+    #details-list tr:first-child a:last-child::before {
+        content: '支取：';
+        float: left;
+        color: grey
+    }
+
+    #details-list tr:first-child a:not(:first-child)::after {
+        content: '、';
+        float: right;
+        color: grey
+    }
+}
+
+table.colwidth,
+table.report_tab_top {
+    background: url('yulan_bg.gif');
+    background-position: center top;
+}
+
+.collect-info[type='6'] table.report_tab_top,
+.collect-info[type='10'] table.report_tab_top,
+.collect-info[type='12'] table.report_tab_top{
+    max-width: 800px
+}
+
+table.merged thead td {
+    border: 1px solid;
+    color: #1b94dd;
+    background-color: #ecf7fd;
+    text-align: center
+}
+
+table.merged,
+table.merged tbody td {
+    border: 1px solid;
+}
+
+#reports table.tab1,
+#reports table.tab2 {
+    width: 100%
+}
+
+#reports table.tab2 td {
+    border: 1px solid
+}
