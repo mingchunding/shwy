@@ -234,7 +234,7 @@ function addEvents(type) {
             return searchResult.sortBy(idx, searchResult.sort[idx])
         })
     }
-
+    return
     document.querySelectorAll(".account-title p.title").forEach(function(x){
         x.setAttribute('show', 'true')
         x.addEventListener("click", function(e){
@@ -432,7 +432,7 @@ function createSearchBox() {
 
     if (i < cssl.length) {
         tasscss = cssl[i]
-//        addEvents("click")
+        addEvents("click")
     } else {
         tasscss = document.getElementById("tasscss")
     }
