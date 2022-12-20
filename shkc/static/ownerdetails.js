@@ -432,7 +432,7 @@ function createSearchBox() {
 
     if (i < cssl.length) {
         tasscss = cssl[i]
-        addEvents("click")
+//        addEvents("click")
     } else {
         tasscss = document.getElementById("tasscss")
     }
@@ -450,8 +450,8 @@ function createSearchBox() {
         addEvents("click")
     }
 
-	var title = document.querySelectorAll("p.title")[1]
-	title.appendChild(document.createElement("a"))
+    var title = document.querySelectorAll("p.title")[1]
+    title.appendChild(document.createElement("a"))
 
     var searchBoxCell = th.querySelector("tr th input")
     if (searchBoxCell) {
