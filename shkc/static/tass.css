@@ -6,7 +6,8 @@
     margin-left: 2%;
     padding-right: 2%;
     width: 96%;
-    min-width: 686px
+    min-width: 686px;
+    max-width: 1280px;
 }
 
 .m-increace-inquiry td {
@@ -118,7 +119,7 @@ form .m-collect-info {
 }
 
 form .m-collect-info .title::before {
-    content: '查询-' counter(query_num) '：'  
+    content: '查询-' counter(query_num) '：'
 }
 
 #details-list, #reports {
@@ -442,4 +443,37 @@ table.merged tbody td {
 
 #reports table.tab2 td {
     border: 1px solid
+}
+
+.m-account-search .f-search-content {
+    position: relative;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.m-account-search.nobdr {
+    display: grid;
+    border: 0;
+    padding: 0 0;
+    margin-top: 0;
+    grid-template-columns: auto auto auto auto;
+    min-width: 1150px;
+    justify-content: space-between;
+}
+
+.m-account-search .f-search-content input {
+    height: 24px;
+    width: 24px;
+}
+
+.m-account-search .f-search-content span {
+    display: inline-block;
+    position: relative;
+    top: -8px;
+    vertical-align: middle;
+}
+
+.m-account-search .f-search-content span:not(:last-child) {
+    border-right: 3px solid;
+    padding-right: 6px;
 }

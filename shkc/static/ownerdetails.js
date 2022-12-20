@@ -538,7 +538,7 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
     link = document.querySelector('a[href$="ownerpact/index_owner.do"]')
     if (link) link.target='_blank'
 } else if (window.location.href.match(/wxzjquery\/index_owner_zq.do$/)) {
-    document.user=$.parseJSON(window.localStorage.hou)
+    document.user=JSON.parse(window.localStorage.hou)
     document.addr=window.localStorage.addr.split(' ')[0].split('：')[1]
     var t=document.querySelector(".title")
     t.append(document.createElement("span"))
@@ -548,7 +548,6 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
         setTimeout(query_by_url, 100,
                    'https://962121.fgj.sh.gov.cn/wyweb/web/wyfeemp/ownerpact/index_owner.do',
                    post_query_projects_list)
-        if (false) {
         setTimeout(query_by_url, 100,
                    'https://962121.fgj.sh.gov.cn/wyweb/web/wyfeemp/wxzjquery/waterOfOwner.do',
                   post_query_account_balance)
@@ -556,7 +555,6 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
                    'https://962121.fgj.sh.gov.cn/wyweb/web/wyfeemp/wxzjquery/drawOfOwner.do')
         setTimeout(query_by_url, 100,
                    'https://962121.fgj.sh.gov.cn/wyweb/web/wyfeemp/wxzjquery/index_owner_sy.do')
-        }
         create_details_container()
         create_reports_container()
     }
@@ -735,46 +733,32 @@ function fetch_reports_list(container) {
     iframe.style.position = 'relative'
     container.reports = Array()
     iframe.hidden = true
+    iframe.addEventListener('error', function(event){
+        console.log('fail to fetch data from ' + this.src + ', retry again 1s later.')
+        setTimeout(function(){
+            this.src = 'https://962121.fgj.sh.gov.cn/wyweb/web/hmfmsweb/biz/hocacctreport/getSection.do'
+        }, 1000)
+    })
     iframe.addEventListener("load", function(event) {
         var progress = container.previousElementSibling.querySelector(".title span")
+        var func = this.contentDocument.location.href.match(/[^\/]+\.do/)[0]
 
-        if (undefined == document.unit_fund) {
-            var func = this.contentDocument.location.href.match(/[^\/]+\.do/)[0]
-            var idx = container.reports.length
-
-            if (func == 'getReportList.do') {
-                var trs = this.contentDocument.querySelectorAll("table.grid1 tbody tr")
-                if (idx < trs.length) {
-                    progress.innerText = '获取报表地址：第 ' + (idx + 1) + ' 项，剩余：' + (trs.length - idx - 1)
-                    var tr = trs[idx]
-                    func_param = tr.querySelector("a").getAttribute('onclick').match(/\d+/g)
-                    s = tr.querySelector("td").innerText
-                    s = s.replace(/上海市闵行区上海康城业主大会|莘松路958弄维园道43号|[\n\t ]*/g, '')
-                    container.reports.push({name: s, type: func_param[0]})
-                    if (func_param.length > 1) {
-                        container.reports[idx].unit_fund = func_param[1]
-                    }
-                    setTimeout(function(a){a.click()}, 100, trs[idx].querySelector('a'))
-                    return
-                }
-                document.unit_fund = trs[2].querySelector('a').getAttribute('onclick').match(/\d+/g)[1]
-            } else if (func != 'getSection.do') {
-                container.reports[idx-1].func = func.replace(/^get/,'')
-                switch (parseInt(container.reports[idx-1].type)) {
-                    case 5:
-                    case 9:
-                        container.reports[idx-1].origin = false
-                        break;
-                    default:
-                        container.reports[idx-1].origin = true
-                        break;
-                }
+        if (container.reports.length < 1) {
+            try {
+                container.reports = JSON.parse(window.localStorage.reports_link)
+                document.unit_fund = container.reports[2].unit_fund
+            } catch (e) {
+                container.reports = Array()
+                console.log(e)
             }
-
-            setTimeout(function(button){button.click()}, 100, this.contentDocument.querySelector(".btn"))
-            return
         }
-
+        if (undefined == document.unit_fund) {
+            fetch_reports_link(func, container, this.contentDocument, progress)
+            return
+        } else if (!JSON.parse(window.localStorage.reports_link)) {
+            window.localStorage.reports_link = JSON.stringify(container.reports)
+            console.log(container.reports)
+        }
         console.log(container.reports)
 
         var tab = this.contentDocument.querySelector("table.datagrid_gridtb")
@@ -808,6 +792,42 @@ function fetch_reports_list(container) {
     document.body.appendChild(iframe)
 }
 
+function fetch_reports_link(func, container, doc, progress) {
+    var idx = container.reports.length
+
+    if (func == 'getReportList.do') {
+        var trs = doc.querySelectorAll("table.grid1 tbody tr")
+        if (idx < trs.length) {
+            progress.innerText = '获取报表地址：第 ' + (idx + 1) + ' 项，剩余：' + (trs.length - idx - 1)
+            var tr = trs[idx]
+            func_param = tr.querySelector("a").getAttribute('onclick').match(/\d+/g)
+            s = tr.querySelector("td").innerText
+            s = s.replace(/上海市闵行区上海康城业主大会|莘松路958弄维园道43号|[\n\t ]*/g, '')
+            container.reports.push({name: s, type: func_param[0]})
+            if (func_param.length > 1) {
+                container.reports[idx].unit_fund = func_param[1]
+            }
+            setTimeout(function(a){a.click()}, 100, trs[idx].querySelector('a'))
+            return false
+        }
+        document.unit_fund = trs[2].querySelector('a').getAttribute('onclick').match(/\d+/g)[1]
+    } else if (func != 'getSection.do') {
+        container.reports[idx-1].func = func.replace(/^get/,'')
+        switch (parseInt(container.reports[idx-1].type)) {
+            case 5:
+            case 9:
+                container.reports[idx-1].origin = false
+                break;
+            default:
+                container.reports[idx-1].origin = true
+                break;
+        }
+    }
+
+    setTimeout(function(button){button.click()}, 100, doc.querySelector(".btn"))
+    return true
+}
+
 function fetch_report_data(box, tr, uri='https://962121.fgj.sh.gov.cn/wyweb/web/hmfmsweb/biz/hocacctreport/get') {
     if (!tr) return
 
@@ -817,7 +837,7 @@ function fetch_report_data(box, tr, uri='https://962121.fgj.sh.gov.cn/wyweb/web/
                 ' 项, 剩余：' + tr.sectionRowIndex
     if (box.querySelector('table[date="' + tr.lastElementChild.innerText + '"')) {
         /* data already exist */
-        if (/*tr.sectionRowIndex + 6 > tr.parentElement.children.length &&*/
+        if (/*tr.sectionRowIndex + 2 > tr.parentElement.children.length &&*/
             tr.sectionRowIndex > 0) {
             setTimeout(fetch_report_data, 1000, box, tr.previousElementSibling, uri)
         } else {
@@ -842,8 +862,9 @@ function fetch_report_data(box, tr, uri='https://962121.fgj.sh.gov.cn/wyweb/web/
     iframe.hidden = true
 
     iframe.addEventListener('load', function(event){
-        rtype = box.getAttribute("type")
-        if (rtype ==1 || rtype == 2 || rtype == 4 || rtype == 11) {
+        rtype = parseInt(box.getAttribute("type"))
+        unhide_reports(rtype, this.contentDocument)
+        if (rtype == 1 || rtype == 2 || rtype == 4 || rtype == 11) {
             var tab = this.contentDocument.querySelector("table.colwidth")
             tab.removeAttribute('background')
             tab.querySelector("tbody").children[0].hidden = true
@@ -884,7 +905,7 @@ function fetch_report_data(box, tr, uri='https://962121.fgj.sh.gov.cn/wyweb/web/
         }
         this.remove()
 
-        if (/*tr.sectionRowIndex + 4 > tr.parentElement.children.length &&*/
+        if (/*tr.sectionRowIndex + 2 > tr.parentElement.children.length &&*/
             tr.sectionRowIndex > 0) {
             setTimeout(fetch_report_data, 1000, box, tr.previousElementSibling, uri)
         } else {
@@ -957,13 +978,11 @@ function restore_title_click_event() {
     })
 }
 
-function unhide_reports() {
-    var type=0
-    window.location.href.split('&').forEach(function(kv){p=kv.split('='); if (p[0]=='repo_type') type=parseInt(p[1])})
+function unhide_reports(type, doc) {
     switch (type) {
     case 1:
-        t=document.querySelector("table.tab3").firstElementChild
-        s = t.firstElementChild.innerHTML.replace(/\n\t*(<!--|-->)\t*/g,'\n')
+        var t=doc.querySelector("table.tab3").firstElementChild
+        var s = t.firstElementChild.innerHTML.replace(/\n\t*(<!--|-->)\t*/g,'\n')
         t.firstElementChild.innerHTML = s
         t.firstElementChild.children[1].hidden = true
         t.firstElementChild.children[2].hidden = true
@@ -977,28 +996,49 @@ function unhide_reports() {
         t.children[5].children[1].innerHTML = s
         t.children[5].children[1].setAttribute('colspan', "4")
         t.children[4].children[1].setAttribute('colspan', "4")
+        t.children[3].appendChild(document.createElement('td'))
+        t.children[6].appendChild(document.createElement('td'))
+        t.children[6].lastElementChild.setAttribute('rowspan', '4')
         break
     case 2:
-        t = document.querySelector("table.tab2")
-        t.querySelectorAll("tr").forEach(function(r){
-            s=r.innerHTML.replace(/\n\t*(<!-- *| *-->)\t*/g,'')
-            r.innerHTML = s
-        })
-        t.querySelector("tr:first-child").children[1].setAttribute('width', '20%')
-        t.querySelector("tr:first-child").children[2].setAttribute('width', '18%')
-        t.querySelector("tr:first-child").children[3].setAttribute('width', '18%')
-        t.querySelector("tr:first-child").children[4].setAttribute('width', '18%')
-        for (; t.querySelector("tr:last-child").children.length < 5; )
+        var t = doc.querySelector("table.tab2")
+        var r = t.querySelectorAll("tr")
+        if (r.length < 1) break
+        var sum=Array(0,0)
+        for (var i=0; i<r.length-1; i++){
+            var s=r[i].innerHTML.replace(/(\n\t*)?(<!-- *| *-->)\t*/g,'')
+            r[i].innerHTML = s
+            if (i>0) try {
+                for (; r[i].children.length < r[0].children.length; )
+                    r[i].appendChild(document.createElement("td"))
+                sum[0] += parseFloat(r[i].children[3].innerText.match(/[\d\.]+/)[0])
+                sum[1] += parseFloat(r[i].children[4].innerText.match(/[\d\.]+/)[0])
+            } catch (e) { }
+        }
+        for (; t.querySelector("tr:last-child").children.length + 1 < r[0].children.length; ) {
             t.querySelector("tr:last-child").appendChild(document.createElement("td"))
-        
+        }
+        r[0].children[1].setAttribute('width', '20%')
+        r[0].children[2].setAttribute('width', '18%')
+        r[0].children[3].setAttribute('width', '18%')
+        r[0].children[4].setAttribute('width', '18%')
+        t.querySelector("tr:last-child").children[2].innerText = sum[0].toFixed(2)
+        t.querySelector("tr:last-child").children[3].innerText = sum[1].toFixed(2)
+        t.querySelector("tr:last-child").children[3].classList.add('tab_money')
+
         break
     case 6:
-        document.querySelectorAll("table.tab2").forEach(function(t){
+        doc.querySelectorAll("table.tab2").forEach(function(t){
             t.querySelectorAll("tr").forEach(function(r){
                 s=r.innerHTML.replace(/<!-- *| *-->/g,'')
                 r.innerHTML = s
             })
             t.querySelector("tr:last-child").firstElementChild.setAttribute('colspan', '3')
+            var c = t.querySelectorAll("tr:first-child td")
+            c[0].setAttribute('width', '8%')
+            c[1].setAttribute('width', '15%')
+            c[2].setAttribute('width', '32%')
+            c[3].setAttribute('width', '15%')
         })
         break
     default:
