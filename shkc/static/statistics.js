@@ -330,6 +330,7 @@ function hidden_by_dom(td) {
 			container[1].appendChild(p)
 		} else {
 			container[0].appendChild(p)
+			p.hidden = false
 			s=p.querySelector("tr:nth-child(8) td:nth-child(2)").innerText.replace(/[\.,， \n]+/g,',').replace(/,$/,'')
 			s.replace('/瀑\d+', '瀑布湾道')
 			console.log(e, s.split(','))
