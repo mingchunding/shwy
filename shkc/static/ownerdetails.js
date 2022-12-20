@@ -212,29 +212,31 @@ function sortByChild(e, idx, desc) {
 }
 
 function addEvents(type) {
-    searchResult = document.querySelector("form .m-collect-info thead")
-    searchResult.sortBy = (function(idx, desc) {
-        return sortByChild(this.previousElementSibling, idx, desc)
-    })
-    searchResult.sort = Array(0)
-
-    for (i = 0; i < searchResult.children[0].children.length; i++) {
-        searchResult.sort[i] = 0
-        var c=searchResult.children[0].children[i]
-        if (3 == i) {
-            c.addEventListener(type, function(e) {
-                hidden = this.parentElement.nextElementSibling.hidden;
-                this.parentElement.nextElementSibling.hidden = !hidden
-            })
-            continue
-        }
-        c.addEventListener(type, function(e) {
-            idx = this.cellIndex
-            searchResult.sort[idx] = !searchResult.sort[idx]
-            return searchResult.sortBy(idx, searchResult.sort[idx])
+    try {
+        searchResult = document.querySelector("form .m-collect-info thead")
+        searchResult.sortBy = (function(idx, desc) {
+            return sortByChild(this.previousElementSibling, idx, desc)
         })
-    }
-    return
+        searchResult.sort = Array(0)
+    
+        for (i = 0; i < searchResult.children[0].children.length; i++) {
+            searchResult.sort[i] = 0
+            var c=searchResult.children[0].children[i]
+            if (3 == i) {
+                c.addEventListener(type, function(e) {
+                    hidden = this.parentElement.nextElementSibling.hidden;
+                    this.parentElement.nextElementSibling.hidden = !hidden
+                })
+                continue
+            }
+            c.addEventListener(type, function(e) {
+                idx = this.cellIndex
+                searchResult.sort[idx] = !searchResult.sort[idx]
+                return searchResult.sortBy(idx, searchResult.sort[idx])
+            })
+        }
+    } catch (e) { }
+
     document.querySelectorAll(".account-title p.title").forEach(function(x){
         x.setAttribute('show', 'true')
         x.addEventListener("click", function(e){
@@ -423,33 +425,6 @@ function createSearchBox() {
         th.appendChild(h.parentElement)
     })
 
-    var cssl = document.styleSheets
-
-    for (var i=0; i<cssl.length; i++) {
-        if (!cssl[i].href) continue
-        if (cssl[i].href.match(/tass.css$/)) break
-    }
-
-    if (i < cssl.length) {
-        tasscss = cssl[i]
-        addEvents("click")
-    } else {
-        tasscss = document.getElementById("tasscss")
-    }
-
-    var styleSheets = ['printzhgbstyle.css', 'tass.css']
-    if (null == tasscss) {
-        styleSheets.forEach(function(css){
-            tasscss = document.createElement("link")
-            tasscss.href = 'http://localhost/' + css
-            tasscss.rel = 'stylesheet'
-            tasscss.type = 'text/css;charset=UTF-8'
-            document.head.appendChild(tasscss)
-        })
-
-        addEvents("click")
-    }
-
     var title = document.querySelectorAll("p.title")[1]
     title.appendChild(document.createElement("a"))
 
@@ -538,23 +513,93 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
     link = document.querySelector('a[href$="ownerpact/index_owner.do"]')
     if (link) link.target='_blank'
 } else if (window.location.href.match(/wxzjquery\/index_owner_zq.do$/)) {
+    var cssl = document.styleSheets
+
+    for (var i=0; i<cssl.length; i++) {
+        if (!cssl[i].href) continue
+        if (cssl[i].href.match(/tass.css$/)) break
+    }
+
+    if (i < cssl.length) {
+        tasscss = cssl[i]
+        addEvents("click")
+    } else {
+        tasscss = document.getElementById("tasscss")
+    }
+
+    var styleSheets = ['printzhgbstyle.css', 'tass.css']
+    if (null == tasscss) {
+        styleSheets.forEach(function(css){
+            tasscss = document.createElement("link")
+            tasscss.href = 'http://localhost/' + css
+            tasscss.rel = 'stylesheet'
+            tasscss.type = 'text/css;charset=UTF-8'
+            document.head.appendChild(tasscss)
+        })
+
+        addEvents("click")
+    }
+
     document.user=JSON.parse(window.localStorage.hou)
     document.addr=window.localStorage.addr.split(' ')[0].split('：')[1]
     var t=document.querySelector(".title")
     t.append(document.createElement("span"))
     t.children[0].innerText=document.addr
+
+    var sbar = document.querySelector("form .m-account-search.nobdr")
+    if (sbar.children.length < 3) {
+        sbar.appendChild(document.createElement("div"))
+        sbar.appendChild(document.createElement("div"))
+        sbar.appendChild(document.createElement("div"))
+        sbar.children[1].classList.add('f-clearfix')
+        sbar.children[2].classList.add('f-clearfix')
+        sbar.children[1].appendChild(sbar.firstElementChild.children[2])
+        sbar.children[1].appendChild(sbar.firstElementChild.children[2])
+        sbar.children[2].appendChild(sbar.firstElementChild.children[2])
+        sbar.children[3].classList.add('f-search-content')
+    }
+    var scfg = sbar.children[3]
+    if (scfg.children.length < 10) {
+        var cfgs = ['支取明细', '收入明细', '收支列表', '支取信息', '工程列表']
+        for (var i=0; i<cfgs.length; i++) {
+            scfg.appendChild(document.createElement("input"))
+            scfg.appendChild(document.createElement("span"))
+            scfg.children[i*2].type = 'checkbox'
+            scfg.children[i*2].checked = true
+            scfg.children[i*2+1].innerText = cfgs[i]
+        }
+        scfg.firstElementChild.disabled = true
+    }
+    setTimeout(function(){
+        scfg.querySelectorAll("input")[0].setAttribute('func', 'index_owner_zq')
+        scfg.querySelectorAll("input")[1].setAttribute('func', 'index_owner_sy')
+        scfg.querySelectorAll("input")[2].setAttribute('func', 'waterOfOwner')
+        scfg.querySelectorAll("input")[3].setAttribute('func', 'drawOfOwner')
+        scfg.querySelectorAll("input")[4].setAttribute('func', 'index_owner')
+
+        scfg.querySelectorAll("input").forEach(function(c){
+            c.addEventListener('change', function(event){
+                try {
+                    document.querySelector("form .m-collect-info." + c.getAttribute('func')).hidden = !c.checked
+                } catch (e) { console.log(e) }
+            })
+        })
+    }, 100)
+    
     if (document.querySelector("form .m-collect-info tbody").children.length > 1) {
         createSearchBox()
+//        if (false) {
         setTimeout(query_by_url, 100,
-                   'https://962121.fgj.sh.gov.cn/wyweb/web/wyfeemp/ownerpact/index_owner.do',
-                   post_query_projects_list)
+                   'https://962121.fgj.sh.gov.cn/wyweb/web/wyfeemp/wxzjquery/index_owner_sy.do')
         setTimeout(query_by_url, 100,
                    'https://962121.fgj.sh.gov.cn/wyweb/web/wyfeemp/wxzjquery/waterOfOwner.do',
                   post_query_account_balance)
         setTimeout(query_by_url, 100,
                    'https://962121.fgj.sh.gov.cn/wyweb/web/wyfeemp/wxzjquery/drawOfOwner.do')
         setTimeout(query_by_url, 100,
-                   'https://962121.fgj.sh.gov.cn/wyweb/web/wyfeemp/wxzjquery/index_owner_sy.do')
+                   'https://962121.fgj.sh.gov.cn/wyweb/web/wyfeemp/ownerpact/index_owner.do',
+                   post_query_projects_list)
+//        }
         create_details_container()
         create_reports_container()
     }
@@ -635,6 +680,7 @@ function convert_iframe_project_list(iframe, f=null) {
     var div = document.querySelector("form .m-account-detail")
     var e = iframe.contentDocument.querySelector(".m-collect-info")
     e.children[1].hidden = true
+    e.classList.add(iframe.src.replace(/.*\/|\.do/g, ''))
     div.appendChild(e)
     iframe.remove()
 
