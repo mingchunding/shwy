@@ -320,6 +320,12 @@ function statistics() {
 	}, 10)
 	
 	setTimeout(function() { document.querySelector("p.title").click() },100)
+	document.querySelectorAll("form .m-collect-info:nth-child(3) tr a").forEach(function(a){
+	    a.href = a.href.replace(/.*#/,'#')
+	})
+	document.querySelectorAll("form .m-collect-info:nth-child(6) tr a").forEach(function(a){
+	    a.href = a.href.replace(/.*#/,'#')
+	})
 }
 
 function hidden_by_dom(td) {
