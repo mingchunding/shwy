@@ -420,6 +420,11 @@ table.merged tbody td {
     width: 100%
 }
 
+#details-list table td {
+    border: 1px solid #8ad9ff;
+    padding: 10px
+}
+
 #reports table.tab2 td {
     border: 1px solid
 }
