@@ -25,8 +25,9 @@ p.title::after {
     font-size: 14px;
 }
 
+#details-list > .account-title p::before ,
 #reports > .account-title p::before {
-    content: '附：';
+    content: '附 ' counter(clouser_num) '：';
 }
 
 #reports > .m-account-detail {
@@ -106,8 +107,22 @@ table.tableorg th,td {
 }
 
 form {
+    counter-reset: query_num;
+    counter-reset: clouser_num;
     counter-reset: statistics_num;
-    counter-set: page_of_project 3
+    counter-set: page_of_project 3;
+}
+
+form .m-collect-info {
+    counter-increment: query_num;
+}
+
+form .m-collect-info .title::before {
+    content: '查询-' counter(query_num) '：'  
+}
+
+#details-list, #reports {
+    counter-increment: clouser_num
 }
 
 form .m-account-detail tr:nth-child(1) th {
