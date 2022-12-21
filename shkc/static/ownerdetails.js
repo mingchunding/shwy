@@ -428,7 +428,7 @@ function createSearchBox() {
         th = document.createElement("thead")
         tab.appendChild(th)
     }
-    tab.firstElementChild.querySelectorAll("th:first-child").forEach(function(h){
+    tab.querySelectorAll("tbody th:first-child").forEach(function(h){
         th.appendChild(h.parentElement)
     })
 
@@ -501,15 +501,24 @@ function createSearchBox() {
     setTimeout(do_filter, 1000)
 }
 
-function do_mobile(hidden){
-    document.querySelector("form table.tableorg tr").forEach(function(e){
-        e.children[2].hidden=hidden
-        e.children[3].hidden=hidden
-    })
-
-    document.querySelector(".details-statistics tr").forEach(function(e){
-        e.lastElementChild.hidden=hidden
-    })
+if (window.location.href.match(/wxzjquery\/index_owner_zq.do$/)) {
+    if (document.querySelector("form .m-collect-info tbody").children.length > 1) {
+        createSearchBox()
+//        if (false) {
+        setTimeout(query_by_url, 100,
+                   '/wyweb/web/wyfeemp/wxzjquery/index_owner_sy.do')
+        setTimeout(query_by_url, 100,
+                   '/wyweb/web/wyfeemp/wxzjquery/waterOfOwner.do',
+                  post_query_account_balance)
+        setTimeout(query_by_url, 100,
+                   '/wyweb/web/wyfeemp/wxzjquery/drawOfOwner.do')
+        setTimeout(query_by_url, 100,
+                   '/wyweb/web/wyfeemp/ownerpact/index_owner.do',
+                   post_query_projects_list)
+//        }
+        create_details_container()
+        create_reports_container()
+    }
 }
 
 if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
@@ -529,7 +538,6 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 
     if (i < cssl.length) {
         tasscss = cssl[i]
-        addEvents("click")
     } else {
         tasscss = document.getElementById("tasscss")
     }
@@ -543,8 +551,6 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
             tasscss.type = 'text/css;charset=UTF-8'
             document.head.appendChild(tasscss)
         })
-
-        addEvents("click")
     }
 
     try {
@@ -569,7 +575,7 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
     }
     var scfg = sbar.children[3]
     if (scfg.children.length < 10) {
-        var cfgs = ['支取明细', '收入明细', '收支列表', '支取信息', '工程列表']
+        var cfgs = ['支取明细', '收入明细', '收支列表', '支取列表', '工程列表']
         for (var i=0; i<cfgs.length; i++) {
             scfg.appendChild(document.createElement("input"))
             scfg.appendChild(document.createElement("span"))
@@ -603,27 +609,8 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
                 }
             })
         })
+        addEvents("click")
     }, 100)
-}
-
-if (window.location.href.match(/wxzjquery\/index_owner_zq.do$/)) {
-    if (document.querySelector("form .m-collect-info tbody").children.length > 1) {
-        createSearchBox()
-//        if (false) {
-        setTimeout(query_by_url, 100,
-                   '/wyweb/web/wyfeemp/wxzjquery/index_owner_sy.do')
-        setTimeout(query_by_url, 100,
-                   '/wyweb/web/wyfeemp/wxzjquery/waterOfOwner.do',
-                  post_query_account_balance)
-        setTimeout(query_by_url, 100,
-                   '/wyweb/web/wyfeemp/wxzjquery/drawOfOwner.do')
-        setTimeout(query_by_url, 100,
-                   '/wyweb/web/wyfeemp/ownerpact/index_owner.do',
-                   post_query_projects_list)
-//        }
-        create_details_container()
-        create_reports_container()
-    }
 }
 
 function query_by_url(url, handler=null){
@@ -899,20 +886,14 @@ function fetch_report_data(box, tr, uri='https://962121.fgj.sh.gov.cn/wyweb/web/
 
     var rawDate = (box.getAttribute('rawDate') == 'false' ? false : true)
     var hap_id = tr.querySelector("input[name='hap_id_arr'").value
-    var iframe=document.createElement("iframe")
-    iframe.src = uri + box.getAttribute('func') + '?hap_id=' + hap_id + '&repo_type=' + box.getAttribute('type') + '&unit_fund='
-    if (box.getAttribute('type') == 4) iframe.src += document.unit_fund
-    iframe.height = '50%'
-    iframe.width = '50%'
-    iframe.style.left = '25%'
-    iframe.style.position = 'relative'
-    iframe.hidden = true
-
-    iframe.addEventListener('load', function(event){
+    var url = uri + box.getAttribute('func') + '?hap_id=' + hap_id + '&repo_type=' + box.getAttribute('type') + '&unit_fund='
+    if (box.getAttribute('type') == 4) url += document.unit_fund
+    $.get(url, {}, function(data, status) {
+        var doc = new DOMParser().parseFromString(data.replace(/.*<body[^>]*>|<\/body>.*/g, ''), 'text/html')
         rtype = parseInt(box.getAttribute("type"))
-        unhide_reports(rtype, this.contentDocument)
+        unhide_reports(rtype, doc)
         if (rtype == 1 || rtype == 2 || rtype == 4 || rtype == 11) {
-            var tab = this.contentDocument.querySelector("table.colwidth")
+            var tab = doc.querySelector("table.colwidth")
             tab.removeAttribute('background')
             tab.querySelector("tbody").children[0].hidden = true
             tab.querySelector("tbody").children[1].hidden = true
@@ -922,7 +903,7 @@ function fetch_report_data(box, tr, uri='https://962121.fgj.sh.gov.cn/wyweb/web/
             tab.setAttribute('date', tr.lastElementChild.innerText)
             box.appendChild(tab)
         } else if (rawDate) {
-            var tabs = this.contentDocument.querySelectorAll("table[align='center']:not([class])")
+            var tabs = doc.querySelectorAll("table[align='center']:not([class])")
             for (var i=0; i<tabs.length; i++) {
                 rtab = tabs[i].parentElement.parentElement.parentElement.parentElement
                 rtab.classList.add('report_tab_top')
@@ -933,9 +914,9 @@ function fetch_report_data(box, tr, uri='https://962121.fgj.sh.gov.cn/wyweb/web/
                 box.appendChild(rtab)
             }
         } else {
-            var title = this.contentDocument.querySelectorAll("td.TopTitle")[1].innerText
-            var tsrange = this.contentDocument.querySelector("td.fubold").innerText
-            var items = this.contentDocument.querySelectorAll("td.tab_td:first-child:not([colspan])")
+            var title = doc.querySelectorAll("td.TopTitle")[1].innerText
+            var tsrange = doc.querySelector("td.fubold").innerText
+            var items = doc.querySelectorAll("td.tab_td:first-child:not([colspan])")
             if (items.length > 0) {
                 var tab = box.querySelector('table')
                 var thead = tab.querySelector("thead")
@@ -950,11 +931,11 @@ function fetch_report_data(box, tr, uri='https://962121.fgj.sh.gov.cn/wyweb/web/
                 })
             }
         }
-        this.remove()
+//        doc.remove()
 
         if (/*tr.sectionRowIndex + 2 > tr.parentElement.children.length &&*/
             tr.sectionRowIndex > 0) {
-            setTimeout(fetch_report_data, 1000, box, tr.previousElementSibling, uri)
+            setTimeout(fetch_report_data, 100, box, tr.previousElementSibling, uri)
         } else {
             box.setAttribute('startDate', document.querySelector("#startDate").value)
             box.setAttribute('endDate', document.querySelector("#endDate").value)
@@ -963,7 +944,6 @@ function fetch_report_data(box, tr, uri='https://962121.fgj.sh.gov.cn/wyweb/web/
             }, 1000)
         }
     })
-    document.body.appendChild(iframe)
 }
 
 function create_box_of_report(container, report, row, base='https://962121.fgj.sh.gov.cn/wyweb/web/hmfmsweb/biz/hocacctreport/get') {
