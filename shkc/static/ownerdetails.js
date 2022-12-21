@@ -218,7 +218,7 @@ function addEvents(type) {
             return sortByChild(this.previousElementSibling, idx, desc)
         })
         searchResult.sort = Array(0)
-    
+
         for (i = 0; i < searchResult.children[0].children.length; i++) {
             searchResult.sort[i] = 0
             var c=searchResult.children[0].children[i]
@@ -313,15 +313,20 @@ function pull_project(div, item, next) {
         return
     }
 
-    var proj = document.createElement("iframe")
-    proj.id = id
-    proj.src = "/wyweb/web/wyfeemp/wxzjquery/getWsInfo.do?mpro_id=" + id
-    proj.addEventListener("load", function(event) {
-        var e = this.contentDocument.querySelector(".account-content")
+    var doc_container = document.createElement("div")
+    doc_container.id = id
+    div.appendChild(doc_container)
+    $.get('/wyweb/web/wyfeemp/wxzjquery/getWsInfo.do?mpro_id=' + id, {},
+    function(data, status){
+        if (status != 'success') {
+            console.log('fail to get data for project id: ' + id)
+            return
+        }
+        var doc = new DOMParser().parseFromString(data.replace(/.*<body[^>]*>|<\/body>.*/g, ''), 'text/html')
+        var e = doc.querySelector(".account-content")
         if (!e) return
         e.querySelectorAll("p").forEach(function(p){p.remove()})
         e.removeAttribute('style')
-        e.id = this.id
         var t=e.querySelector("table")
         t.removeAttribute('style')
         t.removeAttribute('border')
@@ -331,8 +336,9 @@ function pull_project(div, item, next) {
         e.querySelectorAll("td").forEach(function(t){
             t.removeAttribute('height')
         })
-        this.parentElement.appendChild(e)
-        this.remove()
+        e.id = id
+        div.appendChild(e)
+        doc_container.remove()
 
         var anchor = document.createElement("a")
         e.appendChild(anchor)
@@ -352,8 +358,6 @@ function pull_project(div, item, next) {
 
         if (next) pull_project(div, item.nextElementSibling, next)
     })
-
-    div.appendChild(proj)
 }
 
 function pull_project_multi(div, item, cnt) {
@@ -607,14 +611,14 @@ if (window.location.href.match(/wxzjquery\/index_owner_zq.do$/)) {
         createSearchBox()
 //        if (false) {
         setTimeout(query_by_url, 100,
-                   'https://962121.fgj.sh.gov.cn/wyweb/web/wyfeemp/wxzjquery/index_owner_sy.do')
+                   '/wyweb/web/wyfeemp/wxzjquery/index_owner_sy.do')
         setTimeout(query_by_url, 100,
-                   'https://962121.fgj.sh.gov.cn/wyweb/web/wyfeemp/wxzjquery/waterOfOwner.do',
+                   '/wyweb/web/wyfeemp/wxzjquery/waterOfOwner.do',
                   post_query_account_balance)
         setTimeout(query_by_url, 100,
-                   'https://962121.fgj.sh.gov.cn/wyweb/web/wyfeemp/wxzjquery/drawOfOwner.do')
+                   '/wyweb/web/wyfeemp/wxzjquery/drawOfOwner.do')
         setTimeout(query_by_url, 100,
-                   'https://962121.fgj.sh.gov.cn/wyweb/web/wyfeemp/ownerpact/index_owner.do',
+                   '/wyweb/web/wyfeemp/ownerpact/index_owner.do',
                    post_query_projects_list)
 //        }
         create_details_container()
@@ -623,29 +627,20 @@ if (window.location.href.match(/wxzjquery\/index_owner_zq.do$/)) {
 }
 
 function query_by_url(url, handler=null){
-    var container = document.getElementById("details-list")
-    if (!container) return
-    var iframe=document.createElement("iframe")
-    iframe.src = url
-    iframe.height = '50%'
-    iframe.width = '50%'
-    iframe.style.left = '25%'
-    iframe.style.position = 'relative'
-    iframe.step = 0
-    iframe.hidden = true
-    iframe.addEventListener("load", function(event) {
-        console.log(this.step, "start to query all projects list.")
-        this.contentDocument.querySelector("input#startDate").value=document.querySelector("input#startDate").value
-        this.contentDocument.querySelector("input#endDate").value=document.querySelector("input#endDate").value
-        if (this.step == 0) {
-            setTimeout(do_click_submit, 100, iframe)
-        } else {
-            setTimeout(convert_iframe_project_list, 100, iframe, handler)
+    $.post(url, {startDate: document.querySelector("input#startDate").value,
+                endDate: document.querySelector("input#endDate").value},
+    function(data, status) {
+        if (status != 'success') {
+            console.log('fail to get data for project id: ' + id)
+            return
         }
-        this.step++
+        var doc = new DOMParser().parseFromString(data.replace(/.*<body[^>]*>|<\/body>.*/g, ''), 'text/html')
+        var e = doc.querySelector(".m-collect-info")
+        e.classList.add(url.match(/\w+.do$/)[0].split('.')[0])
+        e.children[1].hidden = true
+        document.querySelector("form .m-account-detail").appendChild(e)
+        setTimeout(convert_iframe_project_list, 100, e, handler)
     })
-
-    container.appendChild(iframe)
 }
 
 function do_click_submit(iframe) {
@@ -693,14 +688,7 @@ function post_query_projects_list(container) {
     title.appendChild(document.createElement("a"))
 }
 
-function convert_iframe_project_list(iframe, f=null) {
-    var div = document.querySelector("form .m-account-detail")
-    var e = iframe.contentDocument.querySelector(".m-collect-info")
-    e.children[1].hidden = true
-    e.classList.add(iframe.src.replace(/.*\/|\.do/g, ''))
-    div.appendChild(e)
-    iframe.remove()
-
+function convert_iframe_project_list(e, f=null) {
     e.querySelectorAll("th").forEach(function(e){
         e.removeAttribute('height')
         e.removeAttribute('width')
@@ -750,10 +738,6 @@ function page_zq(page, n){
     m = n * (page + 1)
     n = n * page
     for (i=0; i<trs.length; i++) { trs[i].removeAttribute('style'); if (i<n || i>m) trs[i].style.display='none'}
-}
-
-function fetch_query_by_url(url, startDate, endDate) {
-
 }
 
 function create_reports_container() {

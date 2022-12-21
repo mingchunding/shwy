@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+.m-account-detail table td {
+    border: 0
+}
+
 .m-account-detail {
     float: left;
     margin-bottom: 15px;
