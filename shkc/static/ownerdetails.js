@@ -238,7 +238,7 @@ function addEvents(type) {
     } catch (e) { }
 
     document.querySelectorAll(".account-title p.title").forEach(function(x){
-        x.setAttribute('show', 'true')
+        x.setAttribute('show', 'false')
         x.addEventListener("click", function(e){
             if (event.path[0].localName=='a') {
                 var thread=prompt('并发下载数，建议不超过10，否则会造成网络卡顿')
@@ -247,8 +247,11 @@ function addEvents(type) {
                 get_details(thread)
                 return
             }
-            this.setAttribute('show', !!this.parentElement.nextElementSibling.hidden)
-            this.parentElement.nextElementSibling.hidden=!this.parentElement.nextElementSibling.hidden
+            var target = this.parentElement.nextElementSibling
+            this.setAttribute('show', !!target.hidden)
+            setTimeout(function(){
+                target.hidden=!target.hidden
+            }, 10)
         })
     })
 }
@@ -512,7 +515,7 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
     if (link) link.target='_blank'
     link = document.querySelector('a[href$="ownerpact/index_owner.do"]')
     if (link) link.target='_blank'
-} else if (window.location.href.match(/wxzjquery\/index_owner_zq.do$/)) {
+} else if (window.location.href.match(/(wxzjquery\/index_owner_zq.do$|shwy\/shkc)/)) {
     var cssl = document.styleSheets
 
     for (var i=0; i<cssl.length; i++) {
@@ -540,11 +543,13 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
         addEvents("click")
     }
 
-    document.user=JSON.parse(window.localStorage.hou)
-    document.addr=window.localStorage.addr.split(' ')[0].split('：')[1]
-    var t=document.querySelector(".title")
-    t.append(document.createElement("span"))
-    t.children[0].innerText=document.addr
+    try {
+        document.user=JSON.parse(window.localStorage.hou)
+        document.addr=window.localStorage.addr.split(' ')[0].split('：')[1]
+        var t=document.querySelector(".title")
+        t.append(document.createElement("span"))
+        t.children[0].innerText=document.addr
+    } catch(e) { console.log(e) }
 
     var sbar = document.querySelector("form .m-account-search.nobdr")
     if (sbar.children.length < 3) {
@@ -576,16 +581,28 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
         scfg.querySelectorAll("input")[2].setAttribute('func', 'waterOfOwner')
         scfg.querySelectorAll("input")[3].setAttribute('func', 'drawOfOwner')
         scfg.querySelectorAll("input")[4].setAttribute('func', 'index_owner')
+        document.querySelectorAll("form .m-collect-info:not([hidden])").forEach(function(q){
+            q.classList.forEach(function(c){
+                try {
+                    document.querySelector('form .f-search-content input[func="' + c + '"]').checked = true
+                } catch(e) { }
+            })
+        })
 
         scfg.querySelectorAll("input").forEach(function(c){
             c.addEventListener('change', function(event){
                 try {
                     document.querySelector("form .m-collect-info." + c.getAttribute('func')).hidden = !c.checked
-                } catch (e) { console.log(e) }
+                } catch (e) {
+                    c.disabled = true
+                    console.log(e)
+                }
             })
         })
     }, 100)
-    
+}
+
+if (window.location.href.match(/wxzjquery\/index_owner_zq.do$/)) {
     if (document.querySelector("form .m-collect-info tbody").children.length > 1) {
         createSearchBox()
 //        if (false) {

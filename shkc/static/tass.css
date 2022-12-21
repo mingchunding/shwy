@@ -16,7 +16,7 @@
 
 #reports .title span::before,
 .m-increace-inquiry tr:last-child td.counting::after,
-.m-collect-info:nth-child(4) .title span::after,
+/*.m-collect-info:nth-child(4) .title span::after,*/
 img:not([src]) {
     content: url('data:image/gif;base64,R0lGODlhEAAQALMMAKqooJGOhp2bk7e1rZ2bkre1rJCPhqqon8PBudDOxXd1bISCef///wAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQFAAAMACwAAAAAEAAQAAAET5DJyYyhmAZ7sxQEs1nMsmACGJKmSaVEOLXnK1PuBADepCiMg/DQ+/2GRI8RKOxJfpTCIJNIYArS6aRajWYZCASDa41Ow+Fx2YMWOyfpTAQAIfkEBQAADAAsAAAAABAAEAAABE6QyckEoZgKe7MEQMUxhoEd6FFdQWlOqTq15SlT9VQM3rQsjMKO5/n9hANixgjc9SQ/CgKRUSgw0ynFapVmGYkEg3v1gsPibg8tfk7CnggAIfkEBQAADAAsAAAAABAAEAAABE2QycnOoZjaA/IsRWV1goCBoMiUJTW8A0XMBPZmM4Ug3hQEjN2uZygahDyP0RBMEpmTRCKzWGCkUkq1SsFOFQrG1tr9gsPc3jnco4A9EQAh+QQFAAAMACwAAAAAEAAQAAAETpDJyUqhmFqbJ0LMIA7McWDfF5LmAVApOLUvLFMmlSTdJAiM3a73+wl5HYKSEET2lBSFIhMIYKRSimFriGIZiwWD2/WCw+Jt7xxeU9qZCAAh+QQFAAAMACwAAAAAEAAQAAAETZDJyRCimFqbZ0rVxgwF9n3hSJbeSQ2rCWIkpSjddBzMfee7nQ/XCfJ+OQYAQFksMgQBxumkEKLSCfVpMDCugqyW2w18xZmuwZycdDsRACH5BAUAAAwALAAAAAAQABAAAARNkMnJUqKYWpunUtXGIAj2feFIlt5JrWybkdSydNNQMLaND7pC79YBFnY+HENHMRgyhwPGaQhQotGm00oQMLBSLYPQ9QIASrLAq5x0OxEAIfkEBQAADAAsAAAAABAAEAAABE2QycmUopham+da1cYkCfZ94UiW3kmtbJuRlGF0E4Iwto3rut6tA9wFAjiJjkIgZAYDTLNJgUIpgqyAcTgwCuACJssAdL3gpLmbpLAzEQA7');
 }
@@ -445,20 +445,36 @@ table.merged tbody td {
     border: 1px solid
 }
 
+.m-account-search .f-clearfix {
+    clear: none
+}
+
 .m-account-search .f-search-content {
     position: relative;
     font-size: 14px;
     font-weight: bold;
+    float: left;
+}
+
+input#startDate {
+    margin-right: 20px;
+}
+
+.f-clearfix:after {
+    display: none
+}
+.m-account-search .end-time {
+    margin: 0 12px 0 0
 }
 
 .m-account-search.nobdr {
-    display: grid;
+    /* display: grid; */
     border: 0;
     padding: 0 0;
     margin-top: 0;
-    grid-template-columns: auto auto auto auto;
-    min-width: 1150px;
-    justify-content: space-between;
+    /* grid-template-columns: 25% 25% auto auto; */
+    /* min-width: 1150px; */
+    /* justify-content: space-between; */
 }
 
 .m-account-search .f-search-content input {
@@ -476,4 +492,12 @@ table.merged tbody td {
 .m-account-search .f-search-content span:not(:last-child) {
     border-right: 3px solid;
     padding-right: 6px;
+}
+
+.m-account-search .endDate {
+    margin: 0px 12px 0px 0px;
+}
+
+.m-account-search .btn {
+    margin: -2px 60px 0 12px;
 }

@@ -458,11 +458,13 @@ function create_projects_achor(){
 	})
 }
 
-document.querySelectorAll("#details-list tr:nth-child(8) td:nth-child(2)").forEach(function(c){
-	s=c.innerText.replace(/[\.,， \n]+/g,',').replace(/,$/,'')
-	s.replace('/瀑\d+', '瀑布湾道')
-	console.log(s.split(','))
-})
+function valid_address () {
+	document.querySelectorAll("#details-list tr:nth-child(8) td:nth-child(2)").forEach(function(c){
+		s=c.innerText.replace(/[\.,， \n]+/g,',').replace(/,$/,'')
+		s.replace('/瀑\d+', '瀑布湾道')
+		console.log(s.split(','))
+	})
+}
 
 function flag_statistics_item() {
 	document.querySelectorAll(".details-statistics tbody").forEach(function(b){
