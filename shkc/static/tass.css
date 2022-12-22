@@ -409,6 +409,10 @@ form .collect-info tbody tr.paging td:last-child a {
         float: right;
         color: grey
     }
+    #details-list .m-account-detail {
+        max-height: 95%;
+        overflow-y: scroll;
+    }
 }
 
 table.colwidth,
@@ -505,3 +509,31 @@ input#startDate {
 .m-account-search .btn {
     margin: -2px 60px 0 12px;
 }
+
+#details-list tr:nth-child(2) td a:after {
+    content: attr(zqcode);
+    float: right;
+    color: lightgrey
+}
+
+#details-list tr:nth-child(2) td a:not(:last-child):after {
+    content: ', 'attr(zqcode);
+    float: right;
+}
+
+#details-list tr:nth-child(2) td a:last-child:after {
+    content: '本户支取编号：'attr(zqcode);
+    float: right;
+}
+
+#details-list tr:nth-child(12) td {
+    width: 25%
+}
+
+#details-list tr:nth-child(12) td span:after {
+    content: '本户：'attr(mount);
+    float: right;
+    color: lightgrey;
+}
+
+#statistics {display: inline-block;flex-flow: nowrap;width: fit-content;max-width: 1280;float: left;}

@@ -165,8 +165,7 @@ function do_filter() {
         t[1].sum = sum
     } catch (e) { console.log(e) }
 
-//    setTimeout(get_details, 10, 10)
-    console.log("Done.")
+    console.log("Filter done.")
 }
 
 function sortByChild(e, idx, desc) {
@@ -237,13 +236,14 @@ function addEvents(type) {
         }
     } catch (e) { }
 
-    document.querySelectorAll(".account-title p.title").forEach(function(x){
+    document.querySelectorAll("form .account-title p.title").forEach(function(x){
         x.setAttribute('show', 'false')
         x.addEventListener("click", function(e){
             if (event.path[0].localName=='a') {
-                var thread=prompt('并发下载数，建议不超过10，否则会造成网络卡顿')
+                var thread=prompt('并发下载数，建议不超过10，否则会造成网络卡顿', '10')
                 if (thread < 1) return
                 event.path[0].remove()
+                event.path[1].appendChild(document.createElement('span'))
                 get_details(thread)
                 return
             }
@@ -256,27 +256,58 @@ function addEvents(type) {
     })
 }
 
+function connect_item_and_project(container, item, id) {
+    var proj = document.getElementById(id)
+    var a = item.querySelector('a[href]')
+    var p = a.parentElement;
+    a.removeAttribute('onclick')
+    a.href = "#proj_" + proj.id
+    a.removeAttribute('style')
+    a.removeAttribute('onclick')
+    var s = p.innerHTML
+    a.remove()
+    p.innerHTML = s
+
+    if (container.classList.contains('index_owner')) {
+        try {
+            item.children[3].innerText = proj.querySelectorAll("td:not(.name)")[8].innerText
+        } catch(e) { console.log('fail to get data from project #' + proj.id, e) }
+        var tab = item.parentElement.parentElement
+        var title = tab.parentElement.parentElement.querySelector(".account-title p.title")
+        title.innerHTML = title.innerHTML.replace(/\d+ \/ \d+/,
+            tab.querySelectorAll("tbody tr:not([hidden])").length + ' / ' +
+            tab.querySelectorAll("tbody tr").length)
+    } else {
+        var zqcode = item.firstElementChild.innerText.match(/\d+/)[0]
+        item.querySelector('a[href]').id = 'zq_' + zqcode
+        var anchor = document.createElement('a')
+        try {
+            anchor.setAttribute('zqcode', zqcode)
+            anchor.href = '#zq_' + zqcode
+            proj.querySelector("tr:nth-child(2) td:nth-child(2)").appendChild(anchor)
+        } catch(e) { console.log(proj.id, e) }
+    }
+}
+
 function pull_project(div, item, next) {
     if (null == item) {
         setTimeout(statistics, 1000)
         console.log("Done pulling project detail, statistics will be started in one second.")
-        return
+        return false
     }
 
     var container = item.parentElement.parentElement.parentElement.parentElement
-    if (container.previousElementSibling.classList.contains(container.className)) {
-        /* not the first search table */
-        var progress = container.querySelector(".title span")
+    var progress = container.querySelector("p.title span")
+
+    try {
         progress.innerText = '下载第 ' + (item.sectionRowIndex + 1) + ' 项，剩余 ' +
             (item.parentElement.children.length - item.sectionRowIndex - 1)
-    } else {
-        var progress = null
-    }
+    } catch(e) { }
 
     if (item.hidden) {
-        if (progress && !item.nextElementSibling) progress.remove()
+        if (!item.nextElementSibling && progress) progress.remove()
         if (next) setTimeout(pull_project, 10, div, item.nextElementSibling, next)
-        return
+        return false
     }
     try {
         var id = item.values[5][0].match(/\d+/)[0]
@@ -285,32 +316,18 @@ function pull_project(div, item, next) {
             var id = item.querySelector("a[href]").href.match(/\d+$/)[0]
         } catch(e) {
             if (next) setTimeout(pull_project, 10, div, item.nextElementSibling, next)
-            return
+            return false
         }
     }
 
     var proj = document.getElementById(id)
     if (proj) {
-        var a = item.querySelector('a')
-		a.removeAttribute('onclick')
-		a.href = "#proj_" + id
-        a.removeAttribute('style')
-        a.removeAttribute('onclick')
-        if (progress) {
-            item.hidden = true
-            item.children[3].innerText = proj.querySelectorAll("td:not(.name)")[8].innerText
-            var tab = item.parentElement.parentElement
-            var title = tab.parentElement.parentElement.querySelector(".account-title p.title")
-            title.innerText.replace(/\d+ \/ \d+/,
-                tab.querySelectorAll("tbody tr:not([hidden])").length + ' / ' +
-                tab.querySelectorAll("tbody tr").length)
-            if (!item.nextElementSibling) progress.remove()
-        } else {
-            a.id = 'zq_' + item.firstElementChild.innerText.match(/\d+/)[0]
-        }
+        if (container.classList.contains('index_owner')) item.hidden = true
+        setTimeout(connect_item_and_project, 10000, container, item, id)
 
+        if (!item.nextElementSibling && progress) progress.remove()
         if (next) setTimeout(pull_project, 10, div, item.nextElementSibling, next)
-        return
+        return false
     }
 
     var doc_container = document.createElement("div")
@@ -319,8 +336,10 @@ function pull_project(div, item, next) {
     $.get('/wyweb/web/wyfeemp/wxzjquery/getWsInfo.do?mpro_id=' + id, {},
     function(data, status){
         if (status != 'success') {
-            console.log('fail to get data for project id: ' + id)
-            return
+            console.log('Fail to get data for project id: ' + id, 'try it 10s later')
+            setTimeout(pull_project, 10000, div, item, false)
+            doc_container.remove()
+            return false
         }
         var doc = new DOMParser().parseFromString(data.replace(/.*<body[^>]*>|<\/body>.*/g, ''), 'text/html')
         var e = doc.querySelector(".account-content")
@@ -341,34 +360,33 @@ function pull_project(div, item, next) {
         doc_container.remove()
 
         var anchor = document.createElement("a")
-        e.appendChild(anchor)
-        anchor.id="proj_" + e.querySelector("td:not(.name)").innerText
+        e.insertBefore(anchor, e.firstElementChild)
+        anchor.id="proj_" + id //e.querySelector("td:not(.name)").innerText
 
-        var a = item.querySelector('a')
-		a.removeAttribute('onclick')
-		a.href = "#proj_" + a.innerText.match(/\d+/)[0]
-        a.removeAttribute('style')
-        a.removeAttribute('onclick')
-        if (progress) {
-            if (!item.nextElementSibling) progress.remove()
-            item.children[3].innerText = e.querySelectorAll("td:not(.name)")[8].innerText
-        } else {
-            a.id = 'zq_' + item.firstElementChild.innerText.match(/\d+/)[0]
-        }
+        connect_item_and_project(container, item, id)
 
+        if (!item.nextElementSibling && progress) progress.remove()
         if (next) pull_project(div, item.nextElementSibling, next)
     })
+
+    return true
 }
 
 function pull_project_multi(div, item, cnt) {
+    try {
+        var container = item.parentElement.parentElement.parentElement.parentElement
+        var progress = container.querySelector("p.title span")
+    } catch(e) { }
+
     var c = cnt
     for (; item; item=item.nextElementSibling) {
-        pull_project(div, item, false)
+        if (!pull_project(div, item, false)) continue
         if (--c==0) break;
     }
     if (c > 0 || !item) {
-        console.log('Done parellel fetching projects detail, statistics will be started in 10s.')
-        return setTimeout(statistics, 10000)
+        console.log('Done parellel fetching projects detail, statistics will be started in ' + (200 * cnt) + 's.')
+        if (progress) progress.remove()
+        return setTimeout(statistics, 200 * cnt)
     }
 
     if (item) setTimeout(pull_project_multi, cnt*200, div, item, cnt)
@@ -505,16 +523,20 @@ if (window.location.href.match(/wxzjquery\/index_owner_zq.do$/)) {
     if (document.querySelector("form .m-collect-info tbody").children.length > 1) {
         createSearchBox()
 //        if (false) {
-        setTimeout(query_by_url, 100,
-                   '/wyweb/web/wyfeemp/wxzjquery/index_owner_sy.do')
-        setTimeout(query_by_url, 100,
-                   '/wyweb/web/wyfeemp/wxzjquery/waterOfOwner.do',
-                  post_query_account_balance)
-        setTimeout(query_by_url, 100,
-                   '/wyweb/web/wyfeemp/wxzjquery/drawOfOwner.do')
-        setTimeout(query_by_url, 100,
-                   '/wyweb/web/wyfeemp/ownerpact/index_owner.do',
-                   post_query_projects_list)
+//        if (document.querySelector("form input[func='index_owner_sy']").checked)
+            setTimeout(query_by_url, 100,
+                       '/wyweb/web/wyfeemp/wxzjquery/index_owner_sy.do')
+//        if (document.querySelector("form input[func='waterOfOwner']").checked)
+            setTimeout(query_by_url, 100,
+                       '/wyweb/web/wyfeemp/wxzjquery/waterOfOwner.do',
+                      post_query_account_balance)
+//        if (document.querySelector("form input[func='drawOfOwner']").checked)
+            setTimeout(query_by_url, 100,
+                       '/wyweb/web/wyfeemp/wxzjquery/drawOfOwner.do')
+//        if (document.querySelector("form input[func='index_owner']").checked)
+            setTimeout(query_by_url, 100,
+                       '/wyweb/web/wyfeemp/ownerpact/index_owner.do',
+                       post_query_projects_list)
 //        }
         create_details_container()
         create_reports_container()
@@ -698,18 +720,18 @@ function convert_iframe_project_list(e, f=null) {
 
     e.querySelector(".account-title p.title").addEventListener("click", function(event){
         if (event.path[0].localName=='a') {
-            if (!confirm("总共需下载 " +
+            var thread=prompt("总共需下载 " +
                          this.parentElement.nextElementSibling.querySelectorAll("tbody tr").length +
-                         " 项工程详情数据，下载结束所有统计将被重置!"))
-                return
+                         " 项工程详情数据，下载结束所有统计将被重置!\n设置并发下载数，建议不超过10，否则会造成网络卡顿", "10")
+            if (thread < 1) return
             var title = e.querySelector(".account-title p.title")
             title.lastElementChild.remove()
-            title.innerText += '【本户无关】( ' +
+            title.innerText += '【' +
                 tab.querySelectorAll("tbody tr:not([hidden])").length + ' / ' +
-                tab.querySelectorAll("tbody tr").length + ' )'
+                tab.querySelectorAll("tbody tr").length + '】'
             title.appendChild(document.createElement("span"))
-            return pull_project(document.querySelector("#details-list .m-account-detail:last-child"),
-                         e.querySelector("tbody tr"), true)
+            return pull_project_multi(document.querySelector("#details-list .m-account-detail:last-child"),
+                         e.querySelector("tbody tr"), thread)
         }
         this.setAttribute('show', !!this.parentElement.nextElementSibling.hidden)
         this.parentElement.nextElementSibling.hidden=!this.parentElement.nextElementSibling.hidden
@@ -789,7 +811,9 @@ function fetch_reports_list(container) {
         if (undefined == document.unit_fund) {
             fetch_reports_link(func, container, this.contentDocument, progress)
             return
-        } else if (!JSON.parse(window.localStorage.reports_link)) {
+        } else try {
+                JSON.parse(window.localStorage.reports_link)
+        } catch(e) {
             window.localStorage.reports_link = JSON.stringify(container.reports)
             console.log(container.reports)
         }
