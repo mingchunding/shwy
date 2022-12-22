@@ -4,6 +4,16 @@
     border: 0
 }
 
+thead th[desc='true']:after {
+    content: ' \25bC';
+    float: right
+}
+
+thead th[desc='false']::after {
+    content: ' \25b2';
+    float: right
+}
+
 .m-account-detail {
     float: left;
     margin-bottom: 15px;
@@ -316,10 +326,14 @@ form .m-collect-info:not(:nth-child(3)) td:nth-child(6)::after,
 #details-list {
     float: left;
     margin-top: 20px;
+    /* max-height: 2160px; */
+    /* overflow: scroll; */
 }
 
 #details-list .m-account-detail {
     counter-reset: project_num;
+    max-height: 95%;
+    overflow-y: scroll;
 }
 
 #details-list p::before {
@@ -408,10 +422,6 @@ form .collect-info tbody tr.paging td:last-child a {
         content: '、';
         float: right;
         color: grey
-    }
-    #details-list .m-account-detail {
-        max-height: 95%;
-        overflow-y: scroll;
     }
 }
 

@@ -212,14 +212,12 @@ function sortByChild(e, idx, desc) {
 
 function addEvents(type) {
     try {
-        searchResult = document.querySelector("form .m-collect-info thead")
+        var searchResult = document.querySelector("form .m-collect-info thead")
         searchResult.sortBy = (function(idx, desc) {
-            return sortByChild(this.previousElementSibling, idx, desc)
+            return sortByChild(this.parentElement.querySelector("tbody"), idx, desc)
         })
-        searchResult.sort = Array(0)
 
-        for (i = 0; i < searchResult.children[0].children.length; i++) {
-            searchResult.sort[i] = 0
+        for (var i = 0; i < searchResult.children[0].children.length; i++) {
             var c=searchResult.children[0].children[i]
             if (3 == i) {
                 c.addEventListener(type, function(e) {
@@ -229,30 +227,59 @@ function addEvents(type) {
                 continue
             }
             c.addEventListener(type, function(e) {
-                idx = this.cellIndex
-                searchResult.sort[idx] = !searchResult.sort[idx]
-                return searchResult.sortBy(idx, searchResult.sort[idx])
+                var c = e.path[0]
+                if (c.localName != 'th') return
+                var desc = false
+                try {
+                    if (c.getAttribute('desc') == 'true') desc = true
+                } catch(e) {}
+                c.parentElement.querySelectorAll(c.localName).forEach(function(s){s.removeAttribute('desc')})
+                c.setAttribute('desc', !desc)
+                return searchResult.sortBy(c.cellIndex, !desc)
             })
         }
-    } catch (e) { }
+    } catch (e) { console.log(e) }
+
+    var t = document.querySelectorAll("form .m-collect-info thead")
+    for (var j=1; j<t.length; j++) {
+        t[j].sort = Array()
+        t[j].sortBy = (function(idx, desc) {
+            return sortByChild(this.parentElement.querySelector("tbody"), idx, desc)
+        })
+        for (var i=0; i<t[j].children[0].children.length; i++) {
+            t[j].sort[i] = 0
+            t[j].children[0].children[i].addEventListener(type, function(e){
+                var idx = this.cellIndex
+                t[j].sort[idx] = !t[j].sort[idx]
+                return t[j].sortBy(idx, t[j].sort[idx])
+            })
+        }
+    }
 
     document.querySelectorAll("form .account-title p.title").forEach(function(x){
-        x.setAttribute('show', 'false')
-        x.addEventListener("click", function(e){
-            if (event.path[0].localName=='a') {
-                var thread=prompt('并发下载数，建议不超过10，否则会造成网络卡顿', '10')
-                if (thread < 1) return
-                event.path[0].remove()
-                event.path[1].appendChild(document.createElement('span'))
-                get_details(thread)
-                return
-            }
-            var target = this.parentElement.nextElementSibling
-            this.setAttribute('show', !!target.hidden)
-            setTimeout(function(){
-                target.hidden=!target.hidden
-            }, 10)
-        })
+        var p=x.parentElement
+        var s=p.innerHTML
+        x.remove()
+        p.innerHTML = s
+        setTimeout(function(p, x, s){
+            var x = p.querySelector("p.title")
+            x.setAttribute('show', 'false')
+            x.addEventListener("click", function(e){
+                if (event.path[0].localName=='a') {
+                    var thread=prompt('并发下载数，建议不超过10，否则会造成网络卡顿', '10')
+                    if (thread < 1) return
+                    event.path[0].remove()
+                    event.path[1].appendChild(document.createElement('span'))
+                    get_details(thread)
+                    return
+                }
+                var target = this.parentElement.nextElementSibling
+                this.setAttribute('show', !!target.hidden)
+                setTimeout(function(){
+                    target.hidden=!target.hidden
+                }, 10)
+            })
+        }, 1000, p, x, s)
     })
 }
 
