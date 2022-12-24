@@ -4,6 +4,10 @@
     border: 0
 }
 
+.m-increace-inquiry table td {
+    border: 1px solid #8ad9ff;
+}
+
 thead th[desc='true']:after {
     content: ' \25bC';
     float: right
@@ -388,6 +392,7 @@ form .collect-info tbody tr.paging td:last-child a {
     .details-statistics th:last-child,
     .details-statistics td:last-child,
     .details-statistics .searchbox,
+    .f-search-content,
     #details-list tr:last-child,
     #details-list tr:first-child a{
         display: none
@@ -475,13 +480,9 @@ input#startDate {
 }
 
 .m-account-search.nobdr {
-    /* display: grid; */
     border: 0;
     padding: 0 0;
     margin-top: 0;
-    /* grid-template-columns: 25% 25% auto auto; */
-    /* min-width: 1150px; */
-    /* justify-content: space-between; */
 }
 
 .m-account-search .f-search-content input {
