@@ -422,7 +422,7 @@ function companies() {
 	return c
 }
 
-console.clear()
+//console.clear()
 
 function create_title_click_event() {
 		document.querySelectorAll("form p.title").forEach(function(e){

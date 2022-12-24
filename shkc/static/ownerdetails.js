@@ -96,12 +96,13 @@ function do_filter_row(r, f, s) {
 }
 
 function do_filter() {
-    r = document.querySelector("form .m-collect-info tbody").children
+    var tbody = document.querySelector("form .m-collect-info tbody")
+    var r = tbody.children
 
     var l = r.length
     var cnt = 0
     var sum = Array(Array(0), 1e-6, 1e-6, 1e-6, Array(0), Array(0))
-    var filter = document.querySelectorAll(".tass")
+    var filter = tbody.parentElement.querySelectorAll(".tass")
 
     for (i = 0; i < l; i++) {
         e = r[i]
@@ -111,14 +112,18 @@ function do_filter() {
 
         e.hidden = false
 
-        for (j = 0; j < cols; j++) {
-            c = e.children[j]
-            col[j] = c.innerText.match(/[\d\.\-]+/g)
+        if (typeof(e.values) == 'undefined') {
+            for (j = 0; j < cols; j++) {
+                c = e.children[j]
+                col[j] = c.innerText.match(/[\d\.\-]+/g)
+            }
+            if (!e.hasAttribute("id")) {
+                e.id = i
+            }
+            e.values = col
+        } else {
+            col = e.values
         }
-        if (!e.hasAttribute("id")) {
-            e.id = i
-        }
-        e.values = col
 
         if (filter[0].value.length && null == col[0][0].match(RegExp(filter[0].value))) {
             e.hidden = true
@@ -133,7 +138,7 @@ function do_filter() {
         }
 
         try {
-            if (filter[5].value.length && null == col[5][0].match(RegExp(filter[5].value))) {
+            if (filter[5].value.length && null == e.children[5].innerText.match(RegExp(filter[5].value))) {
                 e.hidden = true
             }
             detail = document.getElementById(col[5][0])
@@ -157,7 +162,7 @@ function do_filter() {
     }
 
     try {
-        var tr = document.querySelector("tbody tr:last-child")
+        var tr = document.querySelector("form tbody tr:last-child")
         per_num = tr.children[1]
         per_num.innerHTML = per_num.innerHTML.replace(/\d+[ \/\d]*$/, "") + l + " / " + cnt
         per_sum = tr.children[0]
@@ -168,92 +173,157 @@ function do_filter() {
     console.log("Filter done.")
 }
 
+function pick_the_one(r, idx, desc, indicator, next) {
+    if (!r) {
+        return setTimeout(function(e, v){
+            e.removeAttribute('sorting')
+            e.setAttribute('desc', v)
+        }, 100, indicator, desc)
+    }
+
+    if (next) {
+        var i = r.sectionRowIndex
+        var c = r.parentElement.children.length
+        indicator.setAttribute('sorting', parseInt( (i + 1) * 100 / c ))
+    }
+//    if (r.hidden) {
+//        return setTimeout(pick_the_one, 1, r.nextElementSibling, idx, desc, indicator, next)
+//    }
+
+    try {
+        sv = r.values[idx][0]
+    } catch(err) {
+        try {
+            sv = r.children[idx].innerText
+            sv = sv.match(/[\d\.\-]+/g)[0]
+        } catch (err) { }
+    }
+    var x = undefined
+
+    for (t=r.nextElementSibling; t; t=t.nextElementSibling) {
+//        if (t.hidden) continue
+
+        try {
+            tv = t.values[idx][0]
+        } catch(err) {
+            try {
+                tv = t.children[idx].innerText
+                tv = tv.match(/[\d\.\-]+/g)[0]
+            } catch (err) { }
+        }
+        if (isNaN(sv) || isNaN(tv)) {
+            if (desc && sv >= tv) {
+                continue
+            }
+            if (!desc && sv <= tv) {
+                continue
+            }
+        } else {
+            if (desc && parseFloat(sv) >= parseFloat(tv)) {
+                continue
+            }
+            if (!desc && parseFloat(sv) <= parseFloat(tv)) {
+                continue
+            }
+        }
+        sv = tv
+        var x = t.previousElementSibling
+        r = r.parentElement.insertBefore(t, r)
+        t = x
+    }
+
+    if (next) setTimeout(pick_the_one, 1, r.nextElementSibling, idx, desc, indicator, next)
+}
+
+function sortByChild2(e, idx, desc) {
+    if (e == null) return
+    c = e.children.length
+    if (c < 2) return
+
+    var indicator=e.parentElement.querySelector('thead').children[0].children[idx]
+
+    pick_the_one(e.firstElementChild, idx, desc, indicator, true)
+}
+
 function sortByChild(e, idx, desc) {
     if (e == null) return
     c = e.children.length
     if (c < 2) return
 
-    var e = document.querySelector("form .m-collect-info tbody")
-    var dtcnt = 0
-    for (var i = 0; i < c; i++) {
-        s = e.children[i]
+    thread_sort(e.firstElementChild, idx, desc, 500)
+}
 
-        for (var j = i + 1; j < c; j++) {
-            t = e.children[j]
-            if (isNaN(s.values[idx][0]) || isNaN(t.values[idx][0])) {
-                if (desc && s.values[idx][0] >= t.values[idx][0]) {
-                    continue
-                }
-                if (!desc && s.values[idx][0] <= t.values[idx][0]) {
-                    continue
-                }
-            } else {
-                if (desc && parseFloat(s.values[idx][0]) >= parseFloat(t.values[idx][0])) {
-                    continue
-                }
-                if (!desc && parseFloat(s.values[idx][0]) <= parseFloat(t.values[idx][0])) {
-                    continue
-                }
-            }
-            s = e.insertBefore(t, s)
-        }
+function thread_sort(r, idx, desc, interval) {
+    var indicator=r.parentElement.parentElement.querySelector('thead').children[0].children[idx]
+    r.parentElement.sorting = true
 
-        if (isNaN(s.values[5][0]))
-            continue
-        dt = document.getElementById(s.values[5][0])
-        if (null == dt)
-            continue
-        if (dt.parentElement.children.length < $(dt).index() + dtcnt)
-            continue
-        dt.parentElement.appendChild(dt)
-        dtcnt++
+    setTimeout(function(e){
+        e.sorting = false
+    }, interval, r.parentElement)
+
+    for (; r && r.parentElement.sorting; r=r.nextElementSibling) {
+        pick_the_one(r, idx, desc, indicator, false)
+    }
+
+    if (r) {
+        var i = r.sectionRowIndex
+        var c = r.parentElement.children.length
+        indicator.setAttribute('sorting', parseInt( (i + 1) * 100 / c ))
+        setTimeout(thread_sort, 1, r.nextElementSibling, idx, desc)
     }
 }
 
 function addEvents(type) {
     try {
-        var searchResult = document.querySelector("form .m-collect-info thead")
-        searchResult.sortBy = (function(idx, desc) {
-            return sortByChild(this.parentElement.querySelector("tbody"), idx, desc)
+        var hdr = document.querySelector("form .m-collect-info thead")
+        hdr.sortBy = (function(idx, desc) {
+            this.children[0].children[idx].setAttribute('sorting', '0')
+            sortByChild2(this.parentElement.querySelector("tbody"), idx, desc)
         })
 
-        for (var i = 0; i < searchResult.children[0].children.length; i++) {
-            var c=searchResult.children[0].children[i]
-            if (3 == i) {
-                c.addEventListener(type, function(e) {
-                    hidden = this.parentElement.nextElementSibling.hidden;
-                    this.parentElement.nextElementSibling.hidden = !hidden
-                })
-                continue
+        hdr.children[0].addEventListener(type, function(e) {
+            var c = e.path[0]
+            if (c.localName != 'th') return
+
+            if (3 == c.cellIndex) {
+                hidden = this.nextElementSibling.hidden;
+                this.nextElementSibling.hidden = !hidden
+                return
             }
-            c.addEventListener(type, function(e) {
-                var c = e.path[0]
-                if (c.localName != 'th') return
-                var desc = false
-                try {
-                    if (c.getAttribute('desc') == 'true') desc = true
-                } catch(e) {}
-                c.parentElement.querySelectorAll(c.localName).forEach(function(s){s.removeAttribute('desc')})
-                c.setAttribute('desc', !desc)
-                return searchResult.sortBy(c.cellIndex, !desc)
+
+            var desc = false
+            try {
+                if (c.getAttribute('desc') == 'true') desc = true
+            } catch(e) {}
+            e.path[1].querySelectorAll(c.localName).forEach(function(s){
+                s.removeAttribute('sorting')
+                s.removeAttribute('desc')
             })
-        }
+            c.setAttribute('desc', !desc)
+            return e.path[2].sortBy(c.cellIndex, !desc)
+        })
     } catch (e) { console.log(e) }
 
     var t = document.querySelectorAll("form .m-collect-info thead")
     for (var j=1; j<t.length; j++) {
-        t[j].sort = Array()
         t[j].sortBy = (function(idx, desc) {
-            return sortByChild(this.parentElement.querySelector("tbody"), idx, desc)
+            this.children[0].children[idx].setAttribute('sorting', '0')
+            sortByChild2(this.parentElement.querySelector("tbody"), idx, desc)
         })
-        for (var i=0; i<t[j].children[0].children.length; i++) {
-            t[j].sort[i] = 0
-            t[j].children[0].children[i].addEventListener(type, function(e){
-                var idx = this.cellIndex
-                t[j].sort[idx] = !t[j].sort[idx]
-                return t[j].sortBy(idx, t[j].sort[idx])
+        t[j].children[0].addEventListener(type, function(e){
+            var c = e.path[0]
+            if (c.localName != 'th') return
+            var desc = false
+            try {
+                if (c.getAttribute('desc') == 'true') desc = true
+            } catch(e) {}
+            e.path[1].querySelectorAll(c.localName).forEach(function(s){
+                s.removeAttribute('sorting')
+                s.removeAttribute('desc')
             })
-        }
+            c.setAttribute('desc', !desc)
+            return e.path[2].sortBy(c.cellIndex, !desc)
+        })
     }
 
     document.querySelectorAll("form .account-title p.title").forEach(function(x){
@@ -486,7 +556,7 @@ function createSearchBox() {
     }
 
     searchBoxRow = document.createElement("tr")
-    filter_values = [".*", "0", "0", "0", "0", ".*"]
+    filter_values = [".*", "0", "0", "0", "0", "--"]
     filter_names = ["reqcode", "amount", "perfee", "remain", "tstp", "procode"]
     for (i = 0; i < th.firstElementChild.children.length; i++) {
         t = document.createElement("input")
@@ -656,6 +726,18 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
                     c.disabled = true
                     console.log(e)
                 }
+            })
+        })
+        document.querySelectorAll("#details-list p.title").forEach(function(e){
+            e.addEventListener('click', function(e){
+                this.setAttribute('show', !!this.parentElement.nextElementSibling.hidden)
+                this.parentElement.nextElementSibling.hidden = !this.parentElement.nextElementSibling.hidden
+            })
+        })
+        document.querySelectorAll("#reports p.title").forEach(function(e){
+            e.addEventListener('click', function(e){
+                this.setAttribute('show', !!this.parentElement.nextElementSibling.hidden)
+                this.parentElement.nextElementSibling.hidden = !this.parentElement.nextElementSibling.hidden
             })
         })
         addEvents("click")
