@@ -46,7 +46,7 @@ p.title::after {
 
 #details-list > .account-title p::before ,
 #reports > .account-title p::before {
-    content: '附 ' counter(clouser_num) '：';
+    content: '附-' counter(clouser_num) '：';
 }
 
 #reports > .m-account-detail {
@@ -359,7 +359,7 @@ form .m-collect-info:not(:nth-child(3)),
 }
 
 .details-statistics .account-title p::before {
-    content: '统计 ' counter(statistics_num) '：';
+    content: '统计-' counter(statistics_num) '：';
 }
 
 .details-statistics .title span::before {
