@@ -125,6 +125,7 @@ form {
     counter-reset: query_num;
     counter-reset: clouser_num;
     counter-reset: statistics_num;
+    counter-reset: project_num;
     counter-set: page_of_project 3;
 }
 
@@ -331,7 +332,6 @@ form .index_owner_sy td:nth-child(3)::after,
 
 @media screen and (min-width: 1920px) {
     #details-list .m-account-detail {
-        counter-reset: project_num;
         max-height: 95%;
         overflow-y: scroll;
     }
@@ -373,6 +373,11 @@ form .collect-info tbody tr.paging td:last-child a {
     counter-increment: page_of_project;
 }
 
+#details-list .m-account-detail:not([hidden]) tr:first-child td::after {
+    counter-increment: project_num;
+    content: '【工程-'counter(project_num)'】';
+    float: left;
+}
 
 @media print {
     form .m-collect-info thead tr:not(:first-child),
@@ -400,8 +405,6 @@ form .collect-info tbody tr.paging td:last-child a {
     }
 
     #details-list .m-account-detail:not([hidden]) tr:first-child td::after {
-        counter-increment: project_num;
-        content: '【工程-'counter(project_num)'】';
         float: right;
         color: lightgrey
     }
@@ -409,26 +412,6 @@ form .collect-info tbody tr.paging td:last-child a {
 
 #details-list tr:first-child a {
     float: right
-}
-
-@media screen {
-    #details-list .m-account-detail:not([hidden]) tr:first-child td::after {
-        counter-increment: project_num;
-        content: '【工程-'counter(project_num)'】';
-        float: left;
-    }
-
-    #details-list tr:first-child a:last-child::before {
-        content: '支取：';
-        float: left;
-        color: grey
-    }
-
-    #details-list tr:first-child a:not(:first-child)::after {
-        content: '、';
-        float: right;
-        color: grey
-    }
 }
 
 table.colwidth,

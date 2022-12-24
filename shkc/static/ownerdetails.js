@@ -1030,7 +1030,7 @@ function fetch_report_data(box, tr, uri='https://962121.fgj.sh.gov.cn/wyweb/web/
             tab.removeAttribute('background')
             tab.querySelector("tbody").children[0].hidden = true
             tab.querySelector("tbody").children[1].hidden = true
-            tab.querySelector("tbody").children[2].hidden = true
+            //tab.querySelector("tbody").children[2].hidden = true
             tab.querySelector("tbody").children[6].hidden = true
             if (rtype == 2) tab.querySelector("tbody").children[9].hidden = true
             tab.setAttribute('date', tr.lastElementChild.innerText)
@@ -1185,7 +1185,6 @@ function unhide_reports(type, doc) {
         t.querySelector("tr:last-child").children[2].innerText = sum[0].toFixed(2)
         t.querySelector("tr:last-child").children[3].innerText = sum[1].toFixed(2)
         t.querySelector("tr:last-child").children[3].classList.add('tab_money')
-
         break
     case 6:
         doc.querySelectorAll("table.tab2").forEach(function(t){
