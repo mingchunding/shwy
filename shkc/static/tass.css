@@ -138,7 +138,7 @@ form .m-collect-info {
 }
 
 form .m-collect-info .title::before {
-    content: '查询-' counter(query_num) '：'
+    content: '查询-' counter(query_num) '：';
 }
 
 #details-list, #reports {
@@ -341,10 +341,6 @@ form .index_owner_sy td:nth-child(3)::after,
     }
 }
 
-#details-list p::before {
-    content: '附：'
-}
-
 form .m-collect-info:not(:nth-child(3)),
 .details-statistics,
 #reports table.colwidth,
@@ -358,9 +354,12 @@ form .m-collect-info:not(:nth-child(3)),
     page-break-after: always;
 }
 
-.details-statistics .account-title p::before {
+.details-statistics {
     counter-increment: statistics_num;
-    content: '统计 ' counter(statistics_num) '：'
+}
+
+.details-statistics .account-title p::before {
+    content: '统计 ' counter(statistics_num) '：';
 }
 
 .details-statistics .title span::before {
