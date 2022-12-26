@@ -276,10 +276,10 @@ function thread_sort(r, idx, desc, interval) {
 function addEvents(type) {
     try {
         var hdr = document.querySelector("form .m-collect-info thead")
-        hdr.sortBy = (function(idx, desc) {
+        hdr.sortBy = function(idx, desc) {
             this.children[0].children[idx].setAttribute('sorting', '0')
             sortByChild2(this.parentElement.querySelector("tbody"), idx, desc)
-        })
+        }
 
         hdr.children[0].addEventListener(type, function(e) {
             var c = e.path[0]
@@ -306,10 +306,10 @@ function addEvents(type) {
 
     var t = document.querySelectorAll("form .m-collect-info thead")
     for (var j=1; j<t.length; j++) {
-        t[j].sortBy = (function(idx, desc) {
+        t[j].sortBy = function(idx, desc) {
             this.children[0].children[idx].setAttribute('sorting', '0')
             sortByChild2(this.parentElement.querySelector("tbody"), idx, desc)
-        })
+        }
         t[j].children[0].addEventListener(type, function(e){
             var c = e.path[0]
             if (c.localName != 'th') return
@@ -401,11 +401,11 @@ function pull_project(div, item, next) {
             (item.parentElement.children.length - item.sectionRowIndex - 1)
     } catch(e) { }
 
-    if (item.hidden) {
-        if (!item.nextElementSibling && progress) progress.remove()
-        if (next) setTimeout(pull_project, 10, div, item.nextElementSibling, next)
-        return false
-    }
+//    if (item.hidden) {
+//        if (!item.nextElementSibling && progress) progress.remove()
+//        if (next) setTimeout(pull_project, 10, div, item.nextElementSibling, next)
+//        return false
+//    }
     try {
         var id = item.values[5][0].match(/\d+/)[0]
     } catch (e) {
@@ -734,12 +734,14 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
                 this.parentElement.nextElementSibling.hidden = !this.parentElement.nextElementSibling.hidden
             })
         })
-        document.querySelectorAll("#reports p.title").forEach(function(e){
-            e.addEventListener('click', function(e){
-                this.setAttribute('show', !!this.parentElement.nextElementSibling.hidden)
-                this.parentElement.nextElementSibling.hidden = !this.parentElement.nextElementSibling.hidden
+        if (!document.querySelector("#reports > .account-title p.title a")) {
+            document.querySelectorAll("#reports p.title").forEach(function(e){
+                e.addEventListener('click', function(e){
+                    this.setAttribute('show', !!this.parentElement.nextElementSibling.hidden)
+                    this.parentElement.nextElementSibling.hidden = !this.parentElement.nextElementSibling.hidden
+                })
             })
-        })
+        }
         addEvents("click")
     }, 100)
 }
@@ -891,7 +893,8 @@ function create_reports_container() {
 
 function fetch_reports_list(container) {
     var iframe=document.createElement("iframe")
-    iframe.src = 'https://962121.fgj.sh.gov.cn/wyweb/web/hmfmsweb/biz/hocacctreport/getSection.do'
+    var url_report_list = 'https://962121.fgj.sh.gov.cn/wyweb/web/hmfmsweb/biz/hocacctreport/getSection.do'
+    iframe.src = url_report_list
     iframe.height = '50%'
     iframe.width = '50%'
     iframe.style.left = '25%'
@@ -901,29 +904,38 @@ function fetch_reports_list(container) {
     iframe.addEventListener('error', function(event){
         console.log('fail to fetch data from ' + this.src + ', retry again 1s later.')
         setTimeout(function(){
-            this.src = 'https://962121.fgj.sh.gov.cn/wyweb/web/hmfmsweb/biz/hocacctreport/getSection.do'
+            this.src = url_report_list
         }, 1000)
     })
     iframe.addEventListener("load", function(event) {
         var progress = container.previousElementSibling.querySelector(".title span")
-        var func = this.contentDocument.location.href.match(/[^\/]+\.do/)[0]
+        try {
+            var func = this.contentDocument.location.href.match(/[^\/]+\.do/)[0]
+        } catch(e) {
+            console.log("Fail to parse url " + this.contentDocument.location.href + ', will reload and try again 5s later.')
+            setTimeout(function(){
+                iframe.src = url_report_list
+            }, 5000)
+            return
+        }
 
         if (container.reports.length < 1) {
             try {
                 container.reports = JSON.parse(window.localStorage.reports_link)
-                document.unit_fund = container.reports[2].unit_fund
+//                document.unit_fund = container.reports[2].unit_fund
             } catch (e) {
                 container.reports = Array()
-                console.log(e)
+//                console.log(e)
             }
         }
         if (undefined == document.unit_fund) {
             fetch_reports_link(func, container, this.contentDocument, progress)
             return
         } else try {
-                JSON.parse(window.localStorage.reports_link)
-        } catch(e) {
             window.localStorage.reports_link = JSON.stringify(container.reports)
+            JSON.parse(window.localStorage.reports_link)
+        } catch(e) {
+            //window.localStorage.reports_link = JSON.stringify(container.reports)
             console.log(container.reports)
         }
         console.log(container.reports)
@@ -968,8 +980,22 @@ function fetch_reports_link(func, container, doc, progress) {
             progress.innerText = '获取报表地址：第 ' + (idx + 1) + ' 项，剩余：' + (trs.length - idx - 1)
             var tr = trs[idx]
             func_param = tr.querySelector("a").getAttribute('onclick').match(/\d+/g)
-            s = tr.querySelector("td").innerText
-            s = s.replace(/上海市闵行区上海康城业主大会|莘松路958弄维园道43号|[\n\t ]*/g, '')
+            var s = tr.querySelector("td").innerText.replace(/^[\t\n  ]+|[\t\n ]+$/g,'')
+            console.log(s)
+            try {
+                switch (idx) {
+                    case 0:
+                        s = s.match(/业主大会账户收支汇总表$/)[0]
+                        break;
+                    case 1:
+                        s = s.match(/业主大会维修资金支出明细表$/)[0]
+                        break;
+                    case 2:
+                        s = s.match(/门牌幢收支汇总表$/)[0]
+                        break;
+                    default:
+                }
+            } catch(e) {console.log('Report name #' + idx + ' mismatched, fullname will be shown')}
             container.reports.push({name: s, type: func_param[0]})
             if (func_param.length > 1) {
                 container.reports[idx].unit_fund = func_param[1]
