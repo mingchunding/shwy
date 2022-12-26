@@ -224,7 +224,12 @@ function do_group_statistics(n, r) {
 		return
 
 	var div = document.createElement("div")
-	document.body.insertBefore(div, dlist)
+	var container = document.getElementById("statistics")
+	if (container) {
+		container.appendChild(div)
+	} else {
+		document.body.insertBefore(div, dlist)
+	}
 	div.classList = "details-statistics m-collect-info m-account-detail"
 
 	div.innerHTML = '\

@@ -929,6 +929,7 @@ function fetch_reports_list(container) {
             }
         }
         if (undefined == document.unit_fund) {
+            progress.innerText = '获取报表地址'
             fetch_reports_link(func, container, this.contentDocument, progress)
             return
         } else try {
@@ -938,7 +939,7 @@ function fetch_reports_list(container) {
             //window.localStorage.reports_link = JSON.stringify(container.reports)
             console.log(container.reports)
         }
-        console.log(container.reports)
+//        console.log(container.reports)
 
         var tab = this.contentDocument.querySelector("table.datagrid_gridtb")
         tab.querySelector("thead").remove()
