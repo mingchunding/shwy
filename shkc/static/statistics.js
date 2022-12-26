@@ -30,10 +30,10 @@ function match_proj_detail(div, idx, what) {
 
 function group_by_row(r, c, t) {
 	if (r > 0 && c > 0)
-		return eval('$("#details-list .m-account-detail:not([hidden]) tr:nth-child(' +
+		return eval('$("#details-list .m-account-detail tr:nth-child(' +
 					r + ') td:nth-child(' + c + '):contains(' + t + ')")')
 	else
-		return document.querySelectorAll("#details-list .m-account-detail:not([hidden]) td:not(.name)")
+		return document.querySelectorAll("#details-list .m-account-detail td:not(.name)")
 }
 
 function sum_by_project(sum, t) {
@@ -41,13 +41,15 @@ function sum_by_project(sum, t) {
 
     var id = td[2].innerText
     sum[0].push(id)
-    var cost = td[10].innerText.match(/[\d\.]+/)[0]
+    var cost = td[30].innerText.match(/[\d\.]+/)[0]
     sum[2] += parseFloat(cost)
     var cost = td[12].innerText.match(/[\d\.]+/)[0]
     sum[3] += parseFloat(cost)
     var s = td[28].innerText.replace(/\n+/, '')
     if (!sum[4].includes(s))
         sum[4].push(s)
+    var cost = td[10].innerText.match(/[\d\.]+/)[0]
+    sum[6] += parseFloat(cost)
     // 个人查询表格计算个人扣款
     try {
         t.perfee.forEach(function(r){
@@ -56,7 +58,7 @@ function sum_by_project(sum, t) {
         })
     } catch (e) {
         var perfee = Array()
-        document.querySelectorAll("form .m-collect-info:nth-child(3) td:last-child").forEach(function(x) {
+        document.querySelectorAll("form .m-collect-info.index_owner_zq td:last-child").forEach(function(x) {
             if (!x.innerText.match(RegExp(id))) return
             var r = x.parentElement
             try {
@@ -90,6 +92,7 @@ function sum_of(n, t) {
 		r = $(tname[i].parentElement).index() + 1
 	}
 	sum.push(r)
+	sum.push(0) //已支取金额
 
 	if (typeof(t) != 'number' || !isNaN(t)) {
 		document.querySelectorAll("#details-list table").forEach(function(e){
@@ -191,6 +194,7 @@ function add_statistics(tbody, rname, key) {
 	tr.children[2].innerHTML='<img>'
 	tr.children[3].innerHTML='<img>'
 	tr.children[4].innerHTML='<img">'
+	tr.children[5].innerHTML='<img">'
 	if (tbody.querySelector("tr:last-child input")) {
 		tbody.insertBefore(tr, tbody.lastElementChild)
 	} else {
@@ -240,7 +244,7 @@ function do_group_statistics(n, r) {
 				<th></th>\
 				<th>工程数量</th>\
 				<th>个人扣款</th>\
-				<th>预算金额</th>\
+				<th>已支取金额</th>\
 				<th>决算金额</th>\
 				<th>施工管理单位</th>\
 				<th>备注：工程名、实施范围、维护原因</th>\
@@ -278,8 +282,8 @@ function do_group_statistics(n, r) {
 						' 至 ' + document.querySelector("#endDate").value
 			cal_statistics(tab, g)
 		}
-		this.setAttribute('show', this.parentElement.nextElementSibling.hidden)
-		this.parentElement.nextElementSibling.hidden=!this.parentElement.nextElementSibling.hidden
+		this.setAttribute('show', sibling.hidden)
+		sibling.hidden=!sibling.hidden
 	})
 
 	if (g.length > 0 && g[g.length-1] == '+') {
