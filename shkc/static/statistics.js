@@ -37,19 +37,23 @@ function group_by_row(r, c, t) {
 }
 
 function sum_by_project(sum, t) {
-    td=t.querySelectorAll("td")
+	if (undefined == t.values || Array.isArray(t.values)) {
+	    td=t.querySelectorAll("td")
+		t.values = Array()
+		t.values[2] = td[2].innerText
+		t.values[30] = parseFloat(td[30].innerText.match(/[\d\.]+/)[0])
+		t.values[12] = parseFloat(td[12].innerText.match(/[\d\.]+/)[0])
+		t.values[28] = td[28].innerText.replace(/\n+/, '')
+		t.values[10] = parseFloat(td[10].innerText.match(/[\d\.]+/)[0])
+	}
 
-    var id = td[2].innerText
-    sum[0].push(id)
-    var cost = td[30].innerText.match(/[\d\.]+/)[0]
-    sum[2] += parseFloat(cost)
-    var cost = td[12].innerText.match(/[\d\.]+/)[0]
-    sum[3] += parseFloat(cost)
-    var s = td[28].innerText.replace(/\n+/, '')
+    sum[0].push(t.values[2])
+    sum[2] += t.values[30]
+    sum[3] += t.values[12]
+    var s = t.values[28]
     if (!sum[4].includes(s))
         sum[4].push(s)
-    var cost = td[10].innerText.match(/[\d\.]+/)[0]
-    sum[6] += parseFloat(cost)
+    sum[6] += t.values[10]
     // 个人查询表格计算个人扣款
     try {
         t.perfee.forEach(function(r){
@@ -59,7 +63,7 @@ function sum_by_project(sum, t) {
     } catch (e) {
         var perfee = Array()
         document.querySelectorAll("form .m-collect-info.index_owner_zq td:last-child").forEach(function(x) {
-            if (!x.innerText.match(RegExp(id))) return
+            if (!x.innerText.match(RegExp(t.values[2]))) return
             var r = x.parentElement
             try {
                 var f = {
@@ -193,8 +197,8 @@ function add_statistics(tbody, rname, key) {
 	tr.children[1].innerHTML='<img>'
 	tr.children[2].innerHTML='<img>'
 	tr.children[3].innerHTML='<img>'
-	tr.children[4].innerHTML='<img">'
-	tr.children[5].innerHTML='<img">'
+	tr.children[4].innerHTML='<img>'
+	tr.children[5].innerHTML='<img>'
 	if (tbody.querySelector("tr:last-child input")) {
 		tbody.insertBefore(tr, tbody.lastElementChild)
 	} else {
@@ -345,7 +349,7 @@ function hidden_by_dom(td) {
 			console.log(e, s.split(','))
 		}
 
-		document.querySelectorAll("form .m-collect-info:nth-child(3) td:last-child").forEach(function(x) {
+		document.querySelectorAll("form .m-collect-info.index_owner_zq td:last-child").forEach(function(x) {
 			if (!x.innerText.match(RegExp(e))) return
 			var r = x.parentElement
 			r.hidden=!td.show
@@ -355,7 +359,7 @@ function hidden_by_dom(td) {
 	setTimeout(function() {
 		var sum = 0
 
-		document.querySelectorAll("form .m-collect-info:nth-child(3) tbody tr:not([hidden])").forEach(function(r) {
+		document.querySelectorAll("form .m-collect-info.index_owner_zq tbody tr:not([hidden])").forEach(function(r) {
 			sum += parseFloat(r.children[2].innerText.match(/[\d\.]+/)[0])
 		})
 
@@ -366,8 +370,8 @@ function hidden_by_dom(td) {
 
 		per_num = tr.children[1]
 		try {
-			var cnt0 = document.querySelectorAll("form .m-collect-info:nth-child(3) tbody tr:not([hidden])").length
-			var cnt1 = document.querySelectorAll("form .m-collect-info:nth-child(3) tbody tr").length
+			var cnt0 = document.querySelectorAll("form .m-collect-info.index_owner_zq tbody tr:not([hidden])").length
+			var cnt1 = document.querySelectorAll("form .m-collect-info.index_owner_zq tbody tr").length
 		} catch(e) {
 			var cnt0 = 0
 			var cnt1 = 0

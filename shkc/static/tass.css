@@ -142,6 +142,7 @@ form .m-collect-info .title::before {
 }
 
 #details-list, #reports {
+    counter-reset: project_num;
     counter-increment: clouser_num
 }
 
