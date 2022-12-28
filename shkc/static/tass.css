@@ -76,9 +76,27 @@ p.title::after {
     margin-bottom: 5px;
 }
 
-#reports tbody tr:hover td {
+#reports .collect-info:not([func='ShouZhiHuiZong.do']) tbody tr:hover td,
+#reports .collect-info[func='ShouZhiHuiZong.do'] table.tab3 tbody tr:hover td:not([rowspan]) {
     background-color: lightblue;
     cursor: default
+}
+
+#reports .collect-info[func='ShouZhiHuiZong.do'] table.tab3 tbody tr:nth-child(1) td.tab_money:before,
+#reports .collect-info[func='ShouZhiHuiZong.do'] table.tab3 tbody tr:nth-child(2) td.tab_money:before,
+#reports .collect-info[func='ShouZhiHuiZong.do'] table.tab3 tbody tr:nth-child(7) td.tab_money:before,
+#reports .collect-info[func='ShouZhiHuiZong.do'] table.tab3 tbody tr:nth-child(8) td.tab_money:before {
+    content: '\2692';
+    font-size: 20px;
+    float: left;
+}
+
+#reports .collect-info[func='ShouZhiHuiZong.do'] table.tab3 tbody tr td.tab_money:hover:before {
+    color: red;
+}
+
+#reports .collect-info[func='ShouZhiHuiZong.do'] table.tab3 tbody tr td.tab_money:hover {
+    cursor: pointer
 }
 
 .account-title[show='true'] p.title:after,
@@ -138,7 +156,7 @@ form .m-collect-info {
 }
 
 form .m-collect-info .title::before {
-    content: '查询-' counter(query_num) '：';
+    content: '\2299  查询-' counter(query_num) '：';
 }
 
 #details-list, #reports {
@@ -355,12 +373,16 @@ form .m-collect-info:not(:nth-child(3)),
     page-break-after: always;
 }
 
+#reports table.colwidth:not(:last-child) {
+    border-bottom: 1px solid
+}
+
 .details-statistics {
     counter-increment: statistics_num;
 }
 
 .details-statistics .account-title p::before {
-    content: '统计-' counter(statistics_num) '：';
+    content: '\2211  统计-' counter(statistics_num) '：';
 }
 
 .details-statistics .title span::before {
@@ -545,4 +567,26 @@ thead th[sorting]:after {
 
 .collect-info[func='ShouZhiHuiZong.do'] table.tab3 > tbody > tr > td {
     border: 1px solid;
+}
+
+#chart {
+    width: min(800px, 80%);
+    border: 1px solid;
+    display: none;
+    position: fixed;
+    height: 50%;
+    background-color: lightblue;
+    left: 10%;
+}
+
+#chart:after {
+    content: 'X';
+    float: right;
+    cursor: pointer;
+    margin: 10px 10px;
+    font-weight: bold
+}
+
+#chart:hover :after{
+    color: red
 }
