@@ -617,7 +617,7 @@ function createSearchBox() {
 }
 
 if (window.location.href.match(/wxzjquery\/index_owner_zq.do$/)) {
-    document.querySelector("form .m-colloect-info").classList.add('index_owner_zq')
+    document.querySelector("form .m-collect-info").classList.add('index_owner_zq')
     if (document.querySelector("form .m-collect-info tbody").children.length > 1) {
         createSearchBox()
 //        if (false) {
