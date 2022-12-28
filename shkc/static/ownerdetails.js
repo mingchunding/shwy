@@ -617,6 +617,7 @@ function createSearchBox() {
 }
 
 if (window.location.href.match(/wxzjquery\/index_owner_zq.do$/)) {
+    document.querySelector("form .m-colloect-info").classList.add('index_owner_zq')
     if (document.querySelector("form .m-collect-info tbody").children.length > 1) {
         createSearchBox()
 //        if (false) {
@@ -646,7 +647,7 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
     link = document.querySelector('a[href$="wxzjquery/index_owner_zq.do"]')
     if (link) link.target='_blank'
     link = document.querySelector('a[href$="ownerpact/index_owner.do"]')
-    if (link) link.target='_blank'
+//    if (link) link.target='_blank'
 } else if (window.location.href.match(/(wxzjquery\/index_owner_zq.do$|shwy\/shkc)/)) {
     var cssl = document.styleSheets
 
@@ -665,7 +666,7 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
     if (null == tasscss) {
         styleSheets.forEach(function(css){
             tasscss = document.createElement("link")
-            tasscss.href = 'http://localhost/' + css
+            tasscss.href = 'https://mingchunding.github.io/shwy/shkc/static/' + css
             tasscss.rel = 'stylesheet'
             tasscss.type = 'text/css;charset=UTF-8'
             document.head.appendChild(tasscss)

@@ -85,7 +85,7 @@ function sum_by_project(sum, t) {
 }
 
 function sum_of(n, t) {
-	var sum = Array(Array(), 0, 0, 0, Array(), Array())
+	var sum = Array(Array(), 0, 0, 0, Array(), Array(), 0)
 	var r = 0, c = 0
 	var tname=document.querySelectorAll("#details-list .account-content:first-child td.name")
 	for (var i=0; i<tname.length; i++) {
@@ -96,7 +96,6 @@ function sum_of(n, t) {
 		r = $(tname[i].parentElement).index() + 1
 	}
 	sum.push(r)
-	sum.push(0) //已支取金额
 
 	if (typeof(t) != 'number' || !isNaN(t)) {
 		document.querySelectorAll("#details-list table").forEach(function(e){
@@ -217,7 +216,7 @@ function add_statistics(tbody, rname, key) {
 		var sum = sum_of(sname, key)
 		tr.statistics = sum
 		fill_statistics_row(tr)
-	}, 1000)
+	}, 10)
 }
 
 function cal_statistics(tab, r) {
