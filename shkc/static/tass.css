@@ -573,7 +573,7 @@ thead th[sorting]:after {
     width: 80%;
     min-width: 1000px;
     border: 1px solid;
-    display: none;
+    /* display: none; */
     height: 80%;
     background-color: white;
     position: fixed;
@@ -581,12 +581,14 @@ thead th[sorting]:after {
     top: 10%;
 }
 
-#chart:before {
-    content: 'X';
+#chart > span {
+    font-weight: bold;
     float: right;
-    cursor: pointer;
-    margin: 10px 10px;
-    font-weight: bold
+    margin: 10px 10px
+}
+
+#chart > span:hover {
+    cursor: pointer
 }
 
 #chart:hover :before{
