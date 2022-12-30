@@ -570,15 +570,15 @@ thead th[sorting]:after {
 }
 
 #chart {
-    width: 80%;
-    min-width: 1000px;
+    width: calc(100% - 40px);
+    /* min-width: 1000px; */
     border: 1px solid;
     /* display: none; */
-    height: 80%;
+    /* height: 80%; */
     background-color: white;
     position: fixed;
-    left: 10%;
-    top: 10%;
+    left: 20px;
+    top: 5%;
 }
 
 #chart > span {

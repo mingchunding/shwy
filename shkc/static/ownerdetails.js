@@ -779,7 +779,7 @@ function do_click_submit(iframe) {
 
 function post_query_account_balance(container) {
     container.querySelectorAll("tr td:first-child").forEach(function(c){
-        var tds = document.querySelectorAll("form .m-collect-info:nth-child(3) tbody td:first-child")
+        var tds = document.querySelectorAll("form .m-collect-info.index_owner_zq tbody td:first-child")
         for (var i=0; i<tds.length; i++) {
             if (tds[i].innerText == c.innerText) {
                 c.parentElement.hidden=true
@@ -1103,6 +1103,9 @@ function fetch_report_data(box, tr, uri='https://962121.fgj.sh.gov.cn/wyweb/web/
             setTimeout(function(){
                 if (progress) progress.remove()
             }, 1000)
+            if (rtype == 1) {
+                setTimeout(chart_shouzhihuizong, 2000)
+            }
         }
     })
 }
@@ -1231,4 +1234,174 @@ function unhide_reports(type, doc) {
     default:
         break
     }
+}
+
+window.chartColors = {
+    DarkGreen: 'rgb(0, 100, 0)',
+    LimeGreen: 'rgb(50, 205, 50)',
+    LightGreen: 'rgb(144, 238, 144)',
+    SpringGreen: 'rgb(0, 255, 127)',
+    PaleGreen: 'rgb(152, 251, 152)',
+    LightCoral: 'rgb(240, 128,128)',
+    red: 'rgb(255, 99, 132)',
+    orange: 'rgb(255, 159, 64)',
+    yellow: 'rgb(255, 205, 86)',
+    green: 'rgb(75, 192, 192)',
+    blue: 'rgb(54, 162, 235)',
+    purple: 'rgb(153, 102, 255)',
+    grey: 'rgb(201, 203, 207)'
+}
+
+function chart_shouzhihuizong() {
+    if (!document.getElementById('chart')) {
+        var div = document.createElement('div')
+        div.id = 'chart'
+        div.appendChild(document.createElement('span'))
+        div.appendChild(document.createElement('canvas'))
+        div.firstElementChild.innerText = 'X'
+        div.firstElementChild.addEventListener('click',function(e){
+            if (e.path[0].localName != 'span') return
+            e.path[1].style.display = 'none'
+        })
+        div.lastElementChild.id = 'canvas'
+        document.body.appendChild(div)
+    }
+
+    var fund_sum = Array(Array(),Array(),Array(),Array(),Array(),Array(),Array(),Array(),Array(),Array())
+    var repair_fund_earning = Array(Array(),Array(),Array(),Array())
+    var labels = Array()
+    var ctx = document.getElementById('canvas').getContext('2d')
+
+    var rtable = document.querySelectorAll(".collect-info[func='ShouZhiHuiZong.do'] table.colwidth")
+    var title = rtable[0].querySelector("table.tab1 tr.tab_unit > td").innerText.match(/上海市.+业主大会/)[0]
+    for (var i=rtable.length; i>0; i--) {
+        td = rtable[i-1].querySelectorAll("table.tab3 > tbody > tr > td.tab_money")
+        fund_sum[0].push(parseFloat(td[0].innerText))
+        fund_sum[1].push(parseFloat(td[2].innerText))
+        fund_sum[2].push(0 - parseFloat(td[3].innerText))
+        fund_sum[3].push(parseFloat(td[4].innerText))
+        fund_sum[4].push(parseFloat(rtable[i-1].querySelector("table.tab3 > tbody > tr:nth-child(5) table tr:last-child td").innerText.match(/[\d\.]{2,}/)[0]))
+        fund_sum[5].push(0 - parseFloat(rtable[i-1].querySelector("table.tab3 > tbody > tr:nth-child(6) table tr:last-child td").innerText.match(/[\d\.]{2,}/)[0]))
+        fund_sum[6].push(parseFloat(td[6].innerText))
+        fund_sum[7].push(parseFloat(td[8].innerText))
+        labels.push(rtable[i-1].querySelector("tbody > tr > td.fubold").innerText.match(/\d+年\d+月/g)[1])
+        var c = rtable[i-1].querySelectorAll("table.tab3 > tbody > tr:nth-child(5) table td")
+        for (var j=0; j<4; j++) {
+            repair_fund_earning[j].push(c[j].innerText.match(/[\d\.]{2,}/)[0])
+        }
+        var spending = rtable[i-1].querySelector("table.tab3 > tbody > tr:nth-child(6) table tr:last-child td").innerText.match(/[\d\.]{2,}/)
+        fund_sum[8].push(parseFloat(c[1].innerText.match(/[\d\.]{2,}/)[0]) - parseFloat(td[9].innerText))
+        fund_sum[9].push(0 - parseFloat(c[1].innerText.match(/[\d\.]{2,}/)[0]))
+    }
+
+    console.log(labels, fund_sum)
+    var barChartData = {
+        labels: labels,
+        datasets: [{
+                label: '总账户期初余额',
+                backgroundColor: window.chartColors.purple,
+                stack: 'Stack 0',
+                data: fund_sum[0],
+                hidden: true
+        }, {
+                label: '总账户收入',
+                backgroundColor: window.chartColors.red,
+                stack: 'Stack 0',
+                data: fund_sum[1],
+                hidden: true
+        }, {
+                label: '总账户支出',
+                backgroundColor: window.chartColors.green,
+                stack: 'Stack 0',
+                data: fund_sum[2],
+                hidden: true
+        }, {
+                label: '维修资金期初余额',
+                backgroundColor: window.chartColors.DarkGreen,
+                stack: 'Stack 1',
+                data: fund_sum[3],
+                hidden: true
+        }, /*{
+                label: '维修资金收入',
+                backgroundColor: window.chartColors.red,
+                stack: 'Stack 1',
+                data: fund_sum[4],
+                hidden: true
+        },*/
+           {
+                label: '维修基金交款',
+                backgroundColor: window.chartColors.LimeGreen,
+                stack: 'Stack 1',
+                data: repair_fund_earning[0],
+                hidden: true
+        }, {
+                label: '公共收益补充',
+                backgroundColor: window.chartColors.LightGreen,
+                stack: 'Stack 1',
+                data: repair_fund_earning[1],
+                hidden: true
+        }, {
+                label: '存款利息',
+                backgroundColor: window.chartColors.SpringGreen,
+                stack: 'Stack 1',
+                data: repair_fund_earning[2],
+                hidden: true
+        }, {
+                label: '其它收入',
+                backgroundColor: window.chartColors.PaleGreen,
+                stack: 'Stack 1',
+                data: repair_fund_earning[3],
+                hidden: true
+        }, {
+                label: '维修资金支出',
+                backgroundColor: window.chartColors.green,
+                stack: 'Stack 1',
+                data: fund_sum[5],
+                hidden: true
+        }, {
+                label: '公共收益期初余额',
+                backgroundColor: window.chartColors.orange,
+                stack: 'Stack 1',
+                data: fund_sum[6]
+        }, {
+                label: '公共收益收入',
+                backgroundColor: window.chartColors.red,
+                stack: 'Stack 1',
+                data: fund_sum[7]
+        }, {
+                label: '转入维修资金',
+                backgroundColor: window.chartColors.purple,
+                stack: 'Stack 1',
+                data: fund_sum[9]
+        }, {
+                label: '公共收益支出',
+                backgroundColor: window.chartColors.green,
+                stack: 'Stack 1',
+                data: fund_sum[8]
+        }]
+    }
+
+    window.myBar = new Chart(ctx, {
+            type: 'bar',
+            data: barChartData,
+            options: {
+                    title: {
+                            display: true,
+                            text: title + ' 帐目（单位：元）'
+                    },
+                    tooltips: {
+                            mode: 'index',
+                            intersect: false
+                    },
+                    responsive: true,
+                    scales: {
+                            xAxes: [{
+                                    stacked: true,
+                            }],
+                            yAxes: [{
+                                    stacked: true
+                            }]
+                    }
+            }
+    })
 }
