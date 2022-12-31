@@ -207,7 +207,7 @@ function add_statistics(tbody, rname, key) {
 		click_event_statistics_item(this)
 	})
 	tr.lastElementChild.addEventListener('click', function(e) {
-		if (e.path[0].localName!='td') return
+		if (e.target.localName!='td') return
 		if (!confirm('确定要删除【' + sname + '】中的统计项：【' + rname + '】吗？')) { return }
 		this.parentElement.remove()
 	})
@@ -300,7 +300,7 @@ function do_group_statistics(n, r) {
 		tr.lastElementChild.appendChild(document.createElement("input"))
 		tr.classList.add('searchbox')
 		tr.lastElementChild.addEventListener('click', function(e){
-			if (e.path[0].localName!='td') return
+			if (e.target.localName!='td') return
 			console.log(e)
 			var s=this.parentElement.querySelectorAll("input")[0].value
 			var k=this.parentElement.querySelectorAll("input")[1].value
