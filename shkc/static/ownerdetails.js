@@ -282,7 +282,7 @@ function addEvents(type) {
         }
 
         hdr.children[0].addEventListener(type, function(e) {
-            var c = e.path[0]
+            var c = e.target
             if (c.localName != 'th') return
 
             if (3 == c.cellIndex) {
@@ -295,12 +295,12 @@ function addEvents(type) {
             try {
                 if (c.getAttribute('desc') == 'true') desc = true
             } catch(e) {}
-            e.path[1].querySelectorAll(c.localName).forEach(function(s){
+            c.parentElement.querySelectorAll(c.localName).forEach(function(s){
                 s.removeAttribute('sorting')
                 s.removeAttribute('desc')
             })
             c.setAttribute('desc', !desc)
-            return e.path[2].sortBy(c.cellIndex, !desc)
+            return c.parentElement.parentElement.sortBy(c.cellIndex, !desc)
         })
     } catch (e) { console.log(e) }
 
@@ -311,18 +311,18 @@ function addEvents(type) {
             sortByChild2(this.parentElement.querySelector("tbody"), idx, desc)
         }
         t[j].children[0].addEventListener(type, function(e){
-            var c = e.path[0]
+            var c = e.target
             if (c.localName != 'th') return
             var desc = false
             try {
                 if (c.getAttribute('desc') == 'true') desc = true
             } catch(e) {}
-            e.path[1].querySelectorAll(c.localName).forEach(function(s){
+            c.parentElement.querySelectorAll(c.localName).forEach(function(s){
                 s.removeAttribute('sorting')
                 s.removeAttribute('desc')
             })
             c.setAttribute('desc', !desc)
-            return e.path[2].sortBy(c.cellIndex, !desc)
+            return c.parentElement.parentElement.sortBy(c.cellIndex, !desc)
         })
     }
 
@@ -335,11 +335,11 @@ function addEvents(type) {
             var x = p.querySelector("p.title")
             x.setAttribute('show', 'false')
             x.addEventListener("click", function(e){
-                if (event.path[0].localName=='a') {
+                if (e.target.localName=='a') {
                     var thread=prompt('并发下载数，建议不超过10，否则会造成网络卡顿', '10')
                     if (thread < 1) return
-                    event.path[0].remove()
-                    event.path[1].appendChild(document.createElement('span'))
+                    e.target.parentElement.appendChild(document.createElement('span'))
+                    e.target.remove()
                     get_details(thread)
                     return
                 }
@@ -831,7 +831,7 @@ function convert_iframe_project_list(e, f=null) {
     ths.forEach(function(t){ thd.appendChild(t.parentElement) })
 
     e.querySelector(".account-title p.title").addEventListener("click", function(event){
-        if (event.path[0].localName=='a') {
+        if (event.target.localName=='a') {
             var thread=prompt("总共需下载 " +
                          this.parentElement.nextElementSibling.querySelectorAll("tbody tr").length +
                          " 项工程详情数据，下载结束所有统计将被重置!\n设置并发下载数，建议不超过10，否则会造成网络卡顿", "10")
@@ -878,9 +878,9 @@ function create_reports_container() {
         container.children[0].setAttribute('show', 'true')
         container.children[1].classList.add('m-account-detail')
         container.children[0].addEventListener('click', function(e){
-            if (event.path[0].localName == 'a') {
-                event.path[0].remove()
-                event.path[1].appendChild(document.createElement("span"))
+            if (e.target.localName == 'a') {
+                e.target.parentElement.appendChild(document.createElement("span"))
+                e.target.remove()
                 setTimeout(fetch_reports_list, 10, this.nextElementSibling)
                 return
             }
@@ -1129,12 +1129,12 @@ function create_box_of_report(container, report, row, base='https://962121.fgj.s
             title.querySelector("p").appendChild(document.createElement("a"))
             return
         }
-        if (event.path[0].localName=='a') {
+        if (event.target.localName=='a') {
             setTimeout(fetch_report_data, 10, box, row, base)
-            event.path[0].remove()
-            event.path[1].appendChild(document.createElement("span"))
+            event.target.parentElement.appendChild(document.createElement("span"))
+            event.target.remove()
             return
-        } else if (event.path[0].localName=='span') {
+        } else if (event.target.localName=='span') {
 
         }
         this.setAttribute('show', !!this.nextElementSibling.hidden)
@@ -1260,8 +1260,8 @@ function chart_shouzhihuizong() {
         div.appendChild(document.createElement('canvas'))
         div.firstElementChild.innerText = 'X'
         div.firstElementChild.addEventListener('click',function(e){
-            if (e.path[0].localName != 'span') return
-            e.path[1].style.display = 'none'
+            if (e.target.localName != 'span') return
+            this.parentElement.hidden = 'true'
         })
         div.lastElementChild.id = 'canvas'
         document.body.appendChild(div)
