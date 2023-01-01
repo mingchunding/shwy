@@ -1253,19 +1253,21 @@ window.chartColors = {
 }
 
 function chart_shouzhihuizong() {
-    if (!document.getElementById('chart')) {
+    var div = document.getElementById('chart')
+    if (!div) {
         var div = document.createElement('div')
         div.id = 'chart'
         div.appendChild(document.createElement('span'))
         div.appendChild(document.createElement('canvas'))
         div.firstElementChild.innerText = 'X'
-        div.firstElementChild.addEventListener('click',function(e){
-            if (e.target.localName != 'span') return
-            this.parentElement.hidden = 'true'
-        })
         div.lastElementChild.id = 'canvas'
         document.body.appendChild(div)
     }
+
+    div.firstElementChild.addEventListener('click',function(e){
+        if (e.target.localName != 'span') return
+        this.parentElement.hidden = 'true'
+    })
 
     var fund_sum = Array(Array(),Array(),Array(),Array(),Array(),Array(),Array(),Array(),Array(),Array())
     var repair_fund_earning = Array(Array(),Array(),Array(),Array())
