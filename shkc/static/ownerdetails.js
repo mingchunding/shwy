@@ -1385,16 +1385,22 @@ function chart_shouzhihuizong() {
         type: 'bar',
         data: barChartData,
         options: {
-            title: {
-                fontSize: 20,
-                display: true,
-                text: title + ' 帐目（单位：元）'
+            plugins: {
+                title: {
+                    fontSize: 20,
+                    display: true,
+                    text: title + ' 帐目（单位：元）'
+                },
+                subtitle: {
+                    display: true,
+                    text: '（业主大会总账户 = 维修资金分账户 + 公共收益分账户 + 工作经费分账户）'
+                }
             },
-            tooltips: {
+            interaction: {
                 mode: 'index',
                 intersect: false
             },
-            responsive: true,
+/*            responsive: true,
             scales: {
                 xAxes: [{
                     stacked: true,
@@ -1402,7 +1408,7 @@ function chart_shouzhihuizong() {
                 yAxes: [{
                     stacked: true
                 }]
-            }
+            }*/
         }
     })
 }
