@@ -1290,7 +1290,7 @@ function chart_shouzhihuizong() {
             repair_fund_earning[j].push(c[j].innerText.match(/[\d\.]{2,}/)[0])
         }
         var spending = rtable[i-1].querySelector("table.tab3 > tbody > tr:nth-child(6) table tr:last-child td").innerText.match(/[\d\.]{2,}/)
-        fund_sum[8].push(parseFloat(c[1].innerText.match(/[\d\.]{2,}/)[0]) - parseFloat(td[9].innerText))
+        fund_sum[8].push(parseFloat(c[1].innerText.match(/[\d\.]{2,}/)[0] - td[9].innerText).toFixed(2))
         fund_sum[9].push(0 - parseFloat(c[1].innerText.match(/[\d\.]{2,}/)[0]))
     }
 
@@ -1382,26 +1382,27 @@ function chart_shouzhihuizong() {
     }
 
     window.myBar = new Chart(ctx, {
-            type: 'bar',
-            data: barChartData,
-            options: {
-                    title: {
-                            display: true,
-                            text: title + ' 帐目（单位：元）'
-                    },
-                    tooltips: {
-                            mode: 'index',
-                            intersect: false
-                    },
-                    responsive: true,
-                    scales: {
-                            xAxes: [{
-                                    stacked: true,
-                            }],
-                            yAxes: [{
-                                    stacked: true
-                            }]
-                    }
+        type: 'bar',
+        data: barChartData,
+        options: {
+            title: {
+                fontSize: 20,
+                display: true,
+                text: title + ' 帐目（单位：元）'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false
+            },
+            responsive: true,
+            scales: {
+                xAxes: [{
+                    stacked: true,
+                }],
+                yAxes: [{
+                    stacked: true
+                }]
             }
+        }
     })
 }
