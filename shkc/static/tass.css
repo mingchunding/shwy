@@ -485,9 +485,19 @@ table.merged tbody td {
 
 .m-account-search .f-search-content {
     position: relative;
-    font-size: 14px;
+    font-size: 1.2em;
     font-weight: bold;
     float: left;
+}
+
+.m-account-search .f-search-content.fixed {
+    position: fixed;
+    background: lightblue;
+    border: 1px solid;
+    padding: 0 30px;
+    top: 5px;
+    left: 200px;
+    border-radius: 20px;
 }
 
 input#startDate {
@@ -510,6 +520,10 @@ input#startDate {
 .m-account-search .f-search-content input {
     height: 24px;
     width: 24px;
+}
+
+.m-account-search .f-search-content input:not([disabled]) {
+    cursor: pointer;
 }
 
 .m-account-search .f-search-content span {
