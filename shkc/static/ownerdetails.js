@@ -706,16 +706,17 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 		scfg.firstElementChild.disabled = true
 	}
 	setTimeout(function(){
-		scfg.querySelectorAll("input")[0].setAttribute('func', 'index_owner_zq')
-		scfg.querySelectorAll("input")[1].setAttribute('func', 'index_owner_sy')
-		scfg.querySelectorAll("input")[2].setAttribute('func', 'waterOfOwner')
-		scfg.querySelectorAll("input")[3].setAttribute('func', 'drawOfOwner')
-		scfg.querySelectorAll("input")[4].setAttribute('func', 'index_owner')
 		try {
+			scfg.querySelectorAll("input")[0].setAttribute('func', 'index_owner_zq')
+			scfg.querySelectorAll("input")[1].setAttribute('func', 'index_owner_sy')
+			scfg.querySelectorAll("input")[2].setAttribute('func', 'waterOfOwner')
+			scfg.querySelectorAll("input")[3].setAttribute('func', 'drawOfOwner')
+			scfg.querySelectorAll("input")[4].setAttribute('func', 'index_owner')
 			scfg.querySelectorAll("input")[5].setAttribute('func', 'details-statistics')
 			scfg.querySelectorAll("input")[6].setAttribute('func', 'details-list')
 			scfg.querySelectorAll("input")[7].setAttribute('func', 'reports')
 			scfg.querySelectorAll("input")[8].setAttribute('func', 'floatbar')
+			scfg.querySelectorAll("input")[8].checked = false
 		} catch(e) { }
 		document.querySelectorAll("form .m-collect-info:not([hidden])").forEach(function(q){
 			q.classList.forEach(function(c){
@@ -760,7 +761,7 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 					if (e.target.localName=='span' && e.target.classList.contains('chart')) {
 						var chart = document.getElementById('chart')
 						chart.removeAttribute('hidden')
-						return
+						return window.myBar.resize()
 					}
 					this.setAttribute('show', !!this.parentElement.nextElementSibling.hidden)
 					this.parentElement.nextElementSibling.hidden = !this.parentElement.nextElementSibling.hidden
@@ -1141,7 +1142,7 @@ function add_title_click_event(e, f=null) {
 		} else if (event.target.localName=='span' && event.target.classList.contains('chart')) {
 			var chart = document.getElementById('chart')
 			chart.removeAttribute('hidden')
-			return
+			return window.myBar.resize()
 		}
 		this.setAttribute('show', !!this.nextElementSibling.hidden)
 		this.nextElementSibling.hidden = !this.nextElementSibling.hidden
@@ -1293,6 +1294,7 @@ function chart_shouzhihuizong() {
 	if (!div) {
 		var div = document.createElement('div')
 		div.id = 'chart'
+		div.hidden = true
 		div.appendChild(document.createElement('span'))
 		div.appendChild(document.createElement('canvas'))
 		div.firstElementChild.innerText = 'X'
