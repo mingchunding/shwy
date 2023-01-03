@@ -32,7 +32,7 @@ thead th[desc='false']::after {
     min-width: 290px
 }
 
-#reports .title span::before,
+#reports .title span:not([class]):before,
 .m-increace-inquiry tr:last-child td.counting::after,
 /*.m-collect-info:nth-child(4) .title span::after,*/
 img:not([src]) {
