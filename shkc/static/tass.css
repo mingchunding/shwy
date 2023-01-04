@@ -596,8 +596,13 @@ thead th[sorting]:after {
 #chart > span {
     font-weight: bold;
     float: right;
-    margin: 10px 20px;
-    /* font-size: 40px; */
+    margin: 10px 10px;
+}
+
+@media screen and (min-resolution: 2dppx) {
+    #chart > span {
+        font-size: 40px
+    }
 }
 
 #chart > span:hover {
