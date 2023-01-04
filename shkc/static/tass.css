@@ -599,7 +599,7 @@ thead th[sorting]:after {
     margin: 10px 10px;
 }
 
-@media screen and (min-resolution: 2dppx) {
+@media screen and (min-resolution: 2.1dppx) {
     #chart > span {
         font-size: 40px
     }
