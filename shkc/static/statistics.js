@@ -208,6 +208,7 @@ function add_statistics(tbody, rname, key) {
 	})
 	tr.lastElementChild.addEventListener('click', function(e) {
 		if (e.target.localName!='td') return
+		console.log(e)
 		if (!confirm('确定要删除【' + sname + '】中的统计项：【' + rname + '】吗？')) { return }
 		this.parentElement.remove()
 	})
@@ -221,7 +222,13 @@ function add_statistics(tbody, rname, key) {
 
 function cal_statistics(tab, r) {
 	r.forEach(function(t){
-		add_statistics(tab, t, t)
+		if (typeof(t) == 'object') {
+			t.constructor.keys(t).forEach(function(k){
+				add_statistics(tab, k, t[k])
+			})
+		} else {
+			add_statistics(tab, t, t)
+		}
 	})
 }
 
@@ -292,21 +299,22 @@ function do_group_statistics(n, r) {
 	if (g.length > 0 && g[g.length-1] == '+') {
 		g.pop(g.length-1)
 		var tr=document.createElement("tr")
-		tab.appendChild(tr)
+		tab.parentElement.appendChild(document.createElement('tfoot'))
+		tft = tab.parentElement.querySelector('tfoot')
+		tft.appendChild(tr)
 		for (var i=0; i<tab.previousElementSibling.querySelectorAll("th").length; i++) {
 			tr.appendChild(document.createElement("td"))
 		}
 		tr.firstElementChild.appendChild(document.createElement("input"))
 		tr.lastElementChild.appendChild(document.createElement("input"))
+		tr.lastElementChild.previousElementSibling.innerText='新增条目'
 		tr.classList.add('searchbox')
 		tr.lastElementChild.addEventListener('click', function(e){
 			if (e.target.localName!='td') return
-			console.log(e)
 			var s=this.parentElement.querySelectorAll("input")[0].value
 			var k=this.parentElement.querySelectorAll("input")[1].value
 			if (k.length < 1) return
 			if (s.length < 1) s=k
-			console.log(e)
 			add_statistics(tab, s, k)
 		})
 	}
@@ -320,10 +328,9 @@ function statistics() {
 
 	document.querySelector("#startDate").earliestValue = document.querySelector("#startDate").value
 	type_of_projs  = ['绿化', '补种', '水景', '道路', '花坛', '路灯', '消防', '监控', '电梯', '电梯更换', '控制柜', '井', '控制板', '+']
-	range_of_projs = ["康城道", "山林道", "维园道", "江山道", "大浪湾道", "瀑布湾道", "门", "全区"]
+	range_of_projs = ["康城道", "山林道", "维园道", "江山道", "大浪湾道", "瀑布湾道", {小区门: '(南|北|西|旋转)大?门'}, '+']
 
 	setTimeout(function() {
-//		do_group_statistics("是否审价", ['是'])
 		do_group_statistics("是否审价", ['是', '否'])
 		do_group_statistics("工程类别", type_of_projs)
 		do_group_statistics("施工范围", range_of_projs)
@@ -332,9 +339,79 @@ function statistics() {
 	}, 10)
 }
 
+function parse_location(c) {
+	var all_roads = ['大浪湾道', '江山道', '康城道', '瀑布湾道', '山林道', '维园道']
+	var s = c.match(/[大浪湾江山康城瀑布湾山林维园道]{0,4}[\-\d]+[号室楼#]?/g)
+	var n=''
+	var addr = {}
+	if (Array.isArray(s) && s.length > 1) for (var i=0; i<s.length; i++) {
+		if (s[i].match(/\d+$/)) s[i] = s[i] + '号'
+		try {
+			n=s[i].match(/^[^\d]+/)[0]
+			all_roads.forEach(function(m){
+				if (m[0] != n) return
+				s[i] = s[i].replace(RegExp(n), m)
+				n = m
+			})
+			if (!addr.constructor.keys(addr).includes(n)) addr[n] = Array()
+			addr[n].push(s[i].match(/[\d\-]+[室#]?/)[0])
+			continue
+		} catch(e) { }
+		if (n.length < 1) continue
+		if (s[i].match(/^\d+号?$/)) s[i] = n + s[i]
+		if (!addr.constructor.keys(addr).includes(n)) addr[n] = Array()
+		addr[n].push(s[i].match(/[\d\-]+[室#]?/)[0])
+	} else {
+		try {
+			re = '(' + all_roads.join('|') + ')([\\d\\-]+)'
+			s = c.match(RegExp(re))
+			road = s[1]
+			addr[road] = Array(s[2])
+		} catch(e) { }
+	}
+	addr.origin = c
+
+	return addr
+}
+
+class PROJ_LOCATION {
+	constructor(s) {
+		this.origin = s
+	}
+	parseJSON() {
+		var c = this.origin
+		var s = c.match(/[大浪湾江山康城瀑布湾山林维园道]{0,4}[\-\d]+[号室楼#]?/g)
+		var n=''
+		var addr = {}
+		if (Array.isArray(s) && s.length > 1) for (var i=0; i<s.length; i++) {
+			if (s[i].match(/\d+$/)) s[i] = s[i] + '号'
+			try {
+				n=s[i].match(/^[^\d]+/)[0]
+				all_roads.forEach(function(m){
+					if (m[0] != n) return
+					s[i] = s[i].replace(RegExp(n), m)
+					n = m
+				})
+				if (!addr.constructor.keys(addr).includes(n)) addr[n] = Array()
+				addr[n].push(s[i].match(/[\d\-]+[室#]?/)[0])
+				continue
+			} catch(e) { }
+			if (n.length < 1) continue
+			if (s[i].match(/^\d+号?$/)) s[i] = n + s[i]
+			if (!addr.constructor.keys(addr).includes(n)) addr[n] = Array()
+			addr[n].push(s[i].match(/[\d\-]+[室#]?/)[0])
+		} else {
+			s = Array(c)
+		}
+
+		this.addr = addr
+	}
+}
+
 function hidden_by_dom(td) {
 	var container = document.querySelectorAll("#details-list .m-account-detail")
 	if (!container || container.length < 2) return
+	var all_roads = ['大浪湾道', '江山道', '康城道', '瀑布湾道', '山林道', '维园道']
 
 	td.parentElement.statistics[0].forEach(function(e) {
 		var p = document.getElementById(e)
@@ -343,9 +420,12 @@ function hidden_by_dom(td) {
 		} else {
 			container[0].appendChild(p)
 			p.hidden = false
-			s=p.querySelector("tr:nth-child(8) td:nth-child(2)").innerText.replace(/[\.,， \n]+/g,',').replace(/,$/,'')
-			s.replace('/瀑\d+', '瀑布湾道')
-			console.log(e, s.split(','))
+//			s=p.querySelector("tr:nth-child(8) td:nth-child(2)").innerText.replace(/[\.,， \n]+/g,',').replace(/,$/,'')
+//			s.replace('/瀑\d+', '瀑布湾道')
+//			console.log(e, s.split(','))
+			c = p.querySelector("tr:nth-child(8) td:nth-child(2)").innerText.replace(/ +/g,'')
+			addr = parse_location(c)
+			console.log(e, addr)
 		}
 
 		document.querySelectorAll("form .m-collect-info.index_owner_zq td:last-child").forEach(function(x) {

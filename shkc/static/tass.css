@@ -304,23 +304,54 @@ form .index_owner_sy td:nth-child(3)::after,
     cursor: pointer;
 }
 
-.details-statistics tbody tr.searchbox td:last-child::after {
+.details-statistics tr.searchbox td:last-child::after {
     content: '\2705';
     padding: 0;
     cursor: pointer;
-    float: right
+    float: right;
+    display: block;
+    margin-top: 4px;
+    font-size: 1.4em;
+    pointer-events: auto;
 }
 
 .details-statistics th {
     min-width: 93px
 }
 
-.details-statistics td:first-child input{
-    width: 80px
+.details-statistics td input {
+    height: 38px;
+    border: 0;
+    font-size: 1.4em;
+    font-weight: bold;
+    color: darkcyan;
+    padding: 0;
+    margin: 0;
+    text-indent: 0;
+    background: #ecf7fd;
 }
-.details-statistics td:last-child input{
+
+.details-statistics tr.searchbox td {
+    padding: 0 10px;
+    background: #ecf7fd;
+    font-size: 18px;
+    padding: 0 10px;
+}
+
+.details-statistics tr.searchbox td:last-child {
+    text-align: left;
+    /* pointer-events: none; */
+}
+
+.details-statistics td:first-child input {
+    width: 100px;
+    text-align: center;
+}
+
+.details-statistics td:last-child input {
     width: 320px
 }
+
 .details-statistics th:nth-child(2){
     min-width: 50px
 }

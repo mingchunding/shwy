@@ -3,7 +3,6 @@
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input,button, textarea, p, blockquote, th, td { -webkit-font-smoothing:antialiased; font-family:"Microsoft Yahei","SimHei","Helvetica Neue"; font-weight:300;}
 body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, p, blockquote, th, td ,label{ padding:0; margin:0;}
 table { border-collapse:collapse; border-spacing:0}
-td[colspan='4'] table {margin-left: 10px; width: calc(100% - 10px);}
 fieldset, img { border:0}
 body{font-size:12px;}
 address, caption, cite, code, dfn, th, var { font-weight:normal; font-style:normal}
@@ -95,7 +94,7 @@ body{background-color:#e1e4e9;}
 .m-account-detail{float:right;width:100%;}
 .m-account-detail .account-title .title{border-left:4px solid #1b94dd;color:#1b94dd;font-size:14px;font-weight:bold;padding-left:5px;}
 .m-account-detail .account-content{margin-top:15px;}
-.m-account-detail table td{/* border:1px solid #8ad9ff; *//* padding:10px; */vertical-align:middle;color:#666;}
+.m-account-detail table td{border:1px solid #8ad9ff;padding:10px;vertical-align:middle;color:#666;}
 .m-account-detail table td.name{background-color:#ecf7fd;color:#1b94dd;font-weight:bold;font-size:12px;}
 
 /*续筹信息查询*/
