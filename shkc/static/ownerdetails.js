@@ -1322,27 +1322,27 @@ function chart_shouzhihuizong() {
 
 	var rtable = document.querySelectorAll(".collect-info[func='ShouZhiHuiZong.do'] table.colwidth")
 	var title = rtable[0].querySelector("table.tab1 tr.tab_unit > td").innerText.match(/上海市.+业主大会/)[0]
-	for (var i=rtable.length; i>0; i--) {
-		td = rtable[i-1].querySelectorAll("table.tab3 > tbody > tr > td.tab_money")
+	for (var i=0; i<rtable.length; i++) {
+		td = rtable[i].querySelectorAll("table.tab3 > tbody > tr > td.tab_money")
 		fund_sum[0].push(parseFloat(td[0].innerText))
 		fund_sum[1].push(parseFloat(td[2].innerText))
 		fund_sum[2].push(0 - parseFloat(td[3].innerText))
 		fund_sum[3].push(parseFloat(td[4].innerText))
-		fund_sum[4].push(parseFloat(rtable[i-1].querySelector("table.tab3 > tbody > tr:nth-child(5) table tr:last-child td").innerText.match(/[\d\.]{2,}/)[0]))
-		fund_sum[5].push(0 - parseFloat(rtable[i-1].querySelector("table.tab3 > tbody > tr:nth-child(6) table tr:last-child td").innerText.match(/[\d\.]{2,}/)[0]))
+		fund_sum[4].push(parseFloat(rtable[i].querySelector("table.tab3 > tbody > tr:nth-child(5) table tr:last-child td").innerText.match(/[\d\.]{2,}/)[0]))
+		fund_sum[5].push(0 - parseFloat(rtable[i].querySelector("table.tab3 > tbody > tr:nth-child(6) table tr:last-child td").innerText.match(/[\d\.]{2,}/)[0]))
 		fund_sum[6].push(parseFloat(td[6].innerText))
 		fund_sum[7].push(parseFloat(td[8].innerText))
-		labels.push(rtable[i-1].querySelector("tbody > tr > td.fubold").innerText.match(/\d+年\d+月/g)[1])
-		var c = rtable[i-1].querySelectorAll("table.tab3 > tbody > tr:nth-child(5) table td")
+		labels.push(rtable[i].querySelector("tbody > tr > td.fubold").innerText.match(/\d+年\d+月/g)[1])
+		var c = rtable[i].querySelectorAll("table.tab3 > tbody > tr:nth-child(5) table td")
 		for (var j=0; j<4; j++) {
 			repair_fund_earning[j].push(c[j].innerText.match(/[\d\.]{2,}/)[0])
 		}
-		var spending = rtable[i-1].querySelector("table.tab3 > tbody > tr:nth-child(6) table tr:last-child td").innerText.match(/[\d\.]{2,}/)
+		var spending = rtable[i].querySelector("table.tab3 > tbody > tr:nth-child(6) table tr:last-child td").innerText.match(/[\d\.]{2,}/)
 		fund_sum[8].push(parseFloat(c[1].innerText.match(/[\d\.]{2,}/)[0] - td[9].innerText).toFixed(2))
 		fund_sum[9].push(0 - parseFloat(c[1].innerText.match(/[\d\.]{2,}/)[0]))
 	}
 
-	console.log(labels, fund_sum)
+//	console.log(labels, fund_sum)
 	var barChartData = {
 		labels: labels,
 		datasets: [{
@@ -1448,6 +1448,16 @@ function chart_shouzhihuizong() {
 				mode: 'index',
 				intersect: false
 			},
+			scales: {
+				x: {
+					//max: '2014年12月',
+					stacked: true,
+					reverse: true
+				},
+				y: {
+					stacked: true
+				}
+			}
 /*			responsive: true,
 			scales: {
 				xAxes: [{

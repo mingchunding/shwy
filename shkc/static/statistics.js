@@ -290,7 +290,7 @@ function do_group_statistics(n, r) {
 		if (!sibling || sibling.querySelectorAll("tbody tr").length < g.length) {
 			subtitle.innerText = document.querySelector("#startDate").earliestValue +
 						' 至 ' + document.querySelector("#endDate").value
-			cal_statistics(tab, g)
+			setTimeout(cal_statistics, 100, tab, g)
 		}
 		this.setAttribute('show', sibling.hidden)
 		sibling.hidden=!sibling.hidden
