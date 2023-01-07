@@ -381,7 +381,9 @@ function connect_item_and_project(container, item, id) {
 		try {
 			anchor.setAttribute('zqcode', zqcode)
 			anchor.href = '#zq_' + zqcode
-			proj.querySelector("tr:nth-child(2) td:nth-child(2)").appendChild(anchor)
+			proj.querySelector("td:not(.name)").appendChild(anchor)
+			if (undefined == proj.querySelector('table').perfee) proj.querySelector('table').perfee = Array()
+			proj.querySelector('table').perfee.push({code: zqcode, fee: parseFloat(item.children[1].innerText.match(/[\d\.]+/)[0])})
 		} catch(e) { console.log(proj.id, e) }
 	}
 }
@@ -1300,6 +1302,10 @@ function chart_shouzhihuizong() {
 		div.firstElementChild.innerText = 'X'
 		div.lastElementChild.id = 'canvas'
 		document.body.appendChild(div)
+	} else {
+		div.querySelector('canvas').removeAttribute('style')
+		div.querySelector('canvas').removeAttribute('width')
+		div.querySelector('canvas').removeAttribute('height')
 	}
 	var indicator = document.querySelector(".collect-info[func='ShouZhiHuiZong.do']").previousElementSibling.querySelector("p.title")
 	var s = indicator.querySelector('span')

@@ -37,23 +37,25 @@ function group_by_row(r, c, t) {
 }
 
 function sum_by_project(sum, t) {
-	if (undefined == t.values || Array.isArray(t.values)) {
-	    td=t.querySelectorAll("td")
+	td=t.querySelectorAll("td:not(.name)")
+	if (undefined == t.values || !Array.isArray(t.values)) {
 		t.values = Array()
-		t.values[2] = td[2].innerText
-		t.values[30] = parseFloat(td[30].innerText.match(/[\d\.]+/)[0])
-		t.values[12] = parseFloat(td[12].innerText.match(/[\d\.]+/)[0])
-		t.values[28] = td[28].innerText.replace(/\n+/, '')
-		t.values[10] = parseFloat(td[10].innerText.match(/[\d\.]+/)[0])
+		t.values[0] = td[0].innerText
+		t.values[4] = parseFloat(td[4].innerText.match(/[\d\.]+/)[0])
+		t.values[5] = parseFloat(td[5].innerText.match(/[\d\.]+/)[0])
+		t.values[8] = td[8].innerText
+		t.values[13] = td[13].innerText.replace(/\n+/, '')
+		t.values[14] = parseFloat(td[14].innerText.match(/[\d\.]+/)[0])
+		t.values[15] = parseFloat(td[15].innerText.match(/[\d\.]+/)[0])
 	}
 
-    sum[0].push(t.values[2])
-    sum[2] += t.values[30]
-    sum[3] += t.values[12]
-    var s = t.values[28]
+    sum[0].push(t.values[0])
+    sum[2] += t.values[14]
+    sum[3] += t.values[5]
+    var s = t.values[13]
     if (!sum[4].includes(s))
         sum[4].push(s)
-    sum[6] += t.values[10]
+    sum[6] += t.values[4]
     // 个人查询表格计算个人扣款
     try {
         t.perfee.forEach(function(r){
@@ -62,19 +64,14 @@ function sum_by_project(sum, t) {
         })
     } catch (e) {
         var perfee = Array()
-        document.querySelectorAll("form .m-collect-info.index_owner_zq td:last-child").forEach(function(x) {
-            if (!x.innerText.match(RegExp(t.values[2]))) return
-            var r = x.parentElement
+        td[0].querySelectorAll('a').forEach(function(x) {
+			var code = x.getAttribute('zqcode')
+            var r = document.querySelector('#zq_' + code).parentElement.parentElement
+			var f = {code: code}
             try {
-                var f = {
-                    fee: parseFloat(r.values[1][0]),
-                    code: r.values[0][0]
-                }
+                f.fee = parseFloat(r.values[1][0])
             } catch(e) {
-                var f = {
-                    fee: parseFloat(r.children[1].innerText.match(/[\d\.]+/)[0]),
-                    code: r.children[0].innerText.match(/\d+/)[0]
-                }
+                f.fee = parseFloat(r.children[1].innerText.match(/[\d\.]+/)[0])
             }
             sum[1] += f.fee
             sum[5].push(f.code)

@@ -253,12 +253,12 @@ select {
     border: 0
 }
 
-.details-statistics tbody tr:not(.searchbox):hover td:first-child {
+.details-statistics tbody tr:hover td:first-child {
     background-color: lightgreen;
     cursor: pointer
 }
 
-tbody tr.searchbox:hover td {
+tfoot tr.searchbox:hover td {
     background-color: lightpink
 }
 
