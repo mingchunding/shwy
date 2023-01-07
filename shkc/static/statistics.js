@@ -305,6 +305,7 @@ function do_group_statistics(n, r) {
 		tr.firstElementChild.appendChild(document.createElement("input"))
 		tr.lastElementChild.appendChild(document.createElement("input"))
 		tr.lastElementChild.previousElementSibling.innerText='新增条目'
+		tr.lastElementChild.setAttribute('colspan', '4')
 		tr.classList.add('searchbox')
 		tr.lastElementChild.addEventListener('click', function(e){
 			if (e.target.localName!='td') return
