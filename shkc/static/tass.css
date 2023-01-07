@@ -364,6 +364,22 @@ form .index_owner_sy td:nth-child(3)::after,
     min-width: 400px
 }
 
+@media screen and (min-resolution: 2dppx) and (max-width: 1020px) {
+    .details-statistics thead th:last-child,
+    .details-statistics tbody td:last-child {
+        display: none
+    }
+    .details-statistics tfoot td:nth-child(2),
+    .details-statistics tfoot td:nth-child(3),
+    .details-statistics tfoot td:nth-child(4),
+    .details-statistics tfoot td:nth-child(5){
+        display: none
+    }
+    .details-statistics tfoot td:last-child input {
+        width: 500px;
+    }
+}
+
 .account-title p {
     cursor: pointer;
     width: 40%;

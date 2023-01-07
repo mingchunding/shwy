@@ -336,7 +336,7 @@ function addEvents(type) {
 			x.setAttribute('show', 'false')
 			x.addEventListener("click", function(e){
 				if (e.target.localName=='a') {
-					var thread=prompt('并发下载数，建议不超过10，否则会造成网络卡顿', '10')
+					var thread=10 /*prompt('并发下载数，建议不超过10，否则会造成网络卡顿', '10')*/
 					if (thread < 1) return
 					e.target.parentElement.appendChild(document.createElement('span'))
 					e.target.remove()
