@@ -139,10 +139,6 @@ p[show='true'].title:after {
     float: right;
 }
 
-.m-collect-info:nth-child(4) .title span:after {
-    float: left
-}
-
 table {
     width: 100%
 }

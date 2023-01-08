@@ -568,11 +568,186 @@ function flag_statistics_item() {
 	})
 }
 
-function chart_zhichumingxi() {
-	var div = document.getElementById('WeiXiuZhiChuMingXi')
+window.chart = {
+	colors: {
+		DarkGreen: 'rgb(0, 100, 0)',
+		LimeGreen: 'rgb(50, 205, 50)',
+		LightGreen: 'rgb(144, 238, 144)',
+		SpringGreen: 'rgb(0, 255, 127)',
+		PaleGreen: 'rgb(152, 251, 152)',
+		LightCoral: 'rgb(240, 128,128)',
+		red: 'rgb(255, 99, 132)',
+		orange: 'rgb(255, 159, 64)',
+		yellow: 'rgb(255, 205, 86)',
+		green: 'rgb(75, 192, 192)',
+		blue: 'rgb(54, 162, 235)',
+		purple: 'rgb(153, 102, 255)',
+		grey: 'rgb(201, 203, 207)'
+	},
+	parser: {
+		WeiXiuZhiChuMingXi: function (src, chartData) {
+			console.log(this)
+			var data = {}
+			var labels = Array()
+			var rtable = src.querySelectorAll("table.colwidth")
+			var title = Array()
+			title.push(rtable[0].querySelector("table.tab1 tr.tab_unit > td").innerText.match(/上海市.+业主大会/)[0])
+			title.push(rtable[0].querySelectorAll("table td.TopTitle")[1].innerText.replace(/表$/,''))
+			for (var i=0; i<rtable.length; i++) {
+				chartData.labels.push(rtable[i].querySelector("tbody > tr > td.fubold").innerText.match(/\d+年\d+月/g)[1])
+				rtable[i].querySelector("table.tab2").querySelectorAll("tr:not([class])").forEach(function(r){
+					item = r.children[1].innerText.replace(/[ \t]+/g,'')
+					if (data[item] == undefined || !Array.isArray(data[item])) data[item] = Array()
+					data[item].push(r.children[2].innerText)
+				})
+			}
+
+			ids = data.constructor.keys(data)
+			color = data.constructor.keys(window.chart.colors)
+			for (var i=0; i<ids.length; i++) {
+				chartData.datasets.push({
+					label: ids[i],
+					data: data[ids[i]],
+					backgroundColor: window.chart.colors[color[i]],
+					stack: ids[i].match(/其他/) != null ? 'stack 1' : 'stack 0'
+				})
+			}
+
+			return title
+		},
+		ShouZhiHuiZong: function (src, chartData) {
+			console.log(this)
+			var fund_sum = Array(Array(),Array(),Array(),Array(),Array(),Array(),Array(),Array(),Array(),Array())
+			var repair_fund_earning = Array(Array(),Array(),Array(),Array())
+			var labels = Array()
+			var rtable = src.querySelectorAll("table.colwidth")
+			var title = Array()
+			title.push(rtable[0].querySelector("table.tab1 tr.tab_unit > td").innerText.match(/上海市.+业主大会/)[0])
+			title.push(rtable[0].querySelectorAll("table td.TopTitle")[1].innerText.replace(/表$/,''))
+			for (var i=0; i<rtable.length; i++) {
+				td = rtable[i].querySelectorAll("table.tab3 > tbody > tr > td.tab_money")
+				fund_sum[0].push(parseFloat(td[0].innerText))
+				fund_sum[1].push(parseFloat(td[2].innerText))
+				fund_sum[2].push(0 - parseFloat(td[3].innerText))
+				fund_sum[3].push(parseFloat(td[4].innerText))
+				fund_sum[4].push(parseFloat(rtable[i].querySelector("table.tab3 > tbody > tr:nth-child(5) table tr:last-child td").innerText.match(/[\d\.]{2,}/)[0]))
+				fund_sum[5].push(0 - parseFloat(rtable[i].querySelector("table.tab3 > tbody > tr:nth-child(6) table tr:last-child td").innerText.match(/[\d\.]{2,}/)[0]))
+				fund_sum[6].push(parseFloat(td[6].innerText))
+				fund_sum[7].push(parseFloat(td[8].innerText))
+				chartData.labels.push(rtable[i].querySelector("tbody > tr > td.fubold").innerText.match(/\d+年\d+月/g)[1])
+				var c = rtable[i].querySelectorAll("table.tab3 > tbody > tr:nth-child(5) table td")
+				for (var j=0; j<4; j++) {
+					repair_fund_earning[j].push(c[j].innerText.match(/[\d\.]{2,}/)[0])
+				}
+				var spending = rtable[i].querySelector("table.tab3 > tbody > tr:nth-child(6) table tr:last-child td").innerText.match(/[\d\.]{2,}/)
+				fund_sum[8].push(parseFloat(c[1].innerText.match(/[\d\.]{2,}/)[0] - td[9].innerText).toFixed(2))
+				fund_sum[9].push(0 - parseFloat(c[1].innerText.match(/[\d\.]{2,}/)[0]))
+			}
+
+			chartData.datasets.push({
+						label: '总账户期初余额',
+						backgroundColor: window.chart.colors.purple,
+						stack: 'Stack 0',
+						data: fund_sum[0],
+						hidden: true
+			})
+			chartData.datasets.push({
+						label: '总账户收入',
+						backgroundColor: window.chart.colors.red,
+						stack: 'Stack 0',
+						data: fund_sum[1],
+						hidden: true
+			})
+			chartData.datasets.push({
+						label: '总账户支出',
+						backgroundColor: window.chart.colors.green,
+						stack: 'Stack 0',
+						data: fund_sum[2],
+						hidden: true
+			})
+			chartData.datasets.push({
+						label: '维修资金期初余额',
+						backgroundColor: window.chart.colors.DarkGreen,
+						stack: 'Stack 1',
+						data: fund_sum[3],
+						hidden: true
+			}) /*{
+						label: '维修资金收入',
+						backgroundColor: window.chartColors.red,
+						stack: 'Stack 1',
+						data: fund_sum[4],
+						hidden: true
+			},*/
+			chartData.datasets.push({
+						label: '维修基金交款',
+						backgroundColor: window.chart.colors.LimeGreen,
+						stack: 'Stack 1',
+						data: repair_fund_earning[0],
+						hidden: true
+			})
+			chartData.datasets.push({
+						label: '公共收益补充',
+						backgroundColor: window.chart.colors.LightGreen,
+						stack: 'Stack 1',
+						data: repair_fund_earning[1],
+						hidden: true
+			})
+			chartData.datasets.push({
+						label: '存款利息',
+						backgroundColor: window.chart.colors.SpringGreen,
+						stack: 'Stack 1',
+						data: repair_fund_earning[2],
+						hidden: true
+			})
+			chartData.datasets.push({
+						label: '其它收入',
+						backgroundColor: window.chart.colors.PaleGreen,
+						stack: 'Stack 1',
+						data: repair_fund_earning[3],
+						hidden: true
+			})
+			chartData.datasets.push({
+						label: '维修资金支出',
+						backgroundColor: window.chart.colors.green,
+						stack: 'Stack 1',
+						data: fund_sum[5],
+						hidden: true
+			})
+			chartData.datasets.push({
+						label: '公共收益期初余额',
+						backgroundColor: window.chart.colors.orange,
+						stack: 'Stack 1',
+						data: fund_sum[6]
+			})
+			chartData.datasets.push({
+						label: '公共收益收入',
+						backgroundColor: window.chart.colors.red,
+						stack: 'Stack 1',
+						data: fund_sum[7]
+			})
+			chartData.datasets.push({
+						label: '转入维修资金',
+						backgroundColor: window.chart.colors.purple,
+						stack: 'Stack 1',
+						data: fund_sum[9]
+			})
+			chartData.datasets.push({
+						label: '公共收益支出',
+						backgroundColor: window.chart.colors.green,
+						stack: 'Stack 1',
+						data: fund_sum[8]
+			})
+
+			return title
+		}
+	}
+}
+
+function chart_of_report(func) {
+	var div = document.getElementById(func)
 	if (!div) {
 		var div = document.createElement('div')
-		div.id = 'WeiXiuZhiChuMingXi'
+		div.id = func
 		div.classList.add('chart')
 		div.hidden = true
 		div.appendChild(document.createElement('span'))
@@ -586,7 +761,7 @@ function chart_zhichumingxi() {
 		div.querySelector('canvas').removeAttribute('height')
 		div.removeAttribute('hidden')
 	}
-	var source = document.querySelector(".collect-info[func='WeiXiuZhiChuMingXi.do']")
+	var source = document.querySelector(".collect-info[func='" + func + ".do']")
 	var indicator = source.previousElementSibling.querySelector("p.title")
 	var s = indicator.querySelector('span')
 	if (!s) {
@@ -594,7 +769,7 @@ function chart_zhichumingxi() {
 		indicator.appendChild(s)
 		s.classList.add('chart')
 		s.innerText = '数据图'
-		s.setAttribute('target', 'WeiXiuZhiChuMingXi')
+		s.setAttribute('target', func)
 	}
 
 	div.firstElementChild.addEventListener('click',function(e){
@@ -604,47 +779,26 @@ function chart_zhichumingxi() {
 
 	var ctx = div.querySelector('canvas').getContext('2d')
 
-	var data = {}
-	var labels = Array()
-	var rtable = source.querySelectorAll("table.colwidth")
-	var title = rtable[0].querySelectorAll("table td.TopTitle")[1].innerText
-	for (var i=0; i<rtable.length; i++) {
-		labels.push(rtable[i].querySelector("tbody > tr > td.fubold").innerText.match(/\d+年\d+月/g)[1])
-		rtable[i].querySelector("table.tab2").querySelectorAll("tr:not([class])").forEach(function(r){
-			item = r.children[1].innerText.replace(/[ \t]+/g,'')
-			if (data[item] == undefined || !Array.isArray(data[item])) data[item] = Array()
-			data[item].push(r.children[2].innerText)
-		})
-	}
-	var barChartData = {
-		labels: labels,
+	var chartData = {
+		labels: [],
 		datasets: []
 	}
 
-	ids = data.constructor.keys(data)
-	color = data.constructor.keys(window.chartColors)
-	for (var i=0; i<ids.length; i++) {
-		barChartData.datasets.push({
-			label: ids[i],
-			data: data[ids[i]],
-			backgroundColor: window.chartColors[color[i]],
-			stack: 'stack 1'
-		})
-	}
+	var title = window.chart.parser[func](source, chartData)
 
-	div.myBar = new Chart(ctx, {
+	div.chart = new Chart(ctx, {
 		type: 'bar',
-		data: barChartData,
+		data: chartData,
 		options: {
 			plugins: {
 				title: {
 					fontSize: 20,
 					display: true,
-					text: title
+					text: title[0]
 				},
 				subtitle: {
-					display: false,
-					text: ''
+					display: true,
+					text: title[1]
 				}
 			},
 			interaction: {
