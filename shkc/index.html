@@ -18,8 +18,8 @@ function restore_click_handler() {
 	setTimeout(() => {
 		createSearchBox()
 		document.querySelectorAll("#details-list .account-content[hidden]").forEach(function(p){p.hidden=false})
-		chart_shouzhihuizong()
-		chart_zhichumingxi()
+		chart_of_report('ShouZhiHuiZong')
+		chart_of_report('WeiXiuZhiChuMingXi')
 	},1000)
 	setTimeout(() => {
 		document.querySelector("p.title").setAttribute('show', 'true')
@@ -58,7 +58,7 @@ function opennew1(mpro_id){
 									<tbody>
 										<tr><td colspan="2"><div class="m-account-search nobdr">
 											<div class="f-clearfix"><span class="start-time">起始日期</span><input class="ipt Wdate" onclick="WdatePicker()" name="startDate" id="startDate" type="text" value="2012-01-01" readonly="readonly"><span class="end-time">
-											截止日期</span><input class="ipt Wdate" type="text" name="endDate" id="endDate" onclick="WdatePicker()" value="2023-12-31" readonly="readonly">
+											截止日期</span><input class="ipt Wdate" type="text" name="endDate" id="endDate" onclick="WdatePicker()" value="2022-12-31" readonly="readonly">
 											<input type="button" class="btn" title="查询" onclick="gotoQuery()"></div>
 										</div></td></tr>
 										<tr><td colspan="2" class="title">业主大会支取汇总信息</td></tr>
