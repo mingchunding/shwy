@@ -142,7 +142,7 @@ setTimeout(() => {
 	window.st = performance.now()
 	var progress = document.createElement('span')
 	progress.classList.add('status')
-	progress.setAttribute('pre1', '解读第 ')
+	progress.setAttribute('pre1', '读取第 ')
 	progress.setAttribute('pre2', '项，剩余 ')
 	progress.setAttribute('done', 1)
 	progress.setAttribute('todo', window.shkc.detail.length)
