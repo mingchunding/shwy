@@ -331,6 +331,7 @@ function statistics() {
 	range_of_projs = ["康城道", "山林道", "维园道", "江山道", "大浪湾道", "瀑布湾道", {小区门: '(南|北|西|旋转)大?门'}, '+']
 
 	return setTimeout(function() {
+		do_group_statistics("可支取金额", [{已完成支付: '^0.00'}, {未完成支付: '[1-9]'}])
 		do_group_statistics("是否审价", ['是', '否'])
 		do_group_statistics("工程类别", type_of_projs)
 		do_group_statistics("施工范围", range_of_projs)
