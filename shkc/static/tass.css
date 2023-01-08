@@ -13,7 +13,7 @@ thead th[desc='true']:after {
     float: right
 }
 
-thead th[desc='false']::after {
+thead th[desc='false']:after {
     content: ' \25b2';
     float: right
 }
@@ -33,19 +33,19 @@ thead th[desc='false']::after {
 }
 
 #reports .title span:not([class]):before,
-.m-increace-inquiry tr:last-child td.counting::after,
-/*.m-collect-info:nth-child(4) .title span::after,*/
+.m-increace-inquiry tr:last-child td.counting:after,
+/*.m-collect-info:nth-child(4) .title span:after,*/
 img:not([src]) {
     content: url('data:image/gif;base64,R0lGODlhEAAQALMMAKqooJGOhp2bk7e1rZ2bkre1rJCPhqqon8PBudDOxXd1bISCef///wAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQFAAAMACwAAAAAEAAQAAAET5DJyYyhmAZ7sxQEs1nMsmACGJKmSaVEOLXnK1PuBADepCiMg/DQ+/2GRI8RKOxJfpTCIJNIYArS6aRajWYZCASDa41Ow+Fx2YMWOyfpTAQAIfkEBQAADAAsAAAAABAAEAAABE6QyckEoZgKe7MEQMUxhoEd6FFdQWlOqTq15SlT9VQM3rQsjMKO5/n9hANixgjc9SQ/CgKRUSgw0ynFapVmGYkEg3v1gsPibg8tfk7CnggAIfkEBQAADAAsAAAAABAAEAAABE2QycnOoZjaA/IsRWV1goCBoMiUJTW8A0XMBPZmM4Ug3hQEjN2uZygahDyP0RBMEpmTRCKzWGCkUkq1SsFOFQrG1tr9gsPc3jnco4A9EQAh+QQFAAAMACwAAAAAEAAQAAAETpDJyUqhmFqbJ0LMIA7McWDfF5LmAVApOLUvLFMmlSTdJAiM3a73+wl5HYKSEET2lBSFIhMIYKRSimFriGIZiwWD2/WCw+Jt7xxeU9qZCAAh+QQFAAAMACwAAAAAEAAQAAAETZDJyRCimFqbZ0rVxgwF9n3hSJbeSQ2rCWIkpSjddBzMfee7nQ/XCfJ+OQYAQFksMgQBxumkEKLSCfVpMDCugqyW2w18xZmuwZycdDsRACH5BAUAAAwALAAAAAAQABAAAARNkMnJUqKYWpunUtXGIAj2feFIlt5JrWybkdSydNNQMLaND7pC79YBFnY+HENHMRgyhwPGaQhQotGm00oQMLBSLYPQ9QIASrLAq5x0OxEAIfkEBQAADAAsAAAAABAAEAAABE2QycmUopham+da1cYkCfZ94UiW3kmtbJuRlGF0E4Iwto3rut6tA9wFAjiJjkIgZAYDTLNJgUIpgqyAcTgwCuACJssAdL3gpLmbpLAzEQA7');
 }
 
-p.title::after {
+p.title:after {
     content: ' \25C0';
     font-size: 14px;
 }
 
-#details-list > .account-title p::before ,
-#reports > .account-title p::before {
+#details-list > .account-title p:before ,
+#reports > .account-title p:before {
     content: '附-' counter(clouser_num) '：';
 }
 
@@ -53,12 +53,12 @@ p.title::after {
     counter-reset: report_num
 }
 
-#reports .m-account-detail .account-title p::before {
+#reports .m-account-detail .account-title p:before {
     content: '表-' counter(report_num) '：';
     counter-increment: report_num;
 }
 
-#reports > .m-account-detail .collect-info::before {
+#reports > .m-account-detail .collect-info:before {
     content: 'func=' attr(func) ', type=' attr(type) ', Date: ' attr(startDate) ' 至 ' attr(endDate);
     font-size: 16px;
     font-weight: bold;
@@ -66,7 +66,7 @@ p.title::after {
     display: none
 }
 
-#reports > .m-account-detail .collect-info table.colwidth::before {
+#reports > .m-account-detail .collect-info table.colwidth:before {
     content: attr(date);
     display: none
 }
@@ -100,7 +100,7 @@ p.title::after {
 }
 
 .account-title[show='true'] p.title:after,
-p[show='true'].title::after {
+p[show='true'].title:after {
     content: ' \25bc';
     font-size: 14px;
     color: green
@@ -110,7 +110,7 @@ p[show='true'].title::after {
     counter-reset: flag_num 0
 }
 
-.details-statistics tbody[flag] tr:not(:last-child) td:first-child::before {
+.details-statistics tbody[flag] tr:not(:last-child) td:first-child:before {
     counter-increment: flag_num;
     content: counter(flag_num);
     float: left;
@@ -118,7 +118,7 @@ p[show='true'].title::after {
     margin-left: -8px
 }
 
-.title a:not([href])::before {
+.title a:not([href]):before {
     content: '下载详情数据'
  }
 
@@ -127,11 +127,19 @@ p[show='true'].title::after {
     float: right
 }
 
-.m-increace-inquiry tr:last-child td.counting::after {
+.title span.status:before {
+    content: url('data:image/gif;base64,R0lGODlhEAAQALMMAKqooJGOhp2bk7e1rZ2bkre1rJCPhqqon8PBudDOxXd1bISCef///wAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQFAAAMACwAAAAAEAAQAAAET5DJyYyhmAZ7sxQEs1nMsmACGJKmSaVEOLXnK1PuBADepCiMg/DQ+/2GRI8RKOxJfpTCIJNIYArS6aRajWYZCASDa41Ow+Fx2YMWOyfpTAQAIfkEBQAADAAsAAAAABAAEAAABE6QyckEoZgKe7MEQMUxhoEd6FFdQWlOqTq15SlT9VQM3rQsjMKO5/n9hANixgjc9SQ/CgKRUSgw0ynFapVmGYkEg3v1gsPibg8tfk7CnggAIfkEBQAADAAsAAAAABAAEAAABE2QycnOoZjaA/IsRWV1goCBoMiUJTW8A0XMBPZmM4Ug3hQEjN2uZygahDyP0RBMEpmTRCKzWGCkUkq1SsFOFQrG1tr9gsPc3jnco4A9EQAh+QQFAAAMACwAAAAAEAAQAAAETpDJyUqhmFqbJ0LMIA7McWDfF5LmAVApOLUvLFMmlSTdJAiM3a73+wl5HYKSEET2lBSFIhMIYKRSimFriGIZiwWD2/WCw+Jt7xxeU9qZCAAh+QQFAAAMACwAAAAAEAAQAAAETZDJyRCimFqbZ0rVxgwF9n3hSJbeSQ2rCWIkpSjddBzMfee7nQ/XCfJ+OQYAQFksMgQBxumkEKLSCfVpMDCugqyW2w18xZmuwZycdDsRACH5BAUAAAwALAAAAAAQABAAAARNkMnJUqKYWpunUtXGIAj2feFIlt5JrWybkdSydNNQMLaND7pC79YBFnY+HENHMRgyhwPGaQhQotGm00oQMLBSLYPQ9QIASrLAq5x0OxEAIfkEBQAADAAsAAAAABAAEAAABE2QycmUopham+da1cYkCfZ94UiW3kmtbJuRlGF0E4Iwto3rut6tA9wFAjiJjkIgZAYDTLNJgUIpgqyAcTgwCuACJssAdL3gpLmbpLAzEQA7');
+}
+
+.title span.status:after {
+    content: ' ' attr(pre1) attr(done) attr(pre2) attr(todo)
+}
+
+.m-increace-inquiry tr:last-child td.counting:after {
     float: right;
 }
 
-.m-collect-info:nth-child(4) .title span::after {
+.m-collect-info:nth-child(4) .title span:after {
     float: left
 }
 
@@ -155,7 +163,7 @@ form .m-collect-info {
     counter-increment: query_num;
 }
 
-form .m-collect-info .title::before {
+form .m-collect-info .title:before {
     content: '\2299  查询-' counter(query_num) '：';
 }
 
@@ -207,21 +215,21 @@ form .m-collect-info:not(:nth-child(3)) td:nth-child(3) {
     text-align: center
 }
 
-form .m-collect-info:nth-child(3) .title span:not([class])::before {
+form .m-collect-info:nth-child(3) .title span:not([class]):before {
     content: '(过滤显示【'
 }
 
-form .m-collect-info:nth-child(3) .title span:not([class])::after {
+form .m-collect-info:nth-child(3) .title span:not([class]):after {
     content: '】相关条目及工程详情)'
 }
 
-form .m-collect-info tr:nth-child(2) th:nth-child(2)::before,
-form .m-collect-info tr:nth-child(2) th:nth-child(3)::before,
-form .m-collect-info tr:nth-child(2) th:nth-child(4)::before {
+form .m-collect-info tr:nth-child(2) th:nth-child(2):before,
+form .m-collect-info tr:nth-child(2) th:nth-child(3):before,
+form .m-collect-info tr:nth-child(2) th:nth-child(4):before {
     content: '至少 '
 }
 
-form .m-collect-info tr:nth-child(2) th:nth-child(5n+1)::before {
+form .m-collect-info tr:nth-child(2) th:nth-child(5n+1):before {
     content: '包含 '
 }
 
@@ -268,29 +276,29 @@ tfoot tr.searchbox:hover td {
     text-align: right
 }
 
-form .index_owner td:nth-child(7)::after,
-form .index_owner td:nth-child(5)::after,
-form .index_owner td:nth-child(6)::after,
-form .index_owner_sy td:nth-child(3)::after,
-.details-statistics tbody tr:not(.searchbox) td:nth-child(3)::after,
-.details-statistics tbody tr:not(.searchbox) td:nth-child(4)::after,
-.details-statistics tbody tr:not(.searchbox) td:nth-child(5)::after {
+form .index_owner td:nth-child(7):after,
+form .index_owner td:nth-child(5):after,
+form .index_owner td:nth-child(6):after,
+form .index_owner_sy td:nth-child(3):after,
+.details-statistics tbody tr:not(.searchbox) td:nth-child(3):after,
+.details-statistics tbody tr:not(.searchbox) td:nth-child(4):after,
+.details-statistics tbody tr:not(.searchbox) td:nth-child(5):after {
     content: ' 元'
 }
 
-.details-statistics tbody tr:not(.searchbox) td:nth-child(6)::after {
+.details-statistics tbody tr:not(.searchbox) td:nth-child(6):after {
     content: ' 家'
 }
 
-.details-statistics .searchbox td::after {
+.details-statistics .searchbox td:after {
     contain: ' '
 }
 
-.details-statistics tbody .searchbox td:first-child::before {
+.details-statistics tbody .searchbox td:first-child:before {
     contain: '名称：'
 }
 
-.details-statistics tbody .searchbox td:last-child::before {
+.details-statistics tbody .searchbox td:last-child:before {
     contain: '关键字：'
 }
 
@@ -298,13 +306,13 @@ form .index_owner_sy td:nth-child(3)::after,
     text-align: left;
 }
 
-.details-statistics tbody td:last-child:hover::after {
+.details-statistics tbody td:last-child:hover:after {
     content: '\274E';
     float: right;
     cursor: pointer;
 }
 
-.details-statistics tr.searchbox td:last-child::after {
+.details-statistics tr.searchbox td:last-child:after {
     content: '\2705';
     padding: 0;
     cursor: pointer;
@@ -428,15 +436,15 @@ form .m-collect-info:not(:nth-child(3)),
     counter-increment: statistics_num;
 }
 
-.details-statistics .account-title p::before {
+.details-statistics .account-title p:before {
     content: '\2211  统计-' counter(statistics_num) '：';
 }
 
-.details-statistics .title span::before {
+.details-statistics .title span:not([class]):before {
     content: '实施时间范围：'
 }
 
-.details-statistics td.show:first-child::after {
+.details-statistics td.show:first-child:after {
     content: '\2713';
     float: right;
     color: green
@@ -446,7 +454,7 @@ form .collect-info tbody tr.paging td:last-child a {
     counter-increment: page_of_project;
 }
 
-#details-list .m-account-detail:not([hidden]) tr:first-child td::after {
+#details-list .m-account-detail:not([hidden]) tr:first-child td:after {
     counter-increment: project_num;
     content: '【工程-'counter(project_num)'】';
     float: left;
@@ -471,14 +479,14 @@ form .collect-info tbody tr.paging td:last-child a {
         min-width: 80px
     }
 
-    form .collect-info tbody tr:not([hidden]) td:last-child a::after {
+    form .collect-info tbody tr:not([hidden]) td:last-child a:after {
         content: '第' counter(page_of_project) '页';
         float: right;
         color: lightgrey;
         display: none
     }
 
-    #details-list .m-account-detail:not([hidden]) tr:first-child td::after {
+    #details-list .m-account-detail:not([hidden]) tr:first-child td:after {
         float: right;
         color: lightgrey
     }

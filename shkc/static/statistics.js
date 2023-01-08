@@ -320,6 +320,8 @@ function do_group_statistics(n, r) {
 
 function statistics() {
 	$(".details-statistics").remove()
+	if (document.querySelectorAll('#details-list .account-content').length < 1) return false
+
 	var dlist = document.getElementById("details-list")
 	if (!dlist) return
 	if (dlist.children.length < 1) return
@@ -328,7 +330,7 @@ function statistics() {
 	type_of_projs  = ['绿化', '补种', '水景', '道路', '花坛', '路灯', '消防', '监控', '电梯', '电梯更换', '控制柜', '井', '控制板', '+']
 	range_of_projs = ["康城道", "山林道", "维园道", "江山道", "大浪湾道", "瀑布湾道", {小区门: '(南|北|西|旋转)大?门'}, '+']
 
-	setTimeout(function() {
+	return setTimeout(function() {
 		do_group_statistics("是否审价", ['是', '否'])
 		do_group_statistics("工程类别", type_of_projs)
 		do_group_statistics("施工范围", range_of_projs)

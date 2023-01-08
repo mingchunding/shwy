@@ -338,7 +338,12 @@ function addEvents(type) {
 				if (e.target.localName=='a') {
 					var thread=10 /*prompt('并发下载数，建议不超过10，否则会造成网络卡顿', '10')*/
 					if (thread < 1) return
-					e.target.parentElement.appendChild(document.createElement('span'))
+					var progress = document.createElement('span')
+					progress.classList.add('status')
+					progress.setAttribute('pre1', '下载第 ')
+					progress.setAttribute('pre2', '项，剩余 ')
+					progress.setAttribute('done', thread)
+					e.target.parentElement.appendChild(progress)
 					e.target.remove()
 					get_details(thread)
 					return
@@ -395,12 +400,11 @@ function pull_project(div, item, next) {
 		return false
 	}
 
-	var container = item.parentElement.parentElement.parentElement.parentElement
-	var progress = container.querySelector("p.title span")
-
 	try {
-		progress.innerText = '下载第 ' + (item.sectionRowIndex + 1) + ' 项，剩余 ' +
-			(item.parentElement.children.length - item.sectionRowIndex - 1)
+		var container = item.parentElement.parentElement.parentElement.parentElement
+		var progress = container.querySelector("p.title span")
+		progress.setAttribute('done', item.sectionRowIndex + 1)
+		progress.setAttribute('todo', item.parentElement.children.length - item.sectionRowIndex - 1)
 	} catch(e) { }
 
 //	if (item.hidden) {
@@ -868,7 +872,12 @@ function convert_iframe_project_list(e, f=null) {
 			title.innerText += '【' +
 				tab.querySelectorAll("tbody tr:not([hidden])").length + ' / ' +
 				tab.querySelectorAll("tbody tr").length + '】'
-			title.appendChild(document.createElement("span"))
+			var progress = document.createElement('span')
+			progress.classList.add('status')
+			progress.setAttribute('pre1', '下载第 ')
+			progress.setAttribute('pre2', '项，剩余 ')
+			progress.setAttribute('done', thread)
+			title.appendChild(progress)
 			return pull_project_multi(document.querySelector("#details-list .m-account-detail:last-child"),
 						 e.querySelector("tbody tr"), thread)
 		}
@@ -1053,10 +1062,12 @@ function fetch_reports_link(func, container, doc, progress) {
 function fetch_report_data(box, tr, uri='https://962121.fgj.sh.gov.cn/wyweb/web/hmfmsweb/biz/hocacctreport/get') {
 	if (!tr) return
 
-	var progress = box.previousElementSibling.querySelector("p.title span")
-	if (progress) progress.innerText = '下载第 ' +
-				(tr.parentElement.children.length - tr.sectionRowIndex) +
-				' 项, 剩余：' + tr.sectionRowIndex
+	try {
+		var progress = box.previousElementSibling.querySelector("p.title span")
+		progress.setAttribute('done', item.sectionRowIndex + 1)
+		progress.setAttribute('todo', item.parentElement.children.length - item.sectionRowIndex - 1)
+	} catch (e) { }
+
 	if (box.querySelector('table[date="' + tr.lastElementChild.innerText + '"')) {
 		/* data already exist */
 		if (/*tr.sectionRowIndex + 2 > tr.parentElement.children.length &&*/

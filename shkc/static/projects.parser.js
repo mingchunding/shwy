@@ -110,24 +110,42 @@ function gen_project_detail_tab(shkc, id) {
 	domProject.querySelector('table').values = values
 }
 
-window.restore_projects_detail = function (shkc, s=0, l=10) {
+window.restore_projects_detail = function (shkc, s=0, l=10, progress=null) {
 	var idt = shkc.detail.constructor.keys(shkc.detail)
 //	console.log('prepare parsing projects: ', s, ' - ', s+l > idt.length ? idt.length : s+l)
 	if (l < 0) l = idt.length
 	for (var i=s; i<s+l; i++) {
-		if (i >= idt.length) {
-			console.log("Done parsing all " + i + " projects in " + ((performance.now() - window.st) / 1000) + " seconds.")
-			return false
-		}
+		if (i >= idt.length) return false
 		gen_project_detail_tab(shkc, idt[i])
 	}
 
-	setTimeout(window.restore_projects_detail, 10, window.shkc, s+l, l)
+	setTimeout(() => {
+		try {
+			progress.setAttribute('done', i)
+			progress.setAttribute('todo', idt.length - i)
+		} catch(e) { }
+
+		if (window.restore_projects_detail(shkc, i, l, progress)) return true
+
+		if (progress) progress.remove()
+		console.log("Done parsing all " + i + " projects in " + ((performance.now() - window.st) / 1000) + " seconds.")
+		try {
+			document.querySelector('form .index_owner_zq .title a').click()
+		} catch(e) { }
+	}, 10)
+
 	return true
 }
 
 //setTimeout(window.restore_projects_list, 100, window.shkc, 0, 10)
 setTimeout(() => {
 	window.st = performance.now()
-	window.restore_projects_detail(window.shkc, 0, -1)
-}, 100)
+	var progress = document.createElement('span')
+	progress.classList.add('status')
+	progress.setAttribute('pre1', '解读第 ')
+	progress.setAttribute('pre2', '项，剩余 ')
+	progress.setAttribute('done', 1)
+	progress.setAttribute('todo', window.shkc.detail.length)
+	document.querySelector('#details-list p.title').appendChild(progress)
+	window.restore_projects_detail(window.shkc, 0, 10, progress)
+}, 3000)
