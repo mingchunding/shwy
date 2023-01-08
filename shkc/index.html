@@ -1,5 +1,5 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>上海康城大修工程</title>
+<title>上海康城大修工程及财务报表</title>
 <link rel="stylesheet" type="text/css" href="static/mainyzcx.css">
 <link rel="stylesheet" type="text/css" href="static/web-ui.css">
 <link rel="stylesheet" type="text/css" href="static/skin-02.css">
@@ -19,6 +19,7 @@ function restore_click_handler() {
 		createSearchBox()
 		document.querySelectorAll("#details-list .account-content[hidden]").forEach(function(p){p.hidden=false})
 		chart_shouzhihuizong()
+		chart_zhichumingxi()
 	},1000)
 	setTimeout(() => {
 		document.querySelector("p.title").setAttribute('show', 'true')
@@ -35652,7 +35653,9 @@ function opennew1(mpro_id){
 			</tbody></table>
 		</td>
 	</tr>
-</tbody></table></div>
+</tbody></table>
+</div>
+</div>
 </div>
 	<script language="javascript" type="text/javascript" src="static/statistics.js"> </script>
 	<script language="javascript" type="text/javascript" src="static/ownerdetails.js"> </script>

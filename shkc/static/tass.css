@@ -638,7 +638,7 @@ thead th[sorting]:after {
     border: 1px solid;
 }
 
-#chart {
+div.chart {
     width: 90%;
     border: 1px solid;
     background-color: white;
@@ -648,28 +648,28 @@ thead th[sorting]:after {
     padding: 5px;
 }
 
-#chart > span {
+.chart > span {
     font-weight: bold;
     float: right;
     margin: 10px 10px;
 }
 
 @media screen and (min-resolution: 2.1dppx) {
-    #chart > span {
+    .chart > span {
         font-size: 40px
     }
 }
 
-#chart > span:hover {
+.chart > span:hover {
     cursor: pointer
 }
 
-#chart:hover :before{
+.chart:hover :before{
     color: red
 }
 
 @media print {
-    #chart {
+    .chart {
         position: relative;
         border: 0;
         background: transparent;
@@ -680,7 +680,7 @@ thead th[sorting]:after {
         width: 1000px;
     }
 
-    #chart > span {
+    .chart > span {
         display: none
     }
 }

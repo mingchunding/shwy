@@ -765,9 +765,9 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 			document.querySelectorAll("#reports p.title").forEach(function(e){
 				e.addEventListener('click', function(e){
 					if (e.target.localName=='span' && e.target.classList.contains('chart')) {
-						var chart = document.getElementById('chart')
+						var chart = document.getElementById(e.target.getAttribute('target'))
 						chart.removeAttribute('hidden')
-						return window.myBar.resize()
+						return chart.myBar.resize()
 					}
 					this.setAttribute('show', !!this.parentElement.nextElementSibling.hidden)
 					this.parentElement.nextElementSibling.hidden = !this.parentElement.nextElementSibling.hidden
@@ -1155,7 +1155,7 @@ function add_title_click_event(e, f=null) {
 		} else if (event.target.localName=='span' && event.target.classList.contains('chart')) {
 			var chart = document.getElementById('chart')
 			chart.removeAttribute('hidden')
-			return window.myBar.resize()
+			return chart.myBar.resize()
 		}
 		this.setAttribute('show', !!this.nextElementSibling.hidden)
 		this.nextElementSibling.hidden = !this.nextElementSibling.hidden
@@ -1303,10 +1303,11 @@ window.chartColors = {
 }
 
 function chart_shouzhihuizong() {
-	var div = document.getElementById('chart')
+	var div = document.getElementById('ShouZhiHuiZong')
 	if (!div) {
 		var div = document.createElement('div')
-		div.id = 'chart'
+		div.id = 'ShouZhiHuiZong'
+		div.classList.add('chart')
 		div.hidden = true
 		div.appendChild(document.createElement('span'))
 		div.appendChild(document.createElement('canvas'))
@@ -1317,14 +1318,17 @@ function chart_shouzhihuizong() {
 		div.querySelector('canvas').removeAttribute('style')
 		div.querySelector('canvas').removeAttribute('width')
 		div.querySelector('canvas').removeAttribute('height')
+		div.removeAttribute('hidden')
 	}
-	var indicator = document.querySelector(".collect-info[func='ShouZhiHuiZong.do']").previousElementSibling.querySelector("p.title")
+	var source = document.querySelector(".collect-info[func='ShouZhiHuiZong.do']")
+	var indicator = source.previousElementSibling.querySelector("p.title")
 	var s = indicator.querySelector('span')
 	if (!s) {
 		s = document.createElement('span')
 		indicator.appendChild(s)
 		s.classList.add('chart')
 		s.innerText = '数据图'
+		s.setAttribute('target', 'ShouZhiHuiZong')
 	}
 
 	div.firstElementChild.addEventListener('click',function(e){
@@ -1335,9 +1339,9 @@ function chart_shouzhihuizong() {
 	var fund_sum = Array(Array(),Array(),Array(),Array(),Array(),Array(),Array(),Array(),Array(),Array())
 	var repair_fund_earning = Array(Array(),Array(),Array(),Array())
 	var labels = Array()
-	var ctx = document.getElementById('canvas').getContext('2d')
+	var ctx = div.querySelector('canvas').getContext('2d')
 
-	var rtable = document.querySelectorAll(".collect-info[func='ShouZhiHuiZong.do'] table.colwidth")
+	var rtable = source.querySelectorAll("table.colwidth")
 	var title = rtable[0].querySelector("table.tab1 tr.tab_unit > td").innerText.match(/上海市.+业主大会/)[0]
 	for (var i=0; i<rtable.length; i++) {
 		td = rtable[i].querySelectorAll("table.tab3 > tbody > tr > td.tab_money")
@@ -1446,7 +1450,7 @@ function chart_shouzhihuizong() {
 		}]
 	}
 
-	window.myBar = new Chart(ctx, {
+	div.myBar = new Chart(ctx, {
 		type: 'bar',
 		data: barChartData,
 		options: {

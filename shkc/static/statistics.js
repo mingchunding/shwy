@@ -567,3 +567,100 @@ function flag_statistics_item() {
 		})
 	})
 }
+
+function chart_zhichumingxi() {
+	var div = document.getElementById('WeiXiuZhiChuMingXi')
+	if (!div) {
+		var div = document.createElement('div')
+		div.id = 'WeiXiuZhiChuMingXi'
+		div.classList.add('chart')
+		div.hidden = true
+		div.appendChild(document.createElement('span'))
+		div.appendChild(document.createElement('canvas'))
+		div.firstElementChild.innerText = 'X'
+		div.lastElementChild.id = 'canvas'
+		document.body.appendChild(div)
+	} else {
+		div.querySelector('canvas').removeAttribute('style')
+		div.querySelector('canvas').removeAttribute('width')
+		div.querySelector('canvas').removeAttribute('height')
+		div.removeAttribute('hidden')
+	}
+	var source = document.querySelector(".collect-info[func='WeiXiuZhiChuMingXi.do']")
+	var indicator = source.previousElementSibling.querySelector("p.title")
+	var s = indicator.querySelector('span')
+	if (!s) {
+		s = document.createElement('span')
+		indicator.appendChild(s)
+		s.classList.add('chart')
+		s.innerText = '数据图'
+		s.setAttribute('target', 'WeiXiuZhiChuMingXi')
+	}
+
+	div.firstElementChild.addEventListener('click',function(e){
+		if (e.target.localName != 'span') return
+		this.parentElement.hidden = 'true'
+	})
+
+	var ctx = div.querySelector('canvas').getContext('2d')
+
+	var data = {}
+	var labels = Array()
+	var rtable = source.querySelectorAll("table.colwidth")
+	var title = rtable[0].querySelectorAll("table td.TopTitle")[1].innerText
+	for (var i=0; i<rtable.length; i++) {
+		labels.push(rtable[i].querySelector("tbody > tr > td.fubold").innerText.match(/\d+年\d+月/g)[1])
+		rtable[i].querySelector("table.tab2").querySelectorAll("tr:not([class])").forEach(function(r){
+			item = r.children[1].innerText.replace(/[ \t]+/g,'')
+			if (data[item] == undefined || !Array.isArray(data[item])) data[item] = Array()
+			data[item].push(r.children[2].innerText)
+		})
+	}
+	var barChartData = {
+		labels: labels,
+		datasets: []
+	}
+
+	ids = data.constructor.keys(data)
+	color = data.constructor.keys(window.chartColors)
+	for (var i=0; i<ids.length; i++) {
+		barChartData.datasets.push({
+			label: ids[i],
+			data: data[ids[i]],
+			backgroundColor: window.chartColors[color[i]],
+			stack: 'stack 1'
+		})
+	}
+
+	div.myBar = new Chart(ctx, {
+		type: 'bar',
+		data: barChartData,
+		options: {
+			plugins: {
+				title: {
+					fontSize: 20,
+					display: true,
+					text: title
+				},
+				subtitle: {
+					display: false,
+					text: ''
+				}
+			},
+			interaction: {
+				mode: 'index',
+				intersect: false
+			},
+			scales: {
+				x: {
+					//max: '2014年12月',
+					stacked: true,
+					reverse: true
+				},
+				y: {
+					stacked: true
+				}
+			}
+		}
+	})
+}
