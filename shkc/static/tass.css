@@ -25,11 +25,11 @@ thead th[desc='false']:after {
     padding-right: 2%;
     width: 96%;
     min-width: 686px;
-    max-width: 1280px;
+    /* max-width: 1280px; */
 }
 
 .m-increace-inquiry td {
-    min-width: 290px
+    min-width: 290px;
 }
 
 #reports .title span:not([class]):before,
@@ -546,8 +546,7 @@ table.merged tbody td {
     background: lightblue;
     border: 1px solid;
     padding: 0 30px;
-    top: 5px;
-    left: 200px;
+    bottom: 20px;
     border-radius: 20px;
 }
 

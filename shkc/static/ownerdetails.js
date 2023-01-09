@@ -739,10 +739,14 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 				} else if ('details-list' == func || 'reports' == func) {
 					document.getElementById(func).hidden = !this.checked
 				} else if ('floatbar' == func) {
-					if (this.checked)
-						document.querySelector('form .f-search-content').classList.add('fixed')
-					else
-						document.querySelector('form .f-search-content').classList.remove('fixed')
+					var b = document.querySelector('form .f-search-content')
+					if (!this.checked) {
+						b.classList.remove('fixed')
+						b.removeAttribute('style')
+						return
+					}
+					b.classList.add('fixed')
+					b.style.left = (window.innerWidth - b.clientWidth) / 2
 				}else try {
 					document.querySelector("form .m-collect-info." + func).hidden = !this.checked
 				} catch (e) {
