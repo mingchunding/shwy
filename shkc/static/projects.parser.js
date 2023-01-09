@@ -106,8 +106,9 @@ function gen_project_detail_tab(shkc, id) {
 	values[5] = parseFloat(shkc.detail[id][4])
 	values[8] = shkc.detail[id][7]
 	values[13] = shkc.detail[id][12]
-	values[14] = parseFloat(shkc.detail[id][13])
-	domProject.querySelector('table').values = values
+	for (var i=14; i<18; i++)
+		values[i] = parseFloat(shkc.detail[id][i-1])
+	domProject.querySelector('table').v = values
 }
 
 window.restore_projects_detail = function (shkc, s=0, l=10, progress=null) {

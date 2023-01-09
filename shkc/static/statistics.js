@@ -38,24 +38,30 @@ function group_by_row(r, c, t) {
 
 function sum_by_project(sum, t) {
 	td=t.querySelectorAll("td:not(.name)")
-	if (undefined == t.values || !Array.isArray(t.values)) {
-		t.values = Array()
-		t.values[0] = td[0].innerText
-		t.values[4] = parseFloat(td[4].innerText.match(/[\d\.]+/)[0])
-		t.values[5] = parseFloat(td[5].innerText.match(/[\d\.]+/)[0])
-		t.values[8] = td[8].innerText
-		t.values[13] = td[13].innerText.replace(/\n+/, '')
-		t.values[14] = parseFloat(td[14].innerText.match(/[\d\.]+/)[0])
-		t.values[15] = parseFloat(td[15].innerText.match(/[\d\.]+/)[0])
+	if (undefined == t.v || !Array.isArray(t.v)) {
+		t.v = Array()
+		t.v[0] = td[0].innerText
+		t.v[4] = parseFloat(td[4].innerText.match(/[\d\.]+/)[0])
+		t.v[5] = parseFloat(td[5].innerText.match(/[\d\.]+/)[0])
+		t.v[8] = td[8].innerText
+		t.v[13] = td[13].innerText.replace(/\n+/, '')
+		for (var i=14; i<18; i++)
+			t.v[i] = parseFloat(td[i].innerText.match(/[\d\.]+/)[0])
 	}
 
-    sum[0].push(t.values[0])
-    sum[2] += t.values[14]
-    sum[3] += t.values[5]
-    var s = t.values[13]
+	try {
+		t.addr.constructor
+	} catch (e) {
+		t.addr = parse_location(td[10].innerText.replace(/ +/g,''))
+	}
+
+    sum[0].push(t.v[0])
+    sum[2] += t.v[14]
+    sum[3] += t.v[5]
+    var s = t.v[13]
     if (!sum[4].includes(s))
         sum[4].push(s)
-    sum[6] += t.values[4]
+    sum[6] += t.v[4]
     // 个人查询表格计算个人扣款
     try {
         t.perfee.forEach(function(r){
@@ -96,16 +102,21 @@ function sum_of(n, t) {
 
 	if (typeof(t) != 'number' || !isNaN(t)) {
 		document.querySelectorAll("#details-list table").forEach(function(e){
-			if (r > 0) {
-				var td=e.getElementsByTagName("tr")[r-1].children[c-1]
-				if (!td.innerText.match(RegExp(t))) return
-			} else {
-				var td=e.querySelectorAll("td:not(.name)")
-				var matched=false
-				td.forEach(function(e){
-					if (e.innerText.match(RegExp(t))) matched=true
-				})
-				if (!matched) return
+			try {
+				var m = t.match(/^eval\((.+)\)$/)[1]
+				if (!eval(m)) return
+			} catch (err) {
+				if (r > 0) {
+					var td=e.getElementsByTagName("tr")[r-1].children[c-1]
+					if (!td.innerText.match(RegExp(t))) return
+				} else {
+					var td=e.querySelectorAll("td:not(.name)")
+					var matched=false
+					td.forEach(function(e){
+						if (e.innerText.match(RegExp(t))) matched=true
+					})
+					if (!matched) return
+				}
 			}
 			if (n != '实施时间') {
 				var startDate = document.querySelector("#startDate").earliestValue
@@ -221,6 +232,7 @@ function cal_statistics(tab, r) {
 	r.forEach(function(t){
 		if (typeof(t) == 'object') {
 			t.constructor.keys(t).forEach(function(k){
+//				console.log(t[k], t[k].match(/^eval\((.+)\)$/))
 				add_statistics(tab, k, t[k])
 			})
 		} else {
@@ -328,11 +340,22 @@ function statistics() {
 
 	document.querySelector("#startDate").earliestValue = document.querySelector("#startDate").value
 	type_of_projs  = ['绿化', '补种', '水景', '道路', '花坛', '路灯', '消防', '监控', '电梯', '电梯更换', '控制柜', '井', '控制板', '+']
-	range_of_projs = ["康城道", "山林道", "维园道", "江山道", "大浪湾道", "瀑布湾道", {小区门: '(南|北|西|旋转)大?门'}, '+']
+	range_of_projs = [{
+						康城道: 'eval(e.addr.constructor.keys(e.addr).includes("康城道"))',
+						山林道: "eval(e.addr.constructor.keys(e.addr).includes('山林道'))",
+						维园道: "eval(e.addr.constructor.keys(e.addr).includes('维园道'))",
+						江山道: "eval(e.addr.constructor.keys(e.addr).includes('江山道'))",
+						大浪湾道: "eval(e.addr.constructor.keys(e.addr).includes('大浪湾道'))",
+						瀑布湾道: "eval(e.addr.constructor.keys(e.addr).includes('瀑布湾道'))",
+						小区门: '(南|北|西|旋转)大?门'
+					}, '+']
 
 	return setTimeout(function() {
-		do_group_statistics("可支取金额", [{已完成支付: '^0.00'}, {未完成支付: '[1-9]'}])
 		do_group_statistics("是否审价", ['是', '否'])
+		do_group_statistics("支取状况", [{已完成支取: 'eval(e.v[14]==e.v[4])'},
+									 {未完成支取: 'eval(e.v[15]>0)'},
+									 {未开始支取: 'eval(e.v[14]==0)'},
+									 {有冲正支取: 'eval(e.v[16]>0)'}])
 		do_group_statistics("工程类别", type_of_projs)
 		do_group_statistics("施工范围", range_of_projs)
 		do_group_statistics("施工管理单位", companies)
@@ -342,9 +365,10 @@ function statistics() {
 
 function parse_location(c) {
 	var all_roads = ['大浪湾道', '江山道', '康城道', '瀑布湾道', '山林道', '维园道']
-	var s = c.match(/[大浪湾江山康城瀑布湾山林维园道]{0,4}[\-\d]+[号室楼#]?/g)
+	var addr = {origin: c}
+	c = c.replace(/[号室#][\-至]/g,'-')
+	var s = c.match(/[大浪湾江山康城瀑布湾山林维园道]{0,4}[\d\-]+[号室楼#]?/g)
 	var n=''
-	var addr = {}
 	if (Array.isArray(s) && s.length > 1) for (var i=0; i<s.length; i++) {
 		if (s[i].match(/\d+$/)) s[i] = s[i] + '号'
 		try {
@@ -370,7 +394,6 @@ function parse_location(c) {
 			addr[road] = Array(s[2])
 		} catch(e) { }
 	}
-	addr.origin = c
 
 	return addr
 }
@@ -424,8 +447,15 @@ function hidden_by_dom(td) {
 //			s=p.querySelector("tr:nth-child(8) td:nth-child(2)").innerText.replace(/[\.,， \n]+/g,',').replace(/,$/,'')
 //			s.replace('/瀑\d+', '瀑布湾道')
 //			console.log(e, s.split(','))
-			c = p.querySelector("tr:nth-child(8) td:nth-child(2)").innerText.replace(/ +/g,'')
-			addr = parse_location(c)
+			var t = p.querySelector('table')
+			try {
+				t.addr.constructor
+				addr = t.addr
+			} catch (e) {
+				c = t.querySelector("tr:nth-child(8) td:nth-child(2)").innerText.replace(/ +/g,'')
+				addr = parse_location(c)
+				t.addr = addr
+			}
 			console.log(e, addr)
 		}
 
