@@ -25,7 +25,7 @@ thead th[desc='false']:after {
     padding-right: 2%;
     width: 96%;
     min-width: 686px;
-    /* max-width: 1280px; */
+    max-width: 1120px;
 }
 
 .m-increace-inquiry td {
@@ -286,10 +286,6 @@ form .index_owner_sy td:nth-child(3):after,
     content: ' 家'
 }
 
-.details-statistics .searchbox td:after {
-    contain: ' '
-}
-
 .details-statistics tbody .searchbox td:first-child:before {
     contain: '名称：'
 }
@@ -306,17 +302,6 @@ form .index_owner_sy td:nth-child(3):after,
     content: '\274E';
     float: right;
     cursor: pointer;
-}
-
-.details-statistics tr.searchbox td:last-child:after {
-    content: '\2705';
-    padding: 0;
-    cursor: pointer;
-    float: right;
-    display: block;
-    margin-top: 4px;
-    font-size: 1.4em;
-    pointer-events: auto;
 }
 
 .details-statistics th {
@@ -342,6 +327,10 @@ form .index_owner_sy td:nth-child(3):after,
     padding: 0 10px;
 }
 
+.details-statistics button {
+    cursor: pointer
+}
+
 .details-statistics tr.searchbox td:last-child {
     text-align: left;
     /* pointer-events: none; */
@@ -350,10 +339,11 @@ form .index_owner_sy td:nth-child(3):after,
 .details-statistics td:first-child input {
     width: 100px;
     text-align: center;
+    /* display: none; */
 }
 
-.details-statistics td:last-child input {
-    width: 320px
+.details-statistics td input {
+    width: -webkit-fill-available;
 }
 
 .details-statistics th:nth-child(2){
@@ -368,8 +358,10 @@ form .index_owner_sy td:nth-child(3):after,
     min-width: 400px
 }
 
-@media screen and (min-resolution: 2dppx) and (max-width: 1020px) {
-    .details-statistics thead th:last-child,
+@media screen and (max-width: 980px) {
+    .details-statistics th:nth-child(3),
+    .details-statistics th:last-child,
+    .details-statistics td:nth-child(3),
     .details-statistics tbody td:last-child {
         display: none
     }
@@ -378,9 +370,6 @@ form .index_owner_sy td:nth-child(3):after,
     .details-statistics tfoot td:nth-child(4),
     .details-statistics tfoot td:nth-child(5){
         display: none
-    }
-    .details-statistics tfoot td:last-child input {
-        width: 500px;
     }
 }
 
@@ -586,6 +575,21 @@ input#startDate {
 .m-account-search .f-search-content span:not(:last-child) {
     border-right: 3px solid;
     padding-right: 6px;
+}
+
+@media screen and (min-resolution: 2dppx) and (max-width: 980px) {
+    .m-account-search .f-search-content {
+        width: 500px;
+    }
+
+    .m-account-search .f-search-contentinput:first-child,
+    .m-account-search .f-search-contentspan:nth-child(2) {
+        display: none
+    }
+
+    .m-account-search .f-search-content span:nth-child(10) {
+        border-right: 0;
+    }
 }
 
 .m-account-search .endDate {

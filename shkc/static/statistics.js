@@ -50,9 +50,12 @@ function sum_by_project(sum, t) {
 	}
 
 	try {
-		t.addr.constructor
+		t.g.constructor
 	} catch (e) {
-		t.addr = parse_location(td[10].innerText.replace(/ +/g,''))
+		t.g = parse_location(td[10].innerText.replace(/ +/g,''))
+		t.g.k = function() {
+			return this.constructor.keys(this)
+		}
 	}
 
     sum[0].push(t.v[0])
@@ -103,7 +106,7 @@ function sum_of(n, t) {
 	if (typeof(t) != 'number' || !isNaN(t)) {
 		document.querySelectorAll("#details-list table").forEach(function(e){
 			try {
-				var m = t.match(/^eval\((.+)\)$/)[1]
+				var m = t.match(/^`(.+)`$/)[1]
 				if (!eval(m)) return
 			} catch (err) {
 				if (r > 0) {
@@ -297,7 +300,7 @@ function do_group_statistics(n, r) {
 		}
 
 		if (!sibling || sibling.querySelectorAll("tbody tr").length < g.length) {
-			subtitle.innerText = document.querySelector("#startDate").earliestValue +
+			subtitle.innerText = document.querySelector("#startDate").value +
 						' 至 ' + document.querySelector("#endDate").value
 			setTimeout(cal_statistics, 100, tab, g)
 		}
@@ -316,13 +319,14 @@ function do_group_statistics(n, r) {
 		}
 		tr.firstElementChild.appendChild(document.createElement("input"))
 		tr.lastElementChild.appendChild(document.createElement("input"))
-		tr.lastElementChild.previousElementSibling.innerText='新增条目'
+		var bt = document.createElement('button')
+		tr.lastElementChild.previousElementSibling.appendChild(bt)
+		bt.innerText='新增条目'
 		tr.lastElementChild.setAttribute('colspan', '4')
 		tr.classList.add('searchbox')
-		tr.lastElementChild.addEventListener('click', function(e){
-			if (e.target.localName!='td') return
-			var s=this.parentElement.querySelectorAll("input")[0].value
-			var k=this.parentElement.querySelectorAll("input")[1].value
+		bt.addEventListener('click', function(e){
+			var s=tr.querySelectorAll("input")[0].value
+			var k=tr.querySelectorAll("input")[1].value
 			if (k.length < 1) return
 			if (s.length < 1) s=k
 			add_statistics(tab, s, k)
@@ -341,23 +345,24 @@ function statistics() {
 	document.querySelector("#startDate").earliestValue = document.querySelector("#startDate").value
 	type_of_projs  = ['绿化', '补种', '水景', '道路', '花坛', '路灯', '消防', '监控', '电梯', '电梯更换', '控制柜', '井', '控制板', '+']
 	range_of_projs = [{
-						康城道: 'eval(e.addr.constructor.keys(e.addr).includes("康城道"))',
-						山林道: "eval(e.addr.constructor.keys(e.addr).includes('山林道'))",
-						维园道: "eval(e.addr.constructor.keys(e.addr).includes('维园道'))",
-						江山道: "eval(e.addr.constructor.keys(e.addr).includes('江山道'))",
-						大浪湾道: "eval(e.addr.constructor.keys(e.addr).includes('大浪湾道'))",
-						瀑布湾道: "eval(e.addr.constructor.keys(e.addr).includes('瀑布湾道'))",
-						小区门: '(南|北|西|旋转)大?门'
-					}, '+']
+			康城道: '`e.g.k().includes("康城道")`',
+			山林道: '`e.g.k().includes("山林道")`',
+			维园道: '`e.g.k().includes("维园道")`',
+			江山道: '`e.g.k().includes("江山道")`',
+			大浪湾道: '`e.g.k().includes("大浪湾道")`',
+			瀑布湾道: '`e.g.k().includes("瀑布湾道")`',
+			小区门: '(南|北|西|旋转)大?门'
+		}, '+']
 
 	return setTimeout(function() {
 		do_group_statistics("是否审价", ['是', '否'])
-		do_group_statistics("支取状况", [{已完成支取: 'eval(e.v[14]==e.v[4])'},
-									 {未完成支取: 'eval(e.v[15]>0)'},
-									 {未开始支取: 'eval(e.v[14]==0)'},
-									 {有冲正支取: 'eval(e.v[16]>0)'}])
+		do_group_statistics("支取状况", [{
+			已完成支取: '`e.v[14]==e.v[4]`',
+			未完成支取: '`e.v[15]>0`',
+			未开始支取: '`e.v[14]==0`',
+			有冲正支取: '`e.v[16]>0`'}])
 		do_group_statistics("工程类别", type_of_projs)
-		do_group_statistics("施工范围", range_of_projs)
+		do_group_statistics("实施范围", range_of_projs)
 		do_group_statistics("施工管理单位", companies)
 		do_group_statistics("实施时间", years)
 	}, 10)
@@ -365,7 +370,7 @@ function statistics() {
 
 function parse_location(c) {
 	var all_roads = ['大浪湾道', '江山道', '康城道', '瀑布湾道', '山林道', '维园道']
-	var addr = {origin: c}
+	var addr = {o: c}
 	c = c.replace(/[号室#][\-至]/g,'-')
 	var s = c.match(/[大浪湾江山康城瀑布湾山林维园道]{0,4}[\d\-]+[号室楼#]?/g)
 	var n=''
@@ -449,14 +454,13 @@ function hidden_by_dom(td) {
 //			console.log(e, s.split(','))
 			var t = p.querySelector('table')
 			try {
-				t.addr.constructor
-				addr = t.addr
+				t.g.constructor
 			} catch (e) {
 				c = t.querySelector("tr:nth-child(8) td:nth-child(2)").innerText.replace(/ +/g,'')
-				addr = parse_location(c)
-				t.addr = addr
+				t.g = parse_location(c)
+				t.g.k = function() {return this.constructor.keys(this)}
 			}
-			console.log(e, addr)
+			console.log(e, t.g)
 		}
 
 		document.querySelectorAll("form .m-collect-info.index_owner_zq td:last-child").forEach(function(x) {
@@ -848,4 +852,10 @@ function chart_of_report(func) {
 			}
 		}
 	})
+}
+
+function projects_per_building_on_road(n, i, c) {
+	if (i > c) return false
+	add_statistics(document.querySelectorAll('.details-statistics tbody')[3], n[0] + i, '`e.g["' + n + '"].includes("' + i + '")`')
+	setTimeout(building_of_road, 10, n, i+1, c)
 }
