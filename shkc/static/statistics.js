@@ -463,9 +463,8 @@ function hidden_by_dom(td) {
 			console.log(e, t.g)
 		}
 
-		document.querySelectorAll("form .m-collect-info.index_owner_zq td:last-child").forEach(function(x) {
-			if (!x.innerText.match(RegExp(e))) return
-			var r = x.parentElement
+		p.querySelectorAll('tr a').forEach(function(a){
+			var r = document.getElementById('zq_' + a.getAttribute('zqcode')).parentElement.parentElement
 			r.hidden=!td.show
 		})
 	})
