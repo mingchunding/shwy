@@ -579,7 +579,7 @@ input#startDate {
 
 @media screen and (min-resolution: 2dppx) and (max-width: 980px) {
     .m-account-search .f-search-content {
-        width: 500px;
+        width: 490px;
     }
 
     .m-account-search .f-search-contentinput:first-child,
