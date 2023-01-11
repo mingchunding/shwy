@@ -696,17 +696,17 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 		sbar.children[3].classList.add('f-search-content')
 	}
 	var scfg = sbar.children[3]
-	if (scfg.children.length < 10) {
-		var cfgs = ['支取明细', '收入明细', '收支列表', '支取列表', '工程列表', '工程统计', '工程详情', '财务报表', '浮动工具']
-		for (var i=0; i<cfgs.length; i++) {
-			scfg.appendChild(document.createElement("input"))
-			scfg.appendChild(document.createElement("span"))
-			scfg.children[i*2].type = 'checkbox'
-			scfg.children[i*2].checked = true
-			scfg.children[i*2+1].innerText = cfgs[i]
-		}
-		scfg.firstElementChild.disabled = true
+	scfg.innerText = ''
+	var cfgs = ['支取明细', '收入明细', '收支列表', '支取列表', '工程列表', '工程统计', '工程详情', '财务报表', '浮动工具']
+	for (var i=0; i<cfgs.length; i++) {
+		scfg.appendChild(document.createElement("span"))
+		scfg.children[i].innerText = cfgs[i]
+		scfg.children[i].insertBefore(document.createElement("input"), scfg.children[i].firstChild)
+		scfg.children[i].firstElementChild.type = 'checkbox'
+		scfg.children[i].firstElementChild.checked = true
 	}
+	scfg.firstElementChild.children[0].disabled = true
+
 	setTimeout(function(){
 		try {
 			scfg.querySelectorAll("input")[0].setAttribute('func', 'index_owner_zq')

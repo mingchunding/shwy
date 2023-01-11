@@ -525,7 +525,6 @@ table.merged tbody td {
 
 .m-account-search .f-search-content {
     position: relative;
-    font-size: 1.2em;
     font-weight: bold;
     float: left;
 }
@@ -534,7 +533,7 @@ table.merged tbody td {
     position: fixed;
     background: lightblue;
     border: 1px solid;
-    padding: 0 30px;
+    padding: 0 30px 8px 30px;
     bottom: 20px;
     border-radius: 20px;
 }
@@ -559,6 +558,8 @@ input#startDate {
 .m-account-search .f-search-content input {
     height: 24px;
     width: 24px;
+    position: relative;
+    top: 6px;
 }
 
 .m-account-search .f-search-content input:not([disabled]) {
@@ -566,29 +567,23 @@ input#startDate {
 }
 
 .m-account-search .f-search-content span {
-    display: inline-block;
-    position: relative;
-    top: -8px;
-    vertical-align: middle;
-}
-
-.m-account-search .f-search-content span:not(:last-child) {
-    border-right: 3px solid;
-    padding-right: 6px;
+    font-size: 16px;
+    padding-bottom: 1px;
+    text-align: center;
+    white-space: nowrap;
+    border-left: 3px solid;
+    padding-right: 3px;
 }
 
 @media screen and (min-resolution: 2dppx) and (max-width: 980px) {
     .m-account-search .f-search-content {
-        width: 490px;
+        width: 404px;
+        padding-left: 60px;
+        overflow: visible;
     }
 
-    .m-account-search .f-search-contentinput:first-child,
-    .m-account-search .f-search-contentspan:nth-child(2) {
+    .f-search-content span:first-child {
         display: none
-    }
-
-    .m-account-search .f-search-content span:nth-child(10) {
-        border-right: 0;
     }
 }
 
