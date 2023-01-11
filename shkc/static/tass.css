@@ -579,7 +579,6 @@ input#startDate {
     .m-account-search .f-search-content {
         width: 404px;
         padding-left: 60px;
-        overflow: visible;
     }
 
     .f-search-content span:first-child {
