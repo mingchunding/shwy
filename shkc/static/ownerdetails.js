@@ -705,6 +705,7 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 		scfg.children[i].firstElementChild.type = 'checkbox'
 		scfg.children[i].firstElementChild.checked = true
 	}
+	scfg.insertBefore(document.createElement('br'), scfg.children[5])
 	scfg.firstElementChild.children[0].disabled = true
 
 	setTimeout(function(){

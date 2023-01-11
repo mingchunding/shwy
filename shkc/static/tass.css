@@ -575,14 +575,22 @@ input#startDate {
     padding-right: 3px;
 }
 
+.m-account-search .f-search-content br {
+    display: none
+}
+
 @media screen and (min-resolution: 2dppx) and (max-width: 980px) {
     .m-account-search .f-search-content {
-        width: 480px;
+        /* width: 405px; */
         padding-left: 60px;
     }
 
     .f-search-content span:first-child {
         display: none
+    }
+
+    .m-account-search .f-search-content br {
+        display: block
     }
 }
 
