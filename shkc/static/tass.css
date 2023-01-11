@@ -577,7 +577,7 @@ input#startDate {
 
 @media screen and (min-resolution: 2dppx) and (max-width: 980px) {
     .m-account-search .f-search-content {
-        width: 454px;
+        width: 480px;
         padding-left: 60px;
     }
 
