@@ -6,7 +6,7 @@
 }
 
 .m-account-detail table td {
-    border: 0
+    border: 0;
 }
 
 .m-increace-inquiry table td {
@@ -606,13 +606,13 @@ input#startDate {
         display: block
     }
     *, *:after, *:before {
-        font-size: 24px !important;
+        font-size: 24px !important
     }
     .m-account-detail table td {
         padding: 5px !important
     }
-    tr.tab_remark td,
-    tr.tab_unit td {
+    .tab_remark,
+    .tab_unit td {
         font-size: 16px !important
     }
 }
