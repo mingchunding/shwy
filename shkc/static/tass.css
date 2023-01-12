@@ -1,4 +1,4 @@
-@charset "UTF-8";
+@charset "UTF8";
 
 .m-increace-inquiry table td .name {
     width: auto;
@@ -9,6 +9,8 @@
     border: 0;
 }
 
+.index_owner_zq td,
+.index_owner td,
 .m-increace-inquiry table td {
     border: 1px solid #8ad9ff;
 }
@@ -591,15 +593,31 @@ input#startDate {
     .details-statistics th:last-child,
     .details-statistics td:nth-child(3),
     .details-statistics tbody td:last-child,
-    form .m-collect-info.index_owner_zq th:nth-child(2),
-    form .m-collect-info.index_owner_zq th:nth-child(4),
-    form .m-collect-info.index_owner_zq td:nth-child(2),
-    form .m-collect-info.index_owner_zq td:nth-child(4),
     .details-statistics tfoot td:nth-child(2),
     .details-statistics tfoot td:nth-child(3),
     .details-statistics tfoot td:nth-child(4),
-    .details-statistics tfoot td:nth-child(5){
-        display: none
+    .details-statistics tfoot td:nth-child(5),
+    .index_owner_zq th:nth-child(3),
+    .index_owner_zq th:nth-child(4),
+    .index_owner_zq td:nth-child(3),
+    .index_owner_zq td:nth-child(4),
+    .waterOfOwner th:nth-child(4),
+    .waterOfOwner td:nth-child(4),
+    .drawofowner th:nth-child(4),
+    .drawofowner th:nth-child(5),
+    .drawofowner th:nth-child(7),
+    .drawofowner td:nth-child(4),
+    .drawofowner td:nth-child(5),
+    .drawofowner td:nth-child(7),
+    .index_owner th:nth-child(7),
+    .index_owner th:nth-child(1),
+    .index_owner td:nth-child(7),
+    .index_owner td:nth-child(1) {
+        display: none !important
+    }
+
+    .drawofowner th:nth-child(2) {
+        width: 40%
     }
 
     .m-account-search .f-search-content br {
@@ -611,7 +629,9 @@ input#startDate {
     .m-account-detail table td {
         padding: 5px !important
     }
-    .tab_remark,
+    .tab_remark {
+        font-size: 12px !important
+    }
     .tab_unit td {
         font-size: 16px !important
     }
