@@ -1,11 +1,12 @@
 @charset "UTF-8";
 
 .m-increace-inquiry table td .name {
-    width: auto
+    width: auto;
+    margin-right: 50px;
 }
 
 .m-account-detail table td {
-    /* border: 0; */
+    border: 0
 }
 
 .m-increace-inquiry table td {
