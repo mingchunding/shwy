@@ -630,6 +630,7 @@ input#startDate {
         padding: 5px !important
     }
     .tab_remark,
+    .tab_remark td,
     .tab_unit td {
         font-size: 12px !important
     }
