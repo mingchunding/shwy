@@ -9,6 +9,10 @@
     border: 0;
 }
 
+.Wdate {
+    background-size: 38px 48px;
+}
+
 .index_owner_zq td,
 .index_owner td,
 .m-increace-inquiry table td {
@@ -523,10 +527,6 @@ input#startDate {
     margin-right: 20px;
 }
 
-.Wdate {
-	background-size: contain;
-}
-
 .f-clearfix:after {
     display: none
 }
@@ -629,11 +629,16 @@ input#startDate {
     .m-account-detail table td {
         padding: 5px !important
     }
-    .tab_remark {
+    .tab_remark,
+    .tab_unit td {
         font-size: 12px !important
     }
-    .tab_unit td {
-        font-size: 16px !important
+    .Wdate {
+		/*background-size: 38px 48px;*/
+		height: 38px !important;
+		top: -5px !important;
+		position: relative;
+		/* transform: scale(1.2); */
     }
 }
 
