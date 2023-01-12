@@ -1,7 +1,11 @@
 @charset "UTF-8";
 
+.m-increace-inquiry table td .name {
+    width: auto
+}
+
 .m-account-detail table td {
-    border: 0
+    /* border: 0; */
 }
 
 .m-increace-inquiry table td {
@@ -34,7 +38,6 @@ thead th[desc='false']:after {
 
 #reports .title span:not([class]):before,
 .m-increace-inquiry tr:last-child td.counting:after,
-/*.m-collect-info:nth-child(4) .title span:after,*/
 img:not([src]) {
     content: url('data:image/gif;base64,R0lGODlhEAAQALMMAKqooJGOhp2bk7e1rZ2bkre1rJCPhqqon8PBudDOxXd1bISCef///wAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh+QQFAAAMACwAAAAAEAAQAAAET5DJyYyhmAZ7sxQEs1nMsmACGJKmSaVEOLXnK1PuBADepCiMg/DQ+/2GRI8RKOxJfpTCIJNIYArS6aRajWYZCASDa41Ow+Fx2YMWOyfpTAQAIfkEBQAADAAsAAAAABAAEAAABE6QyckEoZgKe7MEQMUxhoEd6FFdQWlOqTq15SlT9VQM3rQsjMKO5/n9hANixgjc9SQ/CgKRUSgw0ynFapVmGYkEg3v1gsPibg8tfk7CnggAIfkEBQAADAAsAAAAABAAEAAABE2QycnOoZjaA/IsRWV1goCBoMiUJTW8A0XMBPZmM4Ug3hQEjN2uZygahDyP0RBMEpmTRCKzWGCkUkq1SsFOFQrG1tr9gsPc3jnco4A9EQAh+QQFAAAMACwAAAAAEAAQAAAETpDJyUqhmFqbJ0LMIA7McWDfF5LmAVApOLUvLFMmlSTdJAiM3a73+wl5HYKSEET2lBSFIhMIYKRSimFriGIZiwWD2/WCw+Jt7xxeU9qZCAAh+QQFAAAMACwAAAAAEAAQAAAETZDJyRCimFqbZ0rVxgwF9n3hSJbeSQ2rCWIkpSjddBzMfee7nQ/XCfJ+OQYAQFksMgQBxumkEKLSCfVpMDCugqyW2w18xZmuwZycdDsRACH5BAUAAAwALAAAAAAQABAAAARNkMnJUqKYWpunUtXGIAj2feFIlt5JrWybkdSydNNQMLaND7pC79YBFnY+HENHMRgyhwPGaQhQotGm00oQMLBSLYPQ9QIASrLAq5x0OxEAIfkEBQAADAAsAAAAABAAEAAABE2QycmUopham+da1cYkCfZ94UiW3kmtbJuRlGF0E4Iwto3rut6tA9wFAjiJjkIgZAYDTLNJgUIpgqyAcTgwCuACJssAdL3gpLmbpLAzEQA7');
 }
@@ -80,15 +83,6 @@ p.title:after {
 #reports .collect-info[func='ShouZhiHuiZong.do'] table.tab3 tbody tr:hover td:not([rowspan]) {
     background-color: lightblue;
     cursor: default
-}
-
-#reports .collect-info[func='ShouZhiHuiZong.do'] table.tab3 tbody tr:nth-child(1) td.tab_money:before,
-#reports .collect-info[func='ShouZhiHuiZong.do'] table.tab3 tbody tr:nth-child(2) td.tab_money:before,
-#reports .collect-info[func='ShouZhiHuiZong.do'] table.tab3 tbody tr:nth-child(7) td.tab_money:before,
-#reports .collect-info[func='ShouZhiHuiZong.do'] table.tab3 tbody tr:nth-child(8) td.tab_money:before {
-/*    content: '\2692'; */
-    font-size: 20px;
-    float: left;
 }
 
 #reports .collect-info[func='ShouZhiHuiZong.do'] table.tab3 tbody tr td.tab_money:hover:before {
@@ -339,7 +333,6 @@ form .index_owner_sy td:nth-child(3):after,
 .details-statistics td:first-child input {
     width: 100px;
     text-align: center;
-    /* display: none; */
 }
 
 .details-statistics td input {
@@ -358,24 +351,9 @@ form .index_owner_sy td:nth-child(3):after,
     min-width: 400px
 }
 
-@media screen and (max-width: 980px) {
-    .details-statistics th:nth-child(3),
-    .details-statistics th:last-child,
-    .details-statistics td:nth-child(3),
-    .details-statistics tbody td:last-child {
-        display: none
-    }
-    .details-statistics tfoot td:nth-child(2),
-    .details-statistics tfoot td:nth-child(3),
-    .details-statistics tfoot td:nth-child(4),
-    .details-statistics tfoot td:nth-child(5){
-        display: none
-    }
-}
-
 .account-title p {
     cursor: pointer;
-    width: 40%;
+    /* width: 40%; */
     min-width: 658px
 }
 
@@ -447,10 +425,10 @@ form .collect-info tbody tr.paging td:last-child a {
 
 @media print {
     form .m-collect-info thead tr:not(:first-child),
-    form .m-collect-info:nth-child(3) th:nth-child(4),
-    form .m-collect-info:nth-child(3) th:nth-child(3),
-    form .m-collect-info:nth-child(3) td:nth-child(4),
-    form .m-collect-info:nth-child(3) td:nth-child(3),
+    form .m-collect-info.index_owner th:nth-child(4),
+    form .m-collect-info.index_owner th:nth-child(3),
+    form .m-collect-info.index_owner td:nth-child(4),
+    form .m-collect-info.index_owner td:nth-child(3),
     .details-statistics th:last-child,
     .details-statistics td:last-child,
     .details-statistics .searchbox,
@@ -542,6 +520,10 @@ input#startDate {
     margin-right: 20px;
 }
 
+.Wdate {
+	background-size: contain;
+}
+
 .f-clearfix:after {
     display: none
 }
@@ -571,8 +553,11 @@ input#startDate {
     padding-bottom: 1px;
     text-align: center;
     white-space: nowrap;
-    border-left: 3px solid;
     padding-right: 3px;
+}
+
+.m-account-search .f-search-content span:not(:first-child) {
+    border-left: 3px solid;
 }
 
 .m-account-search .f-search-content br {
@@ -581,16 +566,53 @@ input#startDate {
 
 @media screen and (min-resolution: 2dppx) and (max-width: 980px) {
     .m-account-search .f-search-content {
-        /* width: 405px; */
         padding-left: 60px;
     }
 
-    .f-search-content span:first-child {
+    .f-search-content span {
+        font-size: 32px !important;
+    }
+    .f-search-content span {
+        border-left: 6px solid !important;
+    }
+    .f-search-content span:nth-child(5n+2) {
+        border-left: 0 !important;
+    }
+
+    .f-search-content input {
+        height: 38px !important;
+        width: 38px !important;
+        top: 7px !important;
+    }
+
+    .f-search-content span:first-child,
+    .details-statistics th:nth-child(3),
+    .details-statistics th:last-child,
+    .details-statistics td:nth-child(3),
+    .details-statistics tbody td:last-child,
+    form .m-collect-info.index_owner_zq th:nth-child(2),
+    form .m-collect-info.index_owner_zq th:nth-child(4),
+    form .m-collect-info.index_owner_zq td:nth-child(2),
+    form .m-collect-info.index_owner_zq td:nth-child(4),
+    .details-statistics tfoot td:nth-child(2),
+    .details-statistics tfoot td:nth-child(3),
+    .details-statistics tfoot td:nth-child(4),
+    .details-statistics tfoot td:nth-child(5){
         display: none
     }
 
     .m-account-search .f-search-content br {
         display: block
+    }
+    *, *:after, *:before {
+        font-size: 24px !important;
+    }
+    .m-account-detail table td {
+        padding: 5px !important
+    }
+    tr.tab_remark td,
+    tr.tab_unit td {
+        font-size: 16px !important
     }
 }
 
@@ -603,19 +625,17 @@ input#startDate {
 }
 
 #details-list tr:nth-child(2) td a:after {
-    content: attr(zqcode);
     float: right;
-    color: lightgrey
+    color: lightgrey;
+    font-size: 16px !important
 }
 
 #details-list tr:nth-child(2) td a:not(:last-child):after {
     content: ', 'attr(zqcode);
-    float: right;
 }
 
 #details-list tr:nth-child(2) td a:last-child:after {
     content: '本户支取编号：'attr(zqcode);
-    float: right;
 }
 
 #details-list tr:nth-child(12) td {
@@ -681,11 +701,15 @@ div.chart {
         width: 1000px;
     }
 
-    .chart > span {
+    .chart, .chart > span {
         display: none
     }
 }
 
 button {
     cursor: pointer
+}
+
+#reports {
+    padding-bottom: 120px;
 }
