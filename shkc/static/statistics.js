@@ -128,7 +128,7 @@ function sum_of(n, t) {
 				    document.querySelector("#startDate").value)
 					startDate = document.querySelector("#startDate").value
 				var d = e.querySelectorAll("td:not(.name)")[8].innerText
-				if (d < startDate || d > endDate) return
+				if (d.length >= 10 && (d < startDate || d > endDate)) return
 			}
 			sum_by_project(sum, e)
 		})
