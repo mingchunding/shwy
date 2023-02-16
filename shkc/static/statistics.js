@@ -362,7 +362,7 @@ function statistics() {
 	return setTimeout(function() {
 		do_group_statistics("是否审价", ['是', '否'])
 		do_group_statistics("支取状况", [{
-			已完成支取: '`e.v[14]==e.v[4]`',
+			已完成支取: '`e.v[15]==0`',
 			未完成支取: '`e.v[15]>0`',
 			未开始支取: '`e.v[14]==0`',
 			有冲正支取: '`e.v[16]>0`'}])
