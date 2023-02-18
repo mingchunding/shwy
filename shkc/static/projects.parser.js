@@ -150,7 +150,3 @@ setTimeout(() => {
 	document.querySelector('#details-list p.title').appendChild(progress)
 	window.restore_projects_detail(window.shkc, 0, 10, progress)
 }, 3000)
-
-document.querySelector("#startDate").disabled=true
-document.querySelector("#endDate").disabled=true
-document.querySelector("input.btn").disabled=true
