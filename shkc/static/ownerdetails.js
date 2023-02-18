@@ -697,13 +697,13 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 	}
 	var scfg = sbar.children[3]
 	scfg.innerText = ''
-	var cfgs = ['支取明细', '收入明细', '收支列表', '支取列表', '工程列表', '工程统计', '工程详情', '财务报表', '浮动工具']
+	var cfgs = ['支取明细', '收入明细', '收支列表', '支取列表', '工程列表', '我的工程', '工程统计', '工程详情', '财务报表', '浮动工具']
 	for (var i=0; i<cfgs.length; i++) {
 		scfg.appendChild(document.createElement("span"))
 		scfg.children[i].innerText = cfgs[i]
 		scfg.children[i].insertBefore(document.createElement("input"), scfg.children[i].firstChild)
 		scfg.children[i].firstElementChild.type = 'checkbox'
-		scfg.children[i].firstElementChild.checked = true
+		scfg.children[i].firstElementChild.checked = (5!=i)
 	}
 	scfg.insertBefore(document.createElement('br'), scfg.children[5])
 	scfg.firstElementChild.children[0].disabled = true
@@ -715,11 +715,12 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 			scfg.querySelectorAll("input")[2].setAttribute('func', 'waterOfOwner')
 			scfg.querySelectorAll("input")[3].setAttribute('func', 'drawOfOwner')
 			scfg.querySelectorAll("input")[4].setAttribute('func', 'index_owner')
-			scfg.querySelectorAll("input")[5].setAttribute('func', 'details-statistics')
-			scfg.querySelectorAll("input")[6].setAttribute('func', 'details-list')
-			scfg.querySelectorAll("input")[7].setAttribute('func', 'reports')
-			scfg.querySelectorAll("input")[8].setAttribute('func', 'floatbar')
-			scfg.querySelectorAll("input")[8].checked = false
+			scfg.querySelectorAll("input")[5].setAttribute('func', 'onlymine')
+			scfg.querySelectorAll("input")[6].setAttribute('func', 'details-statistics')
+			scfg.querySelectorAll("input")[7].setAttribute('func', 'details-list')
+			scfg.querySelectorAll("input")[8].setAttribute('func', 'reports')
+			scfg.querySelectorAll("input")[9].setAttribute('func', 'floatbar')
+			scfg.querySelectorAll("input")[10].checked = false
 		} catch(e) { }
 		document.querySelectorAll("form .m-collect-info:not([hidden])").forEach(function(q){
 			q.classList.forEach(function(c){
@@ -732,8 +733,8 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 		scfg.querySelectorAll("input").forEach(function(c){
 			c.addEventListener('change', function(event){
 				func=this.getAttribute('func')
+				var self = this
 				if ('details-statistics' == func) {
-					var self = this
 					document.querySelectorAll(".m-collect-info." + func).forEach(function(e){
 						e.hidden = !self.checked
 					})
@@ -748,7 +749,11 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 					}
 					b.classList.add('fixed')
 					b.style.left = (window.innerWidth - b.clientWidth) / 2
-				}else try {
+				} else if ('onlymine' == func) {
+					if (document.onlymine == self.checked) return
+					document.onlymine = self.checked
+					statistics()
+				} else try {
 					document.querySelector("form .m-collect-info." + func).hidden = !this.checked
 				} catch (e) {
 					this.disabled = true

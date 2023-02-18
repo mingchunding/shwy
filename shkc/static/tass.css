@@ -518,7 +518,7 @@ table.merged tbody td {
     position: fixed;
     background: lightblue;
     border: 1px solid;
-    padding: 0 30px 8px 30px;
+    padding: 0 8px 8px 8px;
     bottom: 20px;
     border-radius: 20px;
 }
@@ -578,7 +578,9 @@ input#startDate {
     .f-search-content span {
         border-left: 6px solid !important;
     }
-    .f-search-content span:nth-child(5n+2) {
+
+    .f-search-content span:nth-child(5n+2),
+    .f-search-content span:nth-child(6n+1) {
         border-left: 0 !important;
     }
 
@@ -589,6 +591,7 @@ input#startDate {
     }
 
     .f-search-content span:first-child,
+    .f-search-content span:last-child,
     .details-statistics th:nth-child(3),
     .details-statistics th:last-child,
     .details-statistics td:nth-child(3),

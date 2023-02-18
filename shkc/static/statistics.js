@@ -105,6 +105,19 @@ function sum_of(n, t) {
 
 	if (typeof(t) != 'number' || !isNaN(t)) {
 		document.querySelectorAll("#details-list table").forEach(function(e){
+			// the project not related to me
+			if (document.onlymine && e.querySelectorAll("td")[2].childElementCount==0) return
+
+			if (n != '实施时间') {
+				var startDate = document.querySelector("#startDate").earliestValue
+				var endDate = document.querySelector("#endDate").value
+				if (document.querySelector("#startDate").defaultValue !=
+				    document.querySelector("#startDate").value)
+					startDate = document.querySelector("#startDate").value
+				var d = e.querySelectorAll("td:not(.name)")[8].innerText
+				if (d.length >= 10 && (d < startDate || d > endDate)) return
+			}
+
 			try {
 				var m = t.match(/^`(.+)`$/)[1]
 				if (!eval(m)) return
@@ -121,15 +134,7 @@ function sum_of(n, t) {
 					if (!matched) return
 				}
 			}
-			if (n != '实施时间') {
-				var startDate = document.querySelector("#startDate").earliestValue
-				var endDate = document.querySelector("#endDate").value
-				if (document.querySelector("#startDate").defaultValue !=
-				    document.querySelector("#startDate").value)
-					startDate = document.querySelector("#startDate").value
-				var d = e.querySelectorAll("td:not(.name)")[8].innerText
-				if (d.length >= 10 && (d < startDate || d > endDate)) return
-			}
+
 			sum_by_project(sum, e)
 		})
 	} else {
@@ -448,11 +453,16 @@ function hidden_by_dom(td) {
 	var all_roads = ['大浪湾道', '江山道', '康城道', '瀑布湾道', '山林道', '维园道']
 
 	td.parentElement.statistics[0].forEach(function(e) {
-		var p = document.getElementById(e)
 		if (!td.show) {
-			container[1].appendChild(p)
+			try {
+				p = container[0].querySelector('div[id="' + e + '"]')
+				container[1].appendChild(p)
+			} catch (e) { return }
 		} else {
-			container[0].appendChild(p)
+			try {
+				p = container[1].querySelector('div[id="' + e + '"]')
+				container[0].appendChild(p)
+			} catch (e) { return }
 			p.hidden = false
 //			s=p.querySelector("tr:nth-child(8) td:nth-child(2)").innerText.replace(/[\.,， \n]+/g,',').replace(/,$/,'')
 //			s.replace('/瀑\d+', '瀑布湾道')
@@ -525,6 +535,10 @@ function years() {
 			yrs.push(y)
 	})
 
+	yrs.sort()
+	yrs.pop()
+	yrs.reverse()
+	yrs.push(NaN)
 	return yrs
 }
 
