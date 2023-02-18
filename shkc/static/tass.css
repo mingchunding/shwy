@@ -430,55 +430,6 @@ form .collect-info tbody tr.paging td:last-child a {
     float: left;
 }
 
-@media print {
-    /*form .m-account-search .f-search-content,*/
-    form .m-collect-info thead tr:not(:first-child),
-    form .m-collect-info.index_owner th:nth-child(4),
-    form .m-collect-info.index_owner th:nth-child(3),
-    form .m-collect-info.index_owner td:nth-child(4),
-    form .m-collect-info.index_owner td:nth-child(3),
-    .details-statistics th:last-child,
-    .details-statistics td:last-child,
-    .details-statistics .searchbox,
-    .f-search-content,
-    #details-list tr:last-child,
-    #details-list tr:first-child a{
-        display: none
-    }
-
-    form .collect-info th {
-        min-width: 80px
-    }
-
-    form .collect-info tbody tr:not([hidden]) td:last-child a:after {
-        content: '第' counter(page_of_project) '页';
-        float: right;
-        color: lightgrey;
-        display: none
-    }
-
-    #details-list .m-account-detail:not([hidden]) tr:first-child td:after {
-        float: right;
-        color: lightgrey
-    }
-    *, *:after, *:before {
-        font-size: 18px !important;
-    }
-    .m-account-detail table td {
-        padding: 5px !important
-    }
-    .m-account-search .f-search-content {
-        padding-left: 60px;
-    }
-    .m-account-search .f-search-content br {
-        display: block
-    }
-    .f-search-content span:nth-child(5n+2),
-    .f-search-content span:nth-child(6n+1) {
-        border-left: 0 !important;
-    }
-}
-
 #details-list tr:first-child a {
     float: right
 }
@@ -582,6 +533,56 @@ input#startDate {
 
 .m-account-search .f-search-content br {
     display: none
+}
+
+@media print {
+    form .m-collect-info thead tr:not(:first-child),
+    form .m-collect-info.index_owner th:nth-child(4),
+    form .m-collect-info.index_owner th:nth-child(3),
+    form .m-collect-info.index_owner td:nth-child(4),
+    form .m-collect-info.index_owner td:nth-child(3),
+    .details-statistics th:last-child,
+    .details-statistics td:last-child,
+    .details-statistics .searchbox,
+    /*.f-search-content,*/
+    /*#details-list tr:last-child,*/
+    #details-list tr:first-child a{
+        display: none
+    }
+
+    form .collect-info th {
+        min-width: 80px
+    }
+
+    form .collect-info tbody tr:not([hidden]) td:last-child a:after {
+        content: '第' counter(page_of_project) '页';
+        float: right;
+        color: lightgrey;
+        display: none
+    }
+
+    #details-list .m-account-detail:not([hidden]) tr:first-child td:after {
+        float: right;
+        color: lightgrey
+    }
+
+    #details-list .account-content:nth-child(2n) {margin-top:100px;}
+
+    *, *:after, *:before {
+        font-size: 16px !important;
+    }
+    .m-account-detail table td {
+        padding: 2px !important
+    }
+    .m-account-search .f-search-content {
+        padding-left: 60px;
+    }
+    .m-account-search .f-search-content br {
+        display: block
+    }
+    .f-search-content span:nth-child(6n+1) {
+        border-left: 0 !important;
+    }
 }
 
 @media screen and (min-resolution: 2dppx) and (max-width: 980px) {
