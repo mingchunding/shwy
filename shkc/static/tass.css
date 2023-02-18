@@ -431,6 +431,7 @@ form .collect-info tbody tr.paging td:last-child a {
 }
 
 @media print {
+    /*form .m-account-search .f-search-content,*/
     form .m-collect-info thead tr:not(:first-child),
     form .m-collect-info.index_owner th:nth-child(4),
     form .m-collect-info.index_owner th:nth-child(3),
@@ -459,6 +460,22 @@ form .collect-info tbody tr.paging td:last-child a {
     #details-list .m-account-detail:not([hidden]) tr:first-child td:after {
         float: right;
         color: lightgrey
+    }
+    *, *:after, *:before {
+        font-size: 18px !important;
+    }
+    .m-account-detail table td {
+        padding: 5px !important
+    }
+    .m-account-search .f-search-content {
+        padding-left: 60px;
+    }
+    .m-account-search .f-search-content br {
+        display: block
+    }
+    .f-search-content span:nth-child(5n+2),
+    .f-search-content span:nth-child(6n+1) {
+        border-left: 0 !important;
     }
 }
 
@@ -505,7 +522,7 @@ table.merged tbody td {
 }
 
 .m-account-search .f-clearfix {
-    clear: none
+    clear: none;
 }
 
 .m-account-search .f-search-content {
@@ -651,7 +668,7 @@ input#startDate {
 }
 
 .m-account-search .btn {
-    margin: -2px 60px 0 12px;
+    margin: -2px 12px 0 12px;
 }
 
 #details-list tr:nth-child(2) td a:after {

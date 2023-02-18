@@ -697,7 +697,7 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 	}
 	var scfg = sbar.children[3]
 	scfg.innerText = ''
-	var cfgs = ['支取明细', '收入明细', '收支列表', '支取列表', '工程列表', '我的工程', '工程统计', '工程详情', '财务报表', '浮动工具']
+	var cfgs = ['支取明细', '收入明细', '收支列表', '支取列表', '工程列表', '仅计我的', '工程统计', '工程详情', '财务报表', '浮动工具']
 	for (var i=0; i<cfgs.length; i++) {
 		scfg.appendChild(document.createElement("span"))
 		scfg.children[i].innerText = cfgs[i]
