@@ -304,7 +304,13 @@ function do_group_statistics(n, r) {
 			var g = r
 		}
 
-		if (!sibling || sibling.querySelectorAll("tbody tr").length < g.length) {
+		if (sibling && sibling.querySelectorAll("tbody tr").length >= g.length) {
+
+		} else if (n.match(/实施时间/)) {
+			subtitle.innerText = document.querySelector("#startDate").defaultValue +
+						' 至 ' + document.querySelector("#endDate").defaultValue
+			setTimeout(cal_statistics, 100, tab, g)
+		} else {
 			subtitle.innerText = document.querySelector("#startDate").value +
 						' 至 ' + document.querySelector("#endDate").value
 			setTimeout(cal_statistics, 100, tab, g)
@@ -370,7 +376,7 @@ function statistics() {
 			已完成支取: '`e.v[15]==0`',
 			未完成支取: '`e.v[15]>0`',
 			未开始支取: '`e.v[14]==0`',
-			有冲正支取: '`e.v[16]>0`'}])
+			有冲正支取: '`e.v[16]>0`'}, '+'])
 		do_group_statistics("工程类别", type_of_projs)
 		do_group_statistics("实施范围", range_of_projs)
 		do_group_statistics("施工管理单位", companies)
