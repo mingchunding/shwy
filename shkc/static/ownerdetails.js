@@ -785,6 +785,11 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 		}
 		addEvents("click")
 	}, 100)
+
+	wm=document.createElement("div")
+	wm.classList.add("watermark")
+	wm.innerText=document.title.replace(/(大修|维修).*$/,'')
+	document.body.append(wm)
 }
 
 function query_by_url(url, handler=null){
