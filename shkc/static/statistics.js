@@ -115,7 +115,7 @@ function sum_of(n, t) {
 				    document.querySelector("#startDate").value)
 					startDate = document.querySelector("#startDate").value
 				var d = e.querySelectorAll("td:not(.name)")[8].innerText
-				if (d.length >= 10 && (d < startDate || d > endDate)) return
+				if (d < startDate || d > endDate) return
 			}
 
 			try {
@@ -231,6 +231,10 @@ function add_statistics(tbody, rname, key) {
 
 	setTimeout(function(){
 		var sum = sum_of(sname, key)
+		if (0==sum[0].length) {
+			tr.remove()
+			return
+		}
 		tr.statistics = sum
 		fill_statistics_row(tr)
 	}, 10)
