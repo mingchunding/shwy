@@ -501,7 +501,7 @@ function hidden_by_dom(td) {
 			sum += parseFloat(r.children[2].innerText.match(/[\d\.]+/)[0])
 		})
 
-		var tr = document.querySelector("tbody tr:last-child")
+		var tr = document.querySelector("form tbody tr:last-child")
 		per_sum = tr.children[0]
 		per_sum.innerHTML = per_sum.innerHTML.replace(/ *\/ *\d.+$/, "") +
 			" / " + sum.toFixed(2) + "元"
