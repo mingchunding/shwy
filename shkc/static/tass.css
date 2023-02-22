@@ -553,8 +553,8 @@ input#startDate {
     transform: rotate(315deg);
     pointer-events: none;
     position: fixed;
-    margin-top: 400px;
     /* display: none; */
+    top: calc(50% - 100px);
 }
 
 @media print {
@@ -785,4 +785,32 @@ button {
 
 #reports {
     padding-bottom: 120px;
+}
+
+table.query_applicant {
+    width: 90%;
+    max-width: 846px;
+    margin: 100px 5%;
+    display: none;
+}
+
+table.query_applicant tr td {
+    border: 1px solid;
+    text-align: center;
+    padding: 10px 10px;
+}
+
+table.query_applicant tr td.r_name {text-align-last: justify;}
+
+table.query_applicant thead tr:first-child td {
+    letter-spacing: 10px
+}
+
+@media print {
+    table.query_applicant {
+        width: 100%;
+        margin: 100px 80px;
+        display: block;
+        height: 21.5cm
+    }
 }
