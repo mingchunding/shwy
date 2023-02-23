@@ -646,11 +646,16 @@ if (window.location.href.match(/wxzjquery\/index_owner_zq.do$/)) {
 if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 	window.localStorage.user=document.querySelector("input[name=App_user]").value
 	window.localStorage.addr=document.querySelector("p.user").innerText.split(" ")[0]
+	window.localStorage.name=document.querySelectorAll("p.name")[0].innerText.split('：')[1]
 	link = document.querySelector('a[href$="wxzjquery/index_owner_zq.do"]')
 	if (link) link.target='_blank'
 	link = document.querySelector('a[href$="ownerpact/index_owner.do"]')
 //	if (link) link.target='_blank'
 } else if (window.location.href.match(/(wxzjquery\/index_owner_zq.do$|shwy\/shkc)/)) {
+	if (window.location.href.match(/wxzjquery\/index_owner_zq.do$/)) {
+		document.title=window.localStorage.name
+	}
+
 	var cssl = document.styleSheets
 
 	for (var i=0; i<cssl.length; i++) {
