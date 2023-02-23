@@ -308,7 +308,7 @@ function do_group_statistics(n, r) {
 			var g = r
 		}
 
-		if (sibling && sibling.querySelectorAll("tbody tr").length >= g.length) {
+		if (sibling && sibling.querySelectorAll("tbody tr").length > 0) {
 
 		} else if (n.match(/实施时间/)) {
 			subtitle.innerText = document.querySelector("#startDate").defaultValue +
