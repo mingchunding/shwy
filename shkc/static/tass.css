@@ -798,6 +798,7 @@ table.query_applicant tr td {
     border: 1px solid;
     text-align: center;
     padding: 10px 10px;
+    font-size: 16px;
 }
 
 table.query_applicant tr td.r_name {text-align-last: justify;}
