@@ -817,7 +817,12 @@ function chart_of_report(func) {
 		div.appendChild(document.createElement('canvas'))
 		div.firstElementChild.innerText = 'X'
 		div.lastElementChild.id = 'canvas'
-		document.body.appendChild(div)
+		try {
+			var container = document.querySelector("#reports .m-account-detail")
+			container.insertBefore(div,document.querySelector('div.collect-info[func="'+func+'.do"]').previousElementSibling)
+		} catch (e) {
+			document.body.appendChild(div)
+		}
 	} else {
 		div.querySelector('canvas').removeAttribute('style')
 		div.querySelector('canvas').removeAttribute('width')
