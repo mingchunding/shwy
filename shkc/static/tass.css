@@ -765,16 +765,19 @@ div.chart {
 @media print {
     .chart {
         position: relative;
-        border: 0;
+        display: inherit;
+        border: none !important;
         background: transparent;
-        transform: rotateZ(90deg);
+/*        transform: rotateZ(90deg);*/
+/*        transform: scale(0.8);*/
         page-break-before: auto;
         page-break-inside: avoid;
         page-break-after: auto;
-        width: 1000px;
+        margin-left: -100px;
+/*        margin: 250px 0;*/
     }
 
-    .chart, .chart > span {
+    .chart > span {
         display: none
     }
 }
