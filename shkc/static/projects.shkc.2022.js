@@ -7,3 +7,15 @@ var shkc = {
 shkc.detail = JSON.parse(LZString.decompress(shkc.detail))
 shkc.pjlist = JSON.parse(LZString.decompress(shkc.pjlist))
 window.shkc = shkc
+
+setTimeout(() => {
+	window.st = performance.now()
+	var progress = document.createElement('span')
+	progress.classList.add('status')
+	progress.setAttribute('pre1', '读取第 ')
+	progress.setAttribute('pre2', '项，剩余 ')
+	progress.setAttribute('done', 1)
+	progress.setAttribute('todo', window.shkc.detail.length)
+	document.querySelector('#details-list p.title').appendChild(progress)
+	window.restore_projects_detail(window.shkc, 0, 10, progress)
+}, 100)
