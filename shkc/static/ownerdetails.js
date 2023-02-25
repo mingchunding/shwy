@@ -779,7 +779,7 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 						var chart = document.getElementById(e.target.getAttribute('target'))
 						document.querySelectorAll("div.chart").forEach(function(c){
 							if (c === chart) chart.removeAttribute('hidden')
-							else c.hidden = true
+							//else c.hidden = true
 						})
 						return chart.chart.resize()
 					}
@@ -1183,7 +1183,7 @@ function add_title_click_event(e, f=null) {
 			var chart = document.getElementById(event.target.getAttribute('target'))
 			document.querySelectorAll("div.chart").forEach(function(c){
 				if (c === chart) chart.removeAttribute('hidden')
-				else c.hidden = true
+				//else c.hidden = true
 			})
 			return chart.chart.resize()
 		}

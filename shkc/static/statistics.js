@@ -819,7 +819,7 @@ function chart_of_report(func) {
 		div.lastElementChild.id = 'canvas'
 		try {
 			var container = document.querySelector("#reports .m-account-detail")
-			container.insertBefore(div,document.querySelector('div.collect-info[func="'+func+'.do"]').previousElementSibling)
+			container.insertBefore(container.querySelector('div.collect-info[func="'+func+'.do"]').previousElementSibling)
 		} catch (e) {
 			document.body.appendChild(div)
 		}
