@@ -670,7 +670,7 @@ input#startDate {
         display: block
     }
     *, *:after, *:before {
-        font-size: 24px !important
+        font-size: 20px !important;
     }
     .m-account-detail table td {
         padding: 5px !important
@@ -780,7 +780,8 @@ div.chart {
 }
 
 button {
-    cursor: pointer
+    cursor: pointer;
+    font-weight: bold;
 }
 
 #reports {
