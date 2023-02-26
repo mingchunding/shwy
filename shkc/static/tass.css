@@ -669,8 +669,11 @@ input#startDate {
     .m-account-search .f-search-content br {
         display: block
     }
-    *, *:after, *:before {
+    .colwidth td {
         font-size: 20px !important;
+    }
+    *, *:after, *:before {
+        font-size: 24px !important;
     }
     .m-account-detail table td {
         padding: 5px !important
@@ -811,13 +814,4 @@ table.query_applicant thead tr:first-child td {
 
 table.query_applicant td.lalign {
     text-align: left;
-}
-
-@media print {
-    table.query_applicant {
-        width: 100%;
-        margin: 100px 80px;
-        display: block;
-        height: 21.5cm
-    }
 }
