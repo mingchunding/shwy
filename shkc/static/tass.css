@@ -805,7 +805,12 @@ table.query_applicant tr td {
 table.query_applicant tr td.r_name {text-align-last: justify;}
 
 table.query_applicant thead tr:first-child td {
-    letter-spacing: 10px
+    letter-spacing: 8px;
+    font-size: 24px !important
+}
+
+table.query_applicant td.lalign {
+    text-align: left;
 }
 
 @media print {
