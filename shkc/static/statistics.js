@@ -103,22 +103,26 @@ function sum_of(n, t) {
 	}
 	sum.push(r)
 
+	var startDate = document.querySelector("#startDate").earliestValue
+	var endDate = document.querySelector("#endDate").value
+	if (document.querySelector("#startDate").defaultValue !=
+		document.querySelector("#startDate").value)
+		startDate = document.querySelector("#startDate").value
+
 	if (typeof(t) != 'number' || !isNaN(t)) {
 		document.querySelectorAll("#details-list table").forEach(function(e){
 			// the project not related to me
 			if (document.onlymine && e.querySelectorAll("td")[2].childElementCount==0) return
 
 			if (n != '实施时间') {
-				var startDate = document.querySelector("#startDate").earliestValue
-				var endDate = document.querySelector("#endDate").value
-				if (document.querySelector("#startDate").defaultValue !=
-				    document.querySelector("#startDate").value)
-					startDate = document.querySelector("#startDate").value
 				var d = e.querySelectorAll("td:not(.name)")[8].innerText
 				if (d < startDate || d > endDate) return
 			}
 
-			try {
+			if (n.match(/建立日期/) && 'object' === typeof(window.shkc.pjlist)) {
+				var d = window.shkc.pjlist[e.v[0]][0]
+				if (!d.match(RegExp(t))) return
+			} else try {
 				var m = t.match(/^`(.+)`$/)[1]
 				if (!eval(m)) return
 			} catch (err) {
@@ -137,7 +141,7 @@ function sum_of(n, t) {
 
 			sum_by_project(sum, e)
 		})
-	} else {
+	} else if (!n.match(/建立日期/)) {
 		document.querySelectorAll("#details-list table").forEach(function(e){
 			var td=e.querySelectorAll("td:not(.name)")
 			if (td[8].innerText.length > 0) return
@@ -385,6 +389,9 @@ function statistics() {
 		do_group_statistics("实施范围", range_of_projs)
 		do_group_statistics("施工管理单位", companies)
 		do_group_statistics("实施时间", years)
+		if (window.shkc && window.shkc.pjlist) {
+			do_group_statistics("建立日期", years)
+		}
 	}, 10)
 }
 
@@ -807,6 +814,9 @@ window.chart = {
 }
 
 function chart_of_report(func) {
+	var source = document.querySelector(".collect-info[func='" + func + ".do']")
+	if (!source) return
+
 	var div = document.getElementById(func)
 	if (!div) {
 		var div = document.createElement('div')
@@ -829,7 +839,6 @@ function chart_of_report(func) {
 		div.querySelector('canvas').removeAttribute('height')
 		div.removeAttribute('hidden')
 	}
-	var source = document.querySelector(".collect-info[func='" + func + ".do']")
 	var indicator = source.previousElementSibling.querySelector("p.title")
 	var s = indicator.querySelector('span')
 	if (!s) {
