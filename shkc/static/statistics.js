@@ -115,12 +115,11 @@ function sum_of(n, t) {
 			if (document.onlymine && e.querySelectorAll("td")[2].childElementCount==0) return
 
 			if (n != '实施时间') {
-				var d = e.querySelectorAll("td:not(.name)")[8].innerText
-				if (d < startDate || d > endDate) return
+				if (e.v[8] < startDate || endDate < e.v[8]) return
 			}
 
-			if (n.match(/建立日期/) && 'object' === typeof(window.shkc.pjlist)) {
-				var d = window.shkc.pjlist[e.v[0]][0]
+			if (n.match(/建立日期/)) {
+				var d = '20' + e.v[0].match(/\d{2}/)[0]
 				if (!d.match(RegExp(t))) return
 			} else try {
 				var m = t.match(/^`(.+)`$/)[1]
@@ -467,7 +466,6 @@ class PROJ_LOCATION {
 function hidden_by_dom(td) {
 	var container = document.querySelectorAll("#details-list .m-account-detail")
 	if (!container || container.length < 2) return
-	var all_roads = ['大浪湾道', '江山道', '康城道', '瀑布湾道', '山林道', '维园道']
 
 	td.parentElement.statistics[0].forEach(function(e) {
 		if (!td.show) {
@@ -481,9 +479,7 @@ function hidden_by_dom(td) {
 				container[0].appendChild(p)
 			} catch (e) { return }
 			p.hidden = false
-//			s=p.querySelector("tr:nth-child(8) td:nth-child(2)").innerText.replace(/[\.,， \n]+/g,',').replace(/,$/,'')
-//			s.replace('/瀑\d+', '瀑布湾道')
-//			console.log(e, s.split(','))
+
 			var t = p.querySelector('table')
 			try {
 				t.g.constructor
@@ -527,6 +523,11 @@ function hidden_by_dom(td) {
 		per_num.removeAttribute('class')
 
 	}, 100)
+
+	document.querySelectorAll(".index_owner tbody td:nth-child(2)").forEach(function(c){
+		if (!td.parentElement.statistics[0].includes(c.innerText)) return
+		c.parentElement.removeAttribute('hidden')
+	})
 }
 
 function hidden_by_grp(grp, hidden) {
