@@ -380,10 +380,10 @@ function statistics() {
 	return setTimeout(function() {
 		do_group_statistics("是否审价", ['是', '否'])
 		do_group_statistics("支取状况", [{
-			已完成支取: '`e.v[15]==0`',
-			未完成支取: '`e.v[15]>0`',
-			未开始支取: '`e.v[14]==0`',
-			有冲正支取: '`e.v[16]>0`'}, '+'])
+			已完成: '`e.v[15]==0`',
+			未完成: '`e.v[15]>0`',
+			未开始: '`e.v[14]==0`',
+			有冲正: '`e.v[16]>0`'}, '+'])
 		do_group_statistics("工程类别", type_of_projs)
 		do_group_statistics("实施范围", range_of_projs)
 		do_group_statistics("施工管理单位", companies)
@@ -874,7 +874,7 @@ function chart_of_report(func) {
 					display: true,
 					text: title[0],
 					font: {
-						size: 36,
+						size: 24,
 						weight: 'bold'
 					}
 				},
@@ -882,8 +882,16 @@ function chart_of_report(func) {
 					display: true,
 					text: title[1],
 					font: {
-						size: 28,
+						size: 36,
 						weight: 'bold'
+					}
+				},
+				legend: {
+					display: true,
+					labels: {
+						font: {
+							size: 20
+						}
 					}
 				}
 			},
