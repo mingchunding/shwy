@@ -388,9 +388,7 @@ function statistics() {
 		do_group_statistics("实施范围", range_of_projs)
 		do_group_statistics("施工管理单位", companies)
 		do_group_statistics("实施时间", years)
-		if (window.shkc && window.shkc.pjlist) {
-			do_group_statistics("建立日期", years)
-		}
+		do_group_statistics("建立日期", years)
 	}, 10)
 }
 
