@@ -753,7 +753,7 @@ div.chart {
 
 @media screen and (min-resolution: 2.1dppx) {
     .chart > span {
-        font-size: 40px
+        font-size: 40px !important;
     }
 }
 
