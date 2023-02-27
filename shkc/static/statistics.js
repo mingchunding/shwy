@@ -872,11 +872,19 @@ function chart_of_report(func) {
 				title: {
 					fontSize: 20,
 					display: true,
-					text: title[0]
+					text: title[0],
+					font: {
+						size: 36,
+						weight: 'bold'
+					}
 				},
 				subtitle: {
 					display: true,
-					text: title[1]
+					text: title[1],
+					font: {
+						size: 28,
+						weight: 'bold'
+					}
 				}
 			},
 			interaction: {

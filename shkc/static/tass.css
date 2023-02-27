@@ -669,11 +669,11 @@ input#startDate {
     .m-account-search .f-search-content br {
         display: block
     }
-    .colwidth td {
+    #reports td {
         font-size: 20px !important;
     }
     *, *:after, *:before {
-        font-size: 24px !important;
+        font-size: 28px !important;
     }
     .m-account-detail table td {
         padding: 5px !important
