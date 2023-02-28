@@ -669,20 +669,25 @@ input#startDate {
     .m-account-search .f-search-content br {
         display: block
     }
-    #reports td {
-        font-size: 20px !important;
-    }
-    *, *:after, *:before {
-        font-size: 28px !important;
-    }
-    .m-account-detail table td {
-        padding: 5px !important
-    }
+
     .tab_remark,
     .tab_remark td,
     .tab_unit td {
         font-size: 12px !important
     }
+
+    div#reports td {
+        font-size: 20px !important;
+    }
+
+    *, *:after, *:before {
+        font-size: 28px !important;
+    }
+
+    .m-account-detail table td {
+        padding: 5px !important
+    }
+
     .Wdate {
 		/*background-size: 38px 48px;*/
 		height: 38px !important;
