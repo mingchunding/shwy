@@ -522,6 +522,14 @@ function hidden_by_dom(td) {
 
 	}, 100)
 
+	var num = container[0].querySelectorAll(".account-content").length
+	var title = container[0].previousElementSibling.querySelector("p")
+	try {
+		var total = window.project.total
+	} catch (e) {
+		var total = document.querySelector(".index_owner").querySelector(".title").innerText.match(/\d+/g)[1]
+	}
+	title.innerText = title.innerText.match(/[^（]+/)[0] + '（' + num + ' / ' + total + '）'
 	document.querySelectorAll(".index_owner tbody td:nth-child(2)").forEach(function(c){
 		if (!td.parentElement.statistics[0].includes(c.innerText)) return
 		c.parentElement.removeAttribute('hidden')
