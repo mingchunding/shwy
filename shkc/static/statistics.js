@@ -346,6 +346,14 @@ function do_group_statistics(n, r) {
 			var s=tr.querySelectorAll("input")[0].value
 			var k=tr.querySelectorAll("input")[1].value
 			if (k.length < 1) return
+			if (tr.parentElement.parentElement.querySelector('th').innerText.match(/实施范围/)) {
+				if (k[0]!='`') {
+					var road = k.match(/[^\d]+/)[0]
+					var bldn = k.match(/\d+/)[0]
+					if (s.length < 1) s = k[0] + bldn
+					k = '`e.g.k().includes("' + road + '") && e.g["' + road + '"].includes("' + bldn + '")`'
+				}
+			}
 			if (s.length < 1) s=k
 			add_statistics(tab, s, k)
 		})
