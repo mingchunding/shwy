@@ -438,8 +438,8 @@ function parse_location(c) {
 		try {
 			re = '(' + all_roads.join('|') + ')([\\d\\-]+[号室楼#]?)'
 			s = c.match(RegExp(re))
-			road = s[1]
-			addr[road] = Array(s[2])
+			if (s[2].match(/\d+$/)) s[2] += '号'
+			addr[s[1]] = Array(s[2])
 		} catch(e) { }
 	}
 
