@@ -367,7 +367,7 @@ function statistics() {
 						  电梯更换:'电梯更换$'
 					  },
 					  '控制柜', '井', '控制板', '+']
-	range_of_projs = [{
+	range_of_projs = {
 			康城道: '`e.g.k().includes("康城道")`',
 			山林道: '`e.g.k().includes("山林道")`',
 			维园道: '`e.g.k().includes("维园道")`',
@@ -375,7 +375,18 @@ function statistics() {
 			大浪湾道: '`e.g.k().includes("大浪湾道")`',
 			瀑布湾道: '`e.g.k().includes("瀑布湾道")`',
 			小区门: '(南|北|西|旋转)大?门'
-		}, '+']
+		}
+	try {
+		var addr = document.querySelector("p.title span").innerText.match(/[^\d]*\d+./g)
+		if (addr.length > 1) {
+			var i = 1
+		} else {
+			var i = 0
+		}
+		var road = addr[i].match(/[^\d]+/)[0]
+		var bldn = addr[i].match(/\d+/)[0]
+		range_of_projs['本楼栋'] = '`e.g.k().includes("' + road + '") && e.g["' + road + '"].includes("' + bldn + '")`'
+	} catch (e) { }
 
 	return setTimeout(function() {
 		do_group_statistics("是否审价", ['是', '否'])
@@ -385,7 +396,7 @@ function statistics() {
 			未开始: '`e.v[14]==0`',
 			有冲正: '`e.v[16]>0`'}, '+'])
 		do_group_statistics("工程类别", type_of_projs)
-		do_group_statistics("实施范围", range_of_projs)
+		do_group_statistics("实施范围", [range_of_projs, '+'])
 		do_group_statistics("施工管理单位", companies)
 		do_group_statistics("实施时间", years)
 		do_group_statistics("建立日期", years)
