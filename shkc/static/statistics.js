@@ -351,7 +351,7 @@ function do_group_statistics(n, r) {
 					var road = k.match(/[^\d]+/)[0]
 					var bldn = k.match(/\d+/)[0]
 					if (s.length < 1) s = k[0] + bldn
-					k = '`e.g.k().includes("' + road + '") && e.g["' + road + '"].includes("' + bldn + '")`'
+					k = '`e.g.k().includes("' + road + '") && e.g["' + road + '"].includes("' + bldn + '号")`'
 				}
 			}
 			if (s.length < 1) s=k
@@ -393,7 +393,7 @@ function statistics() {
 		}
 		var road = addr[i].match(/[^\d]+/)[0]
 		var bldn = addr[i].match(/\d+/)[0]
-		range_of_projs['本楼栋'] = '`e.g.k().includes("' + road + '") && e.g["' + road + '"].includes("' + bldn + '")`'
+		range_of_projs['本楼栋'] = '`e.g.k().includes("' + road + '") && e.g["' + road + '"].includes("' + bldn + '号")`'
 	} catch (e) { }
 
 	return setTimeout(function() {
@@ -418,7 +418,7 @@ function parse_location(c) {
 	var s = c.match(/[大浪湾江山康城瀑布湾山林维园道]{0,4}[\d\-]+[号室楼#]?/g)
 	var n=''
 	if (Array.isArray(s) && s.length > 1) for (var i=0; i<s.length; i++) {
-		if (s[i].match(/\d+$/)) s[i] = s[i] + '号'
+		if (s[i].match(/\d+$/)) s[i] += '号'
 		try {
 			n=s[i].match(/^[^\d]+/)[0]
 			all_roads.forEach(function(m){
@@ -427,16 +427,16 @@ function parse_location(c) {
 				n = m
 			})
 			if (!addr.constructor.keys(addr).includes(n)) addr[n] = Array()
-			addr[n].push(s[i].match(/[\d\-]+[室#]?/)[0])
+			addr[n].push(s[i].match(/[\d\-]+[号室楼#]?/)[0])
 			continue
 		} catch(e) { }
 		if (n.length < 1) continue
 		if (s[i].match(/^\d+号?$/)) s[i] = n + s[i]
 		if (!addr.constructor.keys(addr).includes(n)) addr[n] = Array()
-		addr[n].push(s[i].match(/[\d\-]+[室#]?/)[0])
+		addr[n].push(s[i].match(/[\d\-]+[号室楼#]?/)[0])
 	} else {
 		try {
-			re = '(' + all_roads.join('|') + ')([\\d\\-]+)'
+			re = '(' + all_roads.join('|') + ')([\\d\\-]+[号室楼#]?)'
 			s = c.match(RegExp(re))
 			road = s[1]
 			addr[road] = Array(s[2])
