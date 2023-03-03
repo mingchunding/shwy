@@ -346,14 +346,26 @@ function do_group_statistics(n, r) {
 			var s=tr.querySelectorAll("input")[0].value
 			var k=tr.querySelectorAll("input")[1].value
 			if (k.length < 1) return
-			if (tr.parentElement.parentElement.querySelector('th').innerText.match(/实施范围/)) {
-				if (k[0]!='`') {
-					var road = k.match(/[^\d]+/)[0]
-					var bldn = k.match(/\d+/)[0]
-					if (s.length < 1) s = k[0] + bldn
-					k = '`e.g.k().includes("' + road + '") && e.g["' + road + '"].includes("' + bldn + '号")`'
+			var name = tr.parentElement.parentElement.querySelector('th').innerText
+			if (name.match(/组合统计/)) {
+				return
+			} else if (name.match(/实施范围/) && k[0]!='`' && k.match(/\d+号?$/)) try {
+				var road_name_map = {
+					j: '江山道', d: '大浪湾道', s: '山林道', w: '维园道', p: '瀑布湾道', k: '康城道',
+					J: '江山道', D: '大浪湾道', S: '山林道', W: '维园道', P: '瀑布湾道', K: '康城道',
+					江: '江山道',
+					大: '大浪湾道',
+					山: '山林道',
+					维: '维园道',
+					瀑: '瀑布湾道',
+					康: '康城道'
 				}
-			}
+				var road = road_name_map[k.match(/[^\d]+/)[0][0]]
+				var bldn = k.match(/\d+/)[0]
+				if (s.length < 1) s = road[0] + bldn
+				k = '`e.g.k().includes("' + road + '") && e.g["' + road + '"].includes("' + bldn + '号")`'
+			} catch (e) { }
+
 			if (s.length < 1) s=k
 			add_statistics(tab, s, k)
 		})
