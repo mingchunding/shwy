@@ -427,10 +427,11 @@ function parse_location(c) {
 	var all_roads = ['大浪湾道', '江山道', '康城道', '瀑布湾道', '山林道', '维园道']
 	var addr = {o: c}
 	c = c.replace(/[号室#][\-至]/g,'-')
-	var s = c.match(/[大浪湾江山康城瀑布湾山林维园道]{0,4}[\d\-]+[号室楼#]?/g)
+	var s = c.match(/[大浪湾江山康城瀑布山林维园]{0,3}道?\d[\d\-,\.]*号(\d+[室楼#])?/g)
 	var n=''
 	if (Array.isArray(s) && s.length > 1) for (var i=0; i<s.length; i++) {
 		if (s[i].match(/\d+$/)) s[i] += '号'
+		s[i] = s[i].replace(/(\d+)\./g,'$1号.')
 		try {
 			n=s[i].match(/^[^\d]+/)[0]
 			all_roads.forEach(function(m){
@@ -439,19 +440,22 @@ function parse_location(c) {
 				n = m
 			})
 			if (!addr.constructor.keys(addr).includes(n)) addr[n] = Array()
-			addr[n].push(s[i].match(/[\d\-]+[号室楼#]?/)[0])
+//			addr[n].push(s[i].match(/[\d\-]+[号室楼#]?/)[0])
+			addr[n] = addr[n].concat(s[i].match(/[\d\-]+[号室楼#]?/g))
 			continue
 		} catch(e) { }
 		if (n.length < 1) continue
 		if (s[i].match(/^\d+号?$/)) s[i] = n + s[i]
 		if (!addr.constructor.keys(addr).includes(n)) addr[n] = Array()
-		addr[n].push(s[i].match(/[\d\-]+[号室楼#]?/)[0])
+//		addr[n].push(s[i].match(/[\d\-]+[号室楼#]?/g)[0])
+		addr[n] = addr[n].concat(s[i].match(/[\d\-]+[号室楼#]?/g))
 	} else {
 		try {
-			re = '(' + all_roads.join('|') + ')([\\d\\-]+[号室楼#]?)'
+			re = '(' + all_roads.join('|') + ')([\\d\\-\\.,]+[号室楼#]?)'
 			s = c.match(RegExp(re))
 			if (s[2].match(/\d+$/)) s[2] += '号'
-			addr[s[1]] = Array(s[2])
+//			addr[s[1]] = Array(s[2])
+			addr[s[1]] = s[2].replace(/(\d+)\./g,'$1号.').split('.')
 		} catch(e) { }
 	}
 
