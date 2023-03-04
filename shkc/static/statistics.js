@@ -426,12 +426,12 @@ function statistics() {
 function parse_location(c) {
 	var all_roads = ['大浪湾道', '江山道', '康城道', '瀑布湾道', '山林道', '维园道']
 	var addr = {o: c}
-	c = c.replace(/[号室#][\-至]/g,'-')
-	var s = c.match(/[大浪湾江山康城瀑布山林维园]{0,3}道?\d[\d\-,\.]*号(\d+[室楼#])*/g)
+	c = c.replace(/[\-至—](\d+)/g,'-$1')
+	var s = c.match(/[大江康瀑山维].{0,2}道?([^\d]?\d[\d\-,\.]*[号室楼#]*)+/g)
 	var n=''
-	if (Array.isArray(s) && s.length > 1) for (var i=0; i<s.length; i++) {
+	if (Array.isArray(s) && s.length > 0) for (var i=0; i<s.length; i++) {
 		if (s[i].match(/\d+$/)) s[i] += '号'
-		s[i] = s[i].replace(/(\d+)\./g,'$1号.')
+		s[i] = s[i].replace(/(\d+)[\.,]/g,'$1号.').replace(/[^号室楼#]$/,'号')
 		try {
 			n=s[i].match(/^[^\d]+/)[0]
 			all_roads.forEach(function(m){
@@ -441,22 +441,27 @@ function parse_location(c) {
 			})
 			if (!addr.constructor.keys(addr).includes(n)) addr[n] = Array()
 //			addr[n].push(s[i].match(/[\d\-]+[号室楼#]?/)[0])
-			addr[n] = addr[n].concat(s[i].match(/[\d\-]+[号室楼#]?/g))
-			continue
+//			addr[n] = addr[n].concat(s[i].match(/[\d\-]+[号室楼#]?/g))
+//			continue
 		} catch(e) { }
 		if (n.length < 1) continue
-		if (s[i].match(/^\d+号?$/)) s[i] = n + s[i]
+		if (s[i].match(/^\d+(-\+)?号?$/)) s[i] = n + s[i]
 		if (!addr.constructor.keys(addr).includes(n)) addr[n] = Array()
 //		addr[n].push(s[i].match(/[\d\-]+[号室楼#]?/g)[0])
-		addr[n] = addr[n].concat(s[i].match(/[\d\-]+[号室楼#]?/g))
-	} else {
+//		addr[n] = addr[n].concat(s[i].match(/\d+(-\d+)?[号室楼#]?/g))
 		try {
-			re = '(' + all_roads.join('|') + ')(([\\d\\-\\.,]+[号室楼#]?)+)'
-			s = c.match(RegExp(re))
-			if (s[2].match(/\d+$/)) s[2] += '号'
-//			addr[s[1]] = Array(s[2])
-			addr[s[1]] = s[2].replace(/(\d+)\./g,'$1号').match(/[\d\-]+[号室楼#]?/g)
-		} catch(e) { }
+//			s[i].replace(/(\d+)[^\d\-号室楼#]/g,'$1号').match(/\d+(-\d+)?[号室楼#]/g).forEach((blds) => {
+			s[i].match(/\d+(-\d+)?[号室楼#]/g).forEach((blds) => {
+				b=blds.split('-')
+				if (b.length < 2) {
+					addr[n] = addr[n].concat(b[0].match(/\d+[号室楼#]/g))
+				} else for (j=b[0]; j<=b[1].match(/\d+/)[0]; j++) {
+					addr[n].push(b[1].replace(/\d+/,j))
+				}
+			})
+		} catch (e) {
+			console.log(e)
+		}
 	}
 
 	return addr
