@@ -430,11 +430,16 @@ function statistics() {
 }
 
 function parse_location(c) {
-	var rege_road=/[康维瀑大江山].{0,2}道?([\.,]?\d{1,2}号(\.?\d{2,4}室|大厅)*)+/g
+//	var rege_road=/[康维瀑大江山].{0,2}道?([\.,]?\d{1,2}号(\.?\d{2,4}室|大厅)*)+/g
+	var rege_road = [
+		/[康维瀑大江山].{0,2}道?([\.,]?\d{1,2}号?(-\d{1,2})?号(\.?\d{1,4}室|大厅)*)+/g,
+		/[康维瀑大江山].{0,2}道?([^\d]?\d[\d\-,\.]*(号(大厅|楼顶)?|室|楼|#)?)+/g,
+		/[康维瀑大江山].{0,2}道?([^\d]?\d[\d\-,\.]*[号室楼#]*)+/g
+	]
 	var name_of_roads = ['大浪湾道', '江山道', '康城道', '瀑布湾道', '山林道', '维园道']
 	var addr = {o: c}
-	c = c.replace(/[\-至—](\d+)/g,'-$1')
-	var s = c.match(/[康维瀑大江山].{0,2}道?([^\d]?\d[\d\-,\.]*[号室楼#]*)+/g)
+	c = c.replace(/号?[\-至—](\d+)/g,'-$1').replace(/号([康维瀑大江山][^厅])/g,'号\.$1')
+	var s = c.match(rege_road[1])
 	var n=''
 	if (Array.isArray(s) && s.length > 0) for (var i=0; i<s.length; i++) {
 		if (s[i].match(/\d+$/)) s[i] += '号'
@@ -466,6 +471,7 @@ function parse_location(c) {
 				b=blds.split('-')
 				if (b.length < 2) {
 					addr[n] = addr[n].concat(b[0].match(/\d+[号室楼#]/g))
+//					addr[n] = addr[n].concat(b[0].match(/\d+[号室楼#]|大厅|楼顶/g))
 				} else for (j=parseInt(b[0]); j<=parseInt(b[1]); j++) {
 					addr[n].push(b[1].replace(/\d+/,j))
 				}
