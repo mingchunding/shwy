@@ -52,7 +52,13 @@ function sum_by_project(sum, t) {
 	try {
 		t.g.constructor
 	} catch (e) {
-		t.g = parse_location(td[10].innerText.replace(/ +/g,''))
+		var c = td[10].innerText.replace(/ +/g,'')
+		if (t.v[0].match(/200313467462/)) {
+			console.log("地址超出范围: ", t.v[0], c)
+			c = c.replace(/5\-710\./,'5-7,10,')
+			console.log("纠正地址范围: ", t.v[0], c)
+		}
+		t.g = parse_location(c)
 		t.g.k = function() {
 			return this.constructor.keys(this)
 		}
@@ -424,17 +430,22 @@ function statistics() {
 }
 
 function parse_location(c) {
-	var all_roads = ['大浪湾道', '江山道', '康城道', '瀑布湾道', '山林道', '维园道']
+	var rege_road=/[康维瀑大江山].{0,2}道?([\.,]?\d{1,2}号(\.?\d{2,4}室|大厅)*)+/g
+	var name_of_roads = ['大浪湾道', '江山道', '康城道', '瀑布湾道', '山林道', '维园道']
 	var addr = {o: c}
 	c = c.replace(/[\-至—](\d+)/g,'-$1')
-	var s = c.match(/[大江康瀑山维].{0,2}道?([^\d]?\d[\d\-,\.]*[号室楼#]*)+/g)
+	var s = c.match(/[康维瀑大江山].{0,2}道?([^\d]?\d[\d\-,\.]*[号室楼#]*)+/g)
 	var n=''
 	if (Array.isArray(s) && s.length > 0) for (var i=0; i<s.length; i++) {
 		if (s[i].match(/\d+$/)) s[i] += '号'
-		s[i] = s[i].replace(/(\d+)[\.,]/g,'$1号.').replace(/[^号室楼#]$/,'号')
+		//s[i] = s[i].replace(/(\d+)[\.,]/g,'$1号.').replace(/[^号室楼#]$/,'号')
+		s[i] = s[i].replace(/\d+号\d+([\.,]\d+)+[室楼#]/g,(m)=>{
+			suffix=m.match(/.$/)[0]
+			return m.replace(/(\d+)([\.,])/g,'$1'+suffix+'$2')
+		}).replace(/(\d+)[\.,]/g,'$1号.').replace(/[^号室楼#]$/,'号')
 		try {
 			n=s[i].match(/^[^\d]+/)[0]
-			all_roads.forEach(function(m){
+			name_of_roads.forEach(function(m){
 				if (m[0] != n) return
 				s[i] = s[i].replace(RegExp(n), m)
 				n = m
@@ -455,7 +466,7 @@ function parse_location(c) {
 				b=blds.split('-')
 				if (b.length < 2) {
 					addr[n] = addr[n].concat(b[0].match(/\d+[号室楼#]/g))
-				} else for (j=b[0]; j<=b[1].match(/\d+/)[0]; j++) {
+				} else for (j=parseInt(b[0]); j<=parseInt(b[1]); j++) {
 					addr[n].push(b[1].replace(/\d+/,j))
 				}
 			})
@@ -523,6 +534,11 @@ function hidden_by_dom(td) {
 				t.g.constructor
 			} catch (e) {
 				c = t.querySelector("tr:nth-child(8) td:nth-child(2)").innerText.replace(/ +/g,'')
+				if (e.match(/200313467462/)) {
+					console.log("地址超出范围: ", e, c)
+					c = c.replace(/5\-710\./,'5-7,10,')
+					console.log("纠正地址范围: ", e, c)
+				}
 				t.g = parse_location(c)
 				t.g.k = function() {return this.constructor.keys(this)}
 			}
