@@ -430,56 +430,52 @@ function statistics() {
 }
 
 function parse_location(c) {
-//	var rege_road=/[康维瀑大江山].{0,2}道?([\.,]?\d{1,2}号(\.?\d{2,4}室|大厅)*)+/g
 	var rege_road = [
 		/[康维瀑大江山].{0,2}道?([\.,]?\d{1,2}号?(-\d{1,2})?号(\.?\d{1,4}室|大厅)*)+/g,
-		/[康维瀑大江山].{0,2}道?([^\d]?\d[\d\-,\.]*(号(大厅|楼顶)?|室|楼|#)?)+/g,
-		/[康维瀑大江山].{0,2}道?([^\d]?\d[\d\-,\.]*[号室楼#]*)+/g
+		/[康维瀑大江山].{0,2}道?([^\d]?\d[\d\-,\.]*(号(大厅|楼顶|.侧)?|室|楼|#)?)+/g,
+		/[康维瀑大江山].{0,2}道?([^\d]?\d[\d\-,\.]*[号室楼#]*)+/g,
+		/[康维瀑大江山].{0,2}道?\d[^康维瀑大江山]+/g
 	]
 	var name_of_roads = ['大浪湾道', '江山道', '康城道', '瀑布湾道', '山林道', '维园道']
 	var addr = {o: c}
-	c = c.replace(/号?[\-至—](\d+)/g,'-$1').replace(/号([康维瀑大江山][^厅])/g,'号\.$1')
-	var s = c.match(rege_road[1])
-	var n=''
-	if (Array.isArray(s) && s.length > 0) for (var i=0; i<s.length; i++) {
-		if (s[i].match(/\d+$/)) s[i] += '号'
-		//s[i] = s[i].replace(/(\d+)[\.,]/g,'$1号.').replace(/[^号室楼#]$/,'号')
-		s[i] = s[i].replace(/\d+号\d+([\.,]\d+)+[室楼#]/g,(m)=>{
-			suffix=m.match(/.$/)[0]
-			return m.replace(/(\d+)([\.,])/g,'$1'+suffix+'$2')
-		}).replace(/(\d+)[\.,]/g,'$1号.').replace(/[^号室楼#]$/,'号')
-		try {
-			n=s[i].match(/^[^\d]+/)[0]
-			name_of_roads.forEach(function(m){
-				if (m[0] != n) return
-				s[i] = s[i].replace(RegExp(n), m)
-				n = m
-			})
-			if (!addr.constructor.keys(addr).includes(n)) addr[n] = Array()
-//			addr[n].push(s[i].match(/[\d\-]+[号室楼#]?/)[0])
-//			addr[n] = addr[n].concat(s[i].match(/[\d\-]+[号室楼#]?/g))
-//			continue
-		} catch(e) { }
-		if (n.length < 1) continue
-		if (s[i].match(/^\d+(-\+)?号?$/)) s[i] = n + s[i]
+	c = c.replace(/号?[\-至—](\d+)/g,'-$1')//.replace(/号([康维瀑大江山][^厅])/g,'号\.$1')
+	var s = c.replace(/大厅/g,'厅厅').replace(/([康维瀑大江山].{0,2}道?\d+)([^号\-\d])/g,'$1号$2').match(rege_road[3])
+	if (!s) return addr
+
+	s.forEach((f) => {
+		e = f.replace(/厅厅/g,'大厅').replace(/(\d+号\d{3,4})([、,\.])/g,'$1室$2')
+		n=e.match(/^[^\d]+/)[0]
+		name_of_roads.forEach(function(m){
+			if (m[0] != n) return
+			e = e.replace(RegExp(n), m)
+			n = m
+		})
 		if (!addr.constructor.keys(addr).includes(n)) addr[n] = Array()
-//		addr[n].push(s[i].match(/[\d\-]+[号室楼#]?/g)[0])
-//		addr[n] = addr[n].concat(s[i].match(/\d+(-\d+)?[号室楼#]?/g))
+
+		if (!e.match(/号/)) e = e.replace(/(\d)([^\d]*$)/,'$1号$2')
+		e = e.replace(/^([^\d]+[\d\-]+)([^号\-\d])/,'$1号$2')
 		try {
-//			s[i].replace(/(\d+)[^\d\-号室楼#]/g,'$1号').match(/\d+(-\d+)?[号室楼#]/g).forEach((blds) => {
-			s[i].match(/\d+(-\d+)?[号室楼#]/g).forEach((blds) => {
-				b=blds.split('-')
-				if (b.length < 2) {
-					addr[n] = addr[n].concat(b[0].match(/\d+[号室楼#]/g))
-//					addr[n] = addr[n].concat(b[0].match(/\d+[号室楼#]|大厅|楼顶/g))
-				} else for (j=parseInt(b[0]); j<=parseInt(b[1]); j++) {
-					addr[n].push(b[1].replace(/\d+/,j))
-				}
-			})
-		} catch (e) {
-			console.log(e)
+//		e.replace(/(\d+)[^\d\-号室楼#]/g,'$1号').match(/\d+(-\d+)?[号室楼#]/g).forEach((blds) => {
+		var suffix=''
+		e.match(/\d+(-\d+)?[^\d\-\.,、，]*/g).forEach((blds) => {
+			try {
+				suffix = blds.match(/[^\d]+$/)[0]
+			} catch (err) {
+				blds = blds + suffix
+			}
+			b=blds.split('-')
+			if (b.length < 2) {
+				addr[n] = addr[n].concat(b[0].match(/\d+[号室楼层#](车[库位])?|大厅|楼顶|.{1,2}[侧面]|主干道|监控室|周边/g))
+			} else {
+				for (j=parseInt(b[0]); j<parseInt(b[1]); j++)
+					addr[n].push(b[1].replace(/\d+/,j).match(/\d+[号室楼层#]/)[0])
+				addr[n] = addr[n].concat(b[1].match(/\d+[号室楼层#](车[库位])?|大厅|楼顶|.{1,2}[侧面]|主干道|监控室|周边/g))
+			}
+		})
+		} catch (err) {
+			console.log(err)
 		}
-	}
+	})
 
 	return addr
 }
