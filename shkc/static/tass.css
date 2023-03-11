@@ -695,6 +695,9 @@ input#startDate {
 		position: relative;
 		/* transform: scale(1.2); */
     }
+    .ui-mask-msg div {
+		background: #fbfbfb url(../images/loading.gif) no-repeat 5px 17px;
+    }
 }
 
 .m-account-search .endDate {
