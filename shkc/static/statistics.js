@@ -460,8 +460,6 @@ function parse_location(c) {
 		if (!e.match(/号/)) e = e.replace(/(\d)([^\d]*$)/,'$1号$2')
 		e = e.replace(/^([^\d]+[\d\-]+)([^号\-\d])/,'$1号$2')
 		try {
-//		e.replace(/(\d+)[^\d\-号室楼#]/g,'$1号').match(/\d+(-\d+)?[号室楼#]/g).forEach((blds) => {
-		var suffix=''
 		blds = e.replace(/\d+-\d+[^\x00-\xff]/g,(m) => {
 			item = Array()
 			b=m.split('-')
@@ -481,17 +479,8 @@ function parse_location(c) {
 				item.push(b[0].replace(/\d+/,parseInt(b[j])))
 			return item.join('.')
 		})
-//		  .match(/\d+(-\d+)?[号室楼层#]?/g)
-		addr[n] = addr[n].concat(blds.match(bld_info[0]))
-//		blds.forEach((bld) => {
-//			try {
-//				suffix = bld.match(/[^\d]+$/)[0]
-//			} catch (err) {
-//				bld = bld + suffix
-//			}
 
-//			addr[n].push(bld)
-//		})
+		addr[n] = addr[n].concat(blds.match(bld_info[0]))
 		} catch (err) {
 			console.log(err)
 		}
