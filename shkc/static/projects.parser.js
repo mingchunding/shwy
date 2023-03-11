@@ -143,5 +143,28 @@ window.restore_projects_detail = function (shkc, s=0, l=10, progress=null) {
 	return true
 }
 
+function mask(msg) {
+	div = document.createElement('div')
+	div.classList.add('ui-mask')
+	document.body.appendChild(div)
+
+	div = document.createElement('div')
+	div.classList.add('ui-mask-msg')
+	div.appendChild(document.createElement('div'))
+	div.children[0].innerText = msg
+	document.body.appendChild(div)
+	div.style.top = (window.innerHeight - div.clientHeight) / 2
+	div.style.left = (window.innerWidth - div.clientWidth) / 2
+	console.log(div.clientWidth, div.clientHeight)
+}
+
+function unmask() {
+	document.querySelectorAll('div.ui-mask-msg').forEach(function(e){
+		e.remove()
+	})
+	document.querySelectorAll('div.ui-mask').forEach(function(e){
+		e.remove()
+	})
+}
 //setTimeout(window.restore_projects_list, 100, window.shkc, 0, 10)
 mask("正在下载大修工程数据...")

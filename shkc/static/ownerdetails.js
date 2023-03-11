@@ -1325,27 +1325,3 @@ function unhide_reports(type, doc) {
 function chart_shouzhihuizong() {
 	chart_of_report('ShouZhiHuiZong')
 }
-
-function mask(msg) {
-	div = document.createElement('div')
-	div.classList.add('ui-mask')
-	document.body.appendChild(div)
-
-	div = document.createElement('div')
-	div.classList.add('ui-mask-msg')
-	div.appendChild(document.createElement('div'))
-	div.children[0].innerText = msg
-	document.body.appendChild(div)
-	div.style.top = (window.innerHeight - div.clientHeight) / 2
-	div.style.left = (window.innerWidth - div.clientWidth) / 2
-	console.log(div.clientWidth, div.clientHeight)
-}
-
-function unmask() {
-	document.querySelectorAll('div.ui-mask-msg').forEach(function(e){
-		e.remove()
-	})
-	document.querySelectorAll('div.ui-mask').forEach(function(e){
-		e.remove()
-	})
-}
