@@ -697,7 +697,10 @@ input#startDate {
     }
     .ui-mask-msg div {
 		background: #fbfbfb url(../images/loading.gif) no-repeat 5px 17px;
-    }
+		position: fixed;
+		top: 50%;
+		left: calc(50% - 128px);
+	}
 }
 
 .m-account-search .endDate {
