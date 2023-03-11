@@ -434,16 +434,21 @@ function parse_location(c) {
 		/[康维瀑大江山].{0,2}道?([\.,]?\d{1,2}号?(-\d{1,2})?号(\.?\d{1,4}室|大厅)*)+/g,
 		/[康维瀑大江山].{0,2}道?([^\d]?\d[\d\-,\.]*(号(大厅|楼顶|.侧)?|室|楼|#)?)+/g,
 		/[康维瀑大江山].{0,2}道?([^\d]?\d[\d\-,\.]*[号室楼#]*)+/g,
-		/[康维瀑大江山].{0,2}道?\d[^康维瀑大江山]+/g
+		/[康维瀑大江山].{0,2}道?\d[^康维瀑大江山]+/g,
+		/^[康维瀑大江山].{0,2}道?|[^\x00-\xff]+|[0-9]+[号室楼层#]/g
+	]
+	var bld_info = [
+		/\d+[号室楼层#]?(车[库位])?|([一二三四]期)?[\x00-\xff]+号?车库|大厅|楼[顶前侧旁]|[东西南北前后]{1,2}[侧面]|凯旋门|出入口|岗亭|主干道|监控室|周边/g,
+		/\d+[号室楼层#]/g,
 	]
 	var name_of_roads = ['大浪湾道', '江山道', '康城道', '瀑布湾道', '山林道', '维园道']
 	var addr = {o: c}
-	c = c.replace(/号?[\-至—](\d+)/g,'-$1')//.replace(/号([康维瀑大江山][^厅])/g,'号\.$1')
-	var s = c.replace(/大厅/g,'厅厅').replace(/([康维瀑大江山].{0,2}道?\d+)([^号\-\d])/g,'$1号$2').match(rege_road[3])
-	if (!s) return addr
+	c = c.replace(/号?[\-至—](\d+)/g,'-$1').replace(/[,、，]/g,'.')//.replace(/号([康维瀑大江山][^厅])/g,'号\.$1')
+	var road = c.replace(/大厅/g,'厅厅').replace(/([康维瀑大江山].{0,2}道?\d+)([^号\-\d])/g,'$1号$2').match(rege_road[3])
+	if (!road) return addr
 
-	s.forEach((f) => {
-		e = f.replace(/厅厅/g,'大厅').replace(/(\d+号\d{3,4})([、,\.])/g,'$1室$2')
+	road.forEach((rd) => {
+		e = rd.replace(/厅厅/g,'大厅').replace(/(\d+号\d{3,4})(\.)/g,'$1室$2')
 		n=e.match(/^[^\d]+/)[0]
 		name_of_roads.forEach(function(m){
 			if (m[0] != n) return
@@ -457,21 +462,36 @@ function parse_location(c) {
 		try {
 //		e.replace(/(\d+)[^\d\-号室楼#]/g,'$1号').match(/\d+(-\d+)?[号室楼#]/g).forEach((blds) => {
 		var suffix=''
-		e.match(/\d+(-\d+)?[^\d\-\.,、，]*/g).forEach((blds) => {
-			try {
-				suffix = blds.match(/[^\d]+$/)[0]
-			} catch (err) {
-				blds = blds + suffix
-			}
-			b=blds.split('-')
-			if (b.length < 2) {
-				addr[n] = addr[n].concat(b[0].match(/\d+[号室楼层#](车[库位])?|大厅|楼顶|.{1,2}[侧面]|主干道|监控室|周边/g))
-			} else {
-				for (j=parseInt(b[0]); j<parseInt(b[1]); j++)
-					addr[n].push(b[1].replace(/\d+/,j).match(/\d+[号室楼层#]/)[0])
-				addr[n] = addr[n].concat(b[1].match(/\d+[号室楼层#](车[库位])?|大厅|楼顶|.{1,2}[侧面]|主干道|监控室|周边/g))
-			}
+		blds = e.replace(/\d+-\d+[^\x00-\xff]/g,(m) => {
+			item = Array()
+			b=m.split('-')
+			for (j=parseInt(b[0]); j<=parseInt(b[1]); j++)
+				item.push(b[1].replace(/\d+/,j).match(/\d+[号室楼层#]?/)[0])
+			return item.join('.')
+		}).replace(/\d+(\.\d+)+[号室楼层#]/g,(m) => {
+			item = Array()
+			b=m.match(/\d+[号室楼层#]?/g)
+			for (j=0; j<b.length; j++)
+				item.push(b[b.length-1].replace(/\d+/,parseInt(b[j])))
+			return item.join('.')
+		}).replace(/\d+号(\.\d+)+/g,(m) => {
+			item = Array()
+			b=m.match(/\d+号?/g)
+			for (j=0; j<b.length; j++)
+				item.push(b[0].replace(/\d+/,parseInt(b[j])))
+			return item.join('.')
 		})
+//		  .match(/\d+(-\d+)?[号室楼层#]?/g)
+		addr[n] = addr[n].concat(blds.match(bld_info[0]))
+//		blds.forEach((bld) => {
+//			try {
+//				suffix = bld.match(/[^\d]+$/)[0]
+//			} catch (err) {
+//				bld = bld + suffix
+//			}
+
+//			addr[n].push(bld)
+//		})
 		} catch (err) {
 			console.log(err)
 		}
