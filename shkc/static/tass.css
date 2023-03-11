@@ -701,6 +701,9 @@ input#startDate {
 		top: 50%;
 		left: calc(50% - 170px);
 	}
+    div[lang] {
+        transform: scale(2);
+    }
 }
 
 .m-account-search .endDate {
