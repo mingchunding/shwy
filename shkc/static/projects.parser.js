@@ -153,9 +153,9 @@ function mask(msg) {
 	div.appendChild(document.createElement('div'))
 	div.children[0].innerText = msg
 	document.body.appendChild(div)
-	div.style.top = (window.innerHeight - div.clientHeight) / 2
-	div.style.left = (window.innerWidth - div.clientWidth) / 2
-	console.log(div.clientWidth, div.clientHeight)
+//	div.style.top = (window.innerHeight - div.clientHeight) / 2
+//	div.style.left = (window.innerWidth - div.clientWidth) / 2
+//	console.log(div.clientWidth, div.clientHeight)
 }
 
 function unmask() {

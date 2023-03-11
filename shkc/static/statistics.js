@@ -376,6 +376,8 @@ function do_group_statistics(n, r) {
 			add_statistics(tab, s, k)
 		})
 	}
+
+	return title
 }
 
 function statistics() {
@@ -424,7 +426,7 @@ function statistics() {
 		do_group_statistics("工程类别", type_of_projs)
 		do_group_statistics("实施范围", [range_of_projs, '+'])
 		do_group_statistics("施工管理单位", companies)
-		do_group_statistics("实施时间", years)
+		do_group_statistics("实施时间", years).click()
 		do_group_statistics("建立日期", years)
 	}, 10)
 }

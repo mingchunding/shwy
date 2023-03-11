@@ -693,13 +693,13 @@ input#startDate {
 		height: 38px !important;
 		top: -5px !important;
 		position: relative;
-		/* transform: scale(1.2); */
-    }
+		transform: scale(1.2);
+		}
     .ui-mask-msg div {
 		background: #fbfbfb url(../images/loading.gif) no-repeat 5px 17px;
 		position: fixed;
 		top: 50%;
-		left: calc(50% - 128px);
+		left: calc(50% - 170px);
 	}
 }
 
