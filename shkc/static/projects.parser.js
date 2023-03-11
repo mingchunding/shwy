@@ -115,7 +115,10 @@ window.restore_projects_detail = function (shkc, s=0, l=10, progress=null) {
 	var idt = shkc.detail.constructor.keys(shkc.detail)
 //	console.log('prepare parsing projects: ', s, ' - ', s+l > idt.length ? idt.length : s+l)
 	if (l < 0) l = idt.length
-	if (0==s) mask("正在读取大修工程数据...")
+	if (0==s) {
+		unmask()
+		mask("正在读取大修工程数据...")
+	}
 	for (var i=s; i<s+l; i++) {
 		if (i >= idt.length) return false
 		gen_project_detail_tab(shkc, idt[i])
@@ -141,3 +144,4 @@ window.restore_projects_detail = function (shkc, s=0, l=10, progress=null) {
 }
 
 //setTimeout(window.restore_projects_list, 100, window.shkc, 0, 10)
+mask("正在下载大修工程数据...")
