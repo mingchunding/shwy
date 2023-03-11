@@ -403,7 +403,7 @@ function statistics() {
 			小区门: '(南|北|西|旋转)大?门'
 		}
 	try {
-		var addr = document.querySelector("p.title span").innerText.match(/[^\d]*\d+号?/g)
+		var addr = document.querySelector("p.title span").innerText.match(/[^\d]*\d+[弄号]?/g)
 		if (addr.length > 1) {
 			var i = 1
 		} else {
