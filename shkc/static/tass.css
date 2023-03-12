@@ -9,10 +9,6 @@
     border: 0;
 }
 
-.Wdate {
-    background-size: 38px 48px;
-}
-
 .index_owner_zq td,
 .index_owner td,
 .m-increace-inquiry table td {
@@ -701,7 +697,7 @@ input#startDate {
     }
 
     .Wdate {
-		background-size: 38px;
+		background-size: 38px !important;
 		height: 38px !important;
 		top: -5px !important;
 		position: relative;
