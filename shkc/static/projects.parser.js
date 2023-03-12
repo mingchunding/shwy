@@ -117,7 +117,7 @@ window.restore_projects_detail = function (shkc, s=0, l=10, progress=null) {
 	if (l < 0) l = idt.length
 	if (0==s) {
 		unmask()
-		mask("正在读取大修工程数据...")
+		mask("解读工程数据......")
 	}
 	for (var i=s; i<s+l; i++) {
 		if (i >= idt.length) return false
@@ -167,4 +167,4 @@ function unmask() {
 	})
 }
 //setTimeout(window.restore_projects_list, 100, window.shkc, 0, 10)
-mask("正在下载大修工程数据...")
+mask("下载工程数据......")

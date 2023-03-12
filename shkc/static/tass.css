@@ -536,11 +536,11 @@ input#startDate {
 }
 
 .ui-mask-msg div {
-    background: #fbfbfb url(../images/loading.gif) no-repeat 5px 8px;
+    /* background: #fbfbfb url(../images/loading.gif) no-repeat 5px 8px; */
+    background-position-y: 8px;
     position: fixed;
     top: 50%;
-    align-items: center;
-    left: calc(50% - 100px);
+    left: calc(50% - 138px);
 }
 
 .watermark {
@@ -706,8 +706,9 @@ input#startDate {
         width: 280px;
     }
     .ui-mask-msg div {
-		background: #fbfbfb url(../images/loading.gif) no-repeat 5px 17px;
-        left: calc(50% - 170px);
+		background-size: 34px;
+		left: calc(50% - 125px);
+		padding-left: 45px;
 	}
 	div[lang] {
 		transform: scale(2);
