@@ -323,15 +323,15 @@ function do_group_statistics(n, r) {
 			return
 		}
 
-		if (!!window.shkc) {
-			subtitle.innerText = window.shkc.startDate + ' 至 ' + window.shkc.endDate
-		} else if (n.match(/实施时间/)) {
-			subtitle.innerText = document.querySelector("#startDate").defaultValue +
-						' 至 ' + document.querySelector("#endDate").defaultValue
-		} else {
+		if (!n.match(/实施时间/))
 			subtitle.innerText = document.querySelector("#startDate").value +
 						' 至 ' + document.querySelector("#endDate").value
-		}
+		else if (!window.shkc)
+			subtitle.innerText = document.querySelector("#startDate").defaultValue +
+						' 至 ' + document.querySelector("#endDate").defaultValue
+		else
+			subtitle.innerText = window.shkc.startDate + ' 至 ' + window.shkc.endDate
+
 		setTimeout(cal_statistics, 100, tab, g)
 	})
 
