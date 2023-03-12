@@ -117,7 +117,7 @@ window.restore_projects_detail = function (shkc, s=0, l=10, progress=null) {
 	if (l < 0) l = idt.length
 	if (0==s) {
 		unmask()
-		mask("解读工程数据......")
+		mask("分析工程数据......")
 	}
 	for (var i=s; i<s+l; i++) {
 		if (i >= idt.length) return false
