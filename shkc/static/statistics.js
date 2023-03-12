@@ -310,6 +310,8 @@ function do_group_statistics(n, r) {
 
 	title.addEventListener("click", function(e){
 		sibling=this.parentElement.nextElementSibling
+		sibling.hidden=!sibling.hidden
+		this.setAttribute('show', sibling.hidden)
 
 		if ('function' == typeof(r)) {
 			var g = r()
@@ -318,18 +320,19 @@ function do_group_statistics(n, r) {
 		}
 
 		if (sibling && sibling.querySelectorAll("tbody tr").length > 0) {
+			return
+		}
 
+		if (!!window.shkc) {
+			subtitle.innerText = window.shkc.startDate + ' 至 ' + window.shkc.endDate
 		} else if (n.match(/实施时间/)) {
 			subtitle.innerText = document.querySelector("#startDate").defaultValue +
 						' 至 ' + document.querySelector("#endDate").defaultValue
-			setTimeout(cal_statistics, 100, tab, g)
 		} else {
 			subtitle.innerText = document.querySelector("#startDate").value +
 						' 至 ' + document.querySelector("#endDate").value
-			setTimeout(cal_statistics, 100, tab, g)
 		}
-		this.setAttribute('show', sibling.hidden)
-		sibling.hidden=!sibling.hidden
+		setTimeout(cal_statistics, 100, tab, g)
 	})
 
 	if (g.length > 0 && g[g.length-1] == '+') {

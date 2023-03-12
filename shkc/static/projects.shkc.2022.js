@@ -6,6 +6,8 @@
 	
 	shkc.detail = JSON.parse(LZString.decompress(shkc.detail))
 	shkc.pjlist = JSON.parse(LZString.decompress(shkc.pjlist))
+	shkc.startDate = '2012-01-01'
+	shkc.endDate   = '2012-12-31'
 	window.shkc = shkc
 	try {
 		window.project.total += shkc.detail.constructor.keys(shkc.detail).length
