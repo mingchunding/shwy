@@ -310,8 +310,8 @@ function do_group_statistics(n, r) {
 
 	title.addEventListener("click", function(e){
 		sibling=this.parentElement.nextElementSibling
-		sibling.hidden=!sibling.hidden
 		this.setAttribute('show', sibling.hidden)
+		sibling.hidden=!sibling.hidden
 
 		if ('function' == typeof(r)) {
 			var g = r()
