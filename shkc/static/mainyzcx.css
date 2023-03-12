@@ -103,7 +103,7 @@ body{background-color:#e1e4e9;}
 .m-account-search .start-time{margin-right:12px;}
 .m-account-search .end-time{margin:0px 12px 0px 56px;}
 .m-account-search .ipt{height:28px;line-height:28px;border:1px solid #62ddfe;width:190px;float:left;text-indent:3px;}
-.m-account-search .btn{margin-left:12px;border:none;background:url(../images/account-search-bg.jpg) no-repeat;width:51px;height:32px;float:left;cursor:pointer;}
+.m-account-search .btn{margin-left:12px;border:none;background:url(../images/account-search-bg.jpg) no-repeat;width: 51px;height:32px;float:left;cursor:pointer;}
 .m-account-search .payfor-list{margin-top:10px;}
 .m-account-search .payfor-list span{display:inline-block;color:#1b94dd;height:30px;line-height:30px;}
 .m-account-search .payfor-list .item{width:40%;}

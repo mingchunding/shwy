@@ -712,7 +712,7 @@ input#startDate {
 	}
 	div[lang] {
 		transform: scale(2);
-		top: 204px !important;
+		top: 200px !important;
 	}
 }
 
