@@ -535,6 +535,18 @@ input#startDate {
     display: none
 }
 
+.ui-mask {
+    position: fixed
+}
+
+.ui-mask-msg div {
+    background: #fbfbfb url(../images/loading.gif) no-repeat 5px 8px;
+    position: fixed;
+    top: 50%;
+    align-items: center;
+    left: calc(50% - 100px);
+}
+
 .watermark {
     width: 100%;
     height: 150px;
@@ -689,20 +701,17 @@ input#startDate {
     }
 
     .Wdate {
-		/*background-size: 38px 48px;*/
+		background-size: 38px;
 		height: 38px !important;
 		top: -5px !important;
 		position: relative;
-		/* transform: scale(1.2); */
 	}
     .m-account-search .ipt {
-        width: 260px;
+        width: 280px;
     }
     .ui-mask-msg div {
 		background: #fbfbfb url(../images/loading.gif) no-repeat 5px 17px;
-		position: fixed;
-		top: 50%;
-		left: calc(50% - 170px);
+        left: calc(50% - 170px);
 	}
 	div[lang] {
 		transform: scale(2);
