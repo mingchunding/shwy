@@ -44,9 +44,12 @@ function gotoQuery()
 }
 function opennew1(mpro_id){
 	var add="/wyweb/web/wyfeemp/wxzjquery/getWsInfo.do?mpro_id="+mpro_id;
-		var windowprops="height=600,width=820,location=no,scrollbars=yes,center=yes,status=no,menubars=no,toolbars=no,resizable=yes";
-		window.open(add,"",windowprops);
-	}
+	var windowprops="height=600,width=820,location=no,scrollbars=yes,center=yes,status=no,menubars=no,toolbars=no,resizable=yes";
+	window.open(add,"",windowprops);
+}
+function pickDate(e){
+	WdatePicker({el:e,skin:'YcloudRed'})
+}
 </script>
 </head>
 <body onload="restore_click_handler()" style="background-color: rgb(255, 255, 255); padding-top: 15px;">
@@ -59,8 +62,8 @@ function opennew1(mpro_id){
 								<table>
 									<tbody>
 										<tr><td colspan="2"><div class="m-account-search nobdr">
-													<div class="f-clearfix"><span class="start-time">起始日期</span><input class="ipt Wdate" onclick="WdatePicker({el:this,skin:'YcloudRed'})" ontouchstart="WdatePicker({el:this,skin:'YcloudRed'})" name="startDate" id="startDate" type="text" value="2012-01-01" readonly="readonly"><span class="end-time">
-											截止日期</span><input class="ipt Wdate" type="text" name="endDate" id="endDate" onclick="WdatePicker({el:this,skin:'YcloudRed'})" ontouchstart="WdatePicker({el:this,skin:'YcloudRed'})" value="2022-12-31" readonly="readonly">
+													<div class="f-clearfix"><span class="start-time">起始日期</span><input class="ipt Wdate" onclick="pickDate(this)" ontouchstart="pickDate(this)" name="startDate" id="startDate" type="text" value="2012-01-01" readonly="readonly"><span class="end-time">
+											截止日期</span><input class="ipt Wdate" type="text" name="endDate" id="endDate" onclick="pickDate(this)" ontouchstart="pickDate(this)" value="2022-12-31" readonly="readonly">
 											<input type="button" class="btn" title="查询" onclick="gotoQuery()" disabled></div>
 										</div></td></tr>
 										<tr><td colspan="2" class="title">业主大会支取汇总信息</td></tr>
