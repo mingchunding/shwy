@@ -13,83 +13,73 @@ window.restore_projects_list = function (shkc, s, l) {
 	}
 }
 
-var template_project_detail = '<a></a><table width="80%" align="center">\
-                		<tbody>\
-				            <tr>\
-								<td colspan="4" align="center" class="name">工程信息查询</td>\
-							</tr>\
-							<tr>\
-								<td class="name">工程编号</td>\
-								<td colspan="3" align="left"></td>\
-							</tr>\
-							<tr>\
-								<td class="name">工程名称</td>\
-								<td colspan="3" align="left"></td>\
-							</tr>\
-							<tr>\
-								<td class="name">签定施工合同</td>\
-								<td align="left"></td>\
-								<td class="name">是否审价</td>\
-								<td></td>\
-							</tr>\
-							<tr>\
-								<td class="name">预案金额</td>\
-								<td align="left"></td>\
-								<td class="name">决案金额</td>\
-								<td></td>\
-							</tr>\
-							<tr>\
-								<td class="name">施工单位选择</td>\
-								<td align="left"></td>\
-								<td class="name">工程阶段</td>\
-								<td></td>\
-							</tr>\
-							<tr>\
-								<td class="name">实施时间</td>\
-								<td align="left"></td>\
-								<td class="name">项目性质</td>\
-								<td></td>\
-							</tr>\
-							<tr>\
-								<td class="name">实施范围</td>\
-								<td colspan="3"></td>\
-							</tr>\
-							<tr>\
-								<td class="name">维修原因</td>\
-								<td colspan="3" align="left">/td>\
-							</tr>\
-							<tr>\
-								<td class="name">银行开户名称</td>\
-								<td colspan="3" align="left"></td>\
-							</tr>\
-							<tr>\
-								<td class="name">施工管理单位</td>\
-								<td colspan="3" align="left"></td>\
-							</tr>\
-							<tr>\
-								<td class="name">已支取金额</td>\
-								<td align="left"></td>\
-								<td class="name">可支取金额</td>\
-								<td></td>\
-							</tr>\
-							<tr>\
-								<td class="name">已冲正金额</td>\
-								<td align="left"></td>\
-								<td class="name">已冲正次数</td>\
-								<td>0</td>\
-							</tr>\
-							<tr>\
-								<td class="name">完工日期</td>\
-								<td colspan="3" align="left"></td>\
-							</tr>\
-                		</tbody>\
-                </table>'
+var template_project_detail = [
+'		<a></a>',
+'		<table width="80%" align="center">',
+'		<tbody>',
+'			<tr>',
+'				<td colspan="4" align="center" class="name">工程信息查询</td>',
+'			</tr><tr>',
+'				<td class="name">工程编号</td>',
+'				<td colspan="3" align="left"></td>',
+'			</tr><tr>',
+'				<td class="name">工程名称</td>',
+'				<td colspan="3" align="left"></td>',
+'			</tr><tr>',
+'				<td class="name">签定施工合同</td>',
+'				<td align="left"></td>',
+'				<td class="name">是否审价</td>',
+'				<td></td>',
+'			</tr><tr>',
+'				<td class="name">预案金额</td>',
+'				<td align="left"></td>',
+'				<td class="name">决案金额</td>',
+'				<td></td>',
+'			</tr><tr>',
+'				<td class="name">施工单位选择</td>',
+'				<td align="left"></td>',
+'				<td class="name">工程阶段</td>',
+'				<td></td>',
+'			</tr><tr>',
+'				<td class="name">实施时间</td>',
+'				<td align="left"></td>',
+'				<td class="name">项目性质</td>',
+'				<td></td>',
+'			</tr><tr>',
+'				<td class="name">实施范围</td>',
+'				<td colspan="3"></td>',
+'			</tr><tr>',
+'				<td class="name">维修原因</td>',
+'				<td colspan="3" align="left">/td>',
+'			</tr><tr>',
+'				<td class="name">银行开户名称</td>',
+'				<td colspan="3" align="left"></td>',
+'			</tr><tr>',
+'				<td class="name">施工管理单位</td>',
+'				<td colspan="3" align="left"></td>',
+'			</tr><tr>',
+'				<td class="name">已支取金额</td>',
+'				<td align="left"></td>',
+'				<td class="name">可支取金额</td>',
+'				<td></td>',
+'			</tr><tr>',
+'				<td class="name">已冲正金额</td>',
+'				<td align="left"></td>',
+'				<td class="name">已冲正次数</td>',
+'				<td>0</td>',
+'			</tr><tr>',
+'				<td class="name">完工日期</td>',
+'				<td colspan="3" align="left"></td>',
+'			</tr>',
+'		</tbody>',
+'		</table>'
+]
 
 function gen_project_detail_tab(shkc, id) {
 	if (document.getElementById(id)) return
 
 	domProject = document.createElement('div')
-	domProject.innerHTML = template_project_detail
+	domProject.innerHTML = '\n' + template_project_detail.join('\n') + '\n'
 	domProject.classList.add('account-content')
 	domProject.id = id
 	domProject.querySelector('a').id = 'proj_' + id

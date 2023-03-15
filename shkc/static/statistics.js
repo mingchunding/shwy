@@ -170,13 +170,12 @@ function fill_statistics_row(tr) {
 
 	tr.parentElement.parentElement.querySelector("thead tr").lastElementChild.innerText = '涉及施工施工管理单位'
 	if (sum[4].length > 1) {
-		select = document.createElement("select")
-		tr.lastChild.appendChild(select)
+		var html=['<select>']
 		sum[4].forEach(function(e) {
-			opt = document.createElement("option")
-			opt.innerText = e
-			select.appendChild(opt)
+			html.push('<option>' + e + '</option>')
 		})
+		html.push('</select>')
+		tr.lastChild.innerHTML = html.join('\n');
 	} else if (sum[4].length > 0) {
 		tr.lastChild.innerText = sum[4][0]
 	}
@@ -213,22 +212,35 @@ function click_event_statistics_item(obj) {
 
 function add_statistics(tbody, rname, key) {
 	var sname = tbody.parentElement.parentElement.previousElementSibling.querySelector(".title").firstChild.data
-	var tr = document.createElement("tr")
-	for (i = 0; i < 7; i++) {
-		tr.appendChild(document.createElement("td"))
+	var html = [
+'			<tr>',
+'				<td>' + rname + '</td>'
+	]
+	for (i = 1; i < 6; i++) {
+		html.push(
+'				<td><img></td>'
+		)
 	}
-	tr.firstChild.innerText = rname
-	tr.children[1].innerHTML='<img>'
-	tr.children[2].innerHTML='<img>'
-	tr.children[3].innerHTML='<img>'
-	tr.children[4].innerHTML='<img>'
-	tr.children[5].innerHTML='<img>'
+	for (i = 6; i < 7; i++) {
+		html.push(
+'				<td></td>'
+		)
+	}
+	html.push(
+'			</tr>'
+	)
+
+	tb = document.createElement('tbody')
+	tb.innerHTML = html.join('\n')
+	var tr = tb.querySelector('tr')
 	if (tbody.querySelector("tr:last-child input")) {
 		tbody.insertBefore(tr, tbody.lastElementChild)
 	} else {
 		tbody.appendChild(tr)
 	}
-	tr.firstChild.addEventListener('click', function(e) {
+	tb.remove()
+
+	tr.firstElementChild.addEventListener('click', function(e) {
 		click_event_statistics_item(this)
 	})
 	tr.lastElementChild.addEventListener('click', function(e) {
@@ -276,24 +288,51 @@ function do_group_statistics(n, r) {
 	}
 	div.classList = "details-statistics m-collect-info m-account-detail"
 
-	div.innerHTML = '\
-		<div class="account-title"><p class="title"></p></div>\
-		<div class="collect-info" hidden>\
-		<table class="tableorg">\
-		<thead><tr>\
-				<th></th>\
-				<th>工程数量</th>\
-				<th>个人扣款</th>\
-				<th>已支取金额</th>\
-				<th>决算金额</th>\
-				<th>施工管理单位</th>\
-				<th>备注：工程名、实施范围、维护原因</th>\
-			</tr>\
-		</thead>\
-		<tbody>\
-		</tbody>\
-		</table>\
-		</div>'
+	if ('function' == typeof(r)) {
+		var g = r()
+	} else {
+		var g = r
+	}
+
+	var html = [
+'	<div class="account-title">',
+'		<p class="title"></p>',
+'	</div>',
+'	<div class="collect-info" hidden>',
+'	<table class="tableorg">',
+'		<thead>',
+'			<tr>',
+'				<th></th>',
+'				<th>工程数量</th>',
+'				<th>个人扣款</th>',
+'				<th>已支取金额</th>',
+'				<th>决算金额</th>',
+'				<th>施工管理单位</th>',
+'				<th>备注：工程名、实施范围、维护原因</th>',
+'			</tr>',
+'		</thead>',
+'		<tbody>',
+'		</tbody>'
+	]
+	if (g.length > 0 && g[g.length-1] == '+') {
+		html = html.concat([
+'		<tfoot>',
+'			<tr>'
+		])
+		for (i = 0; i < 7; i++) {
+			html.push(
+'				<td></td>'
+			)
+		}
+		html = html.concat([
+'			</tr>',
+'		</tfoot>'])
+	}
+	html = html.concat([
+'	</table>',
+'	</div>'
+	])
+	div.innerHTML = '\n' + html.join('\n') + '\n'
 
 	var title = div.getElementsByClassName("title")[0]
 	var subtitle = document.createElement("span")
@@ -302,22 +341,10 @@ function do_group_statistics(n, r) {
 	div.getElementsByTagName("th")[0].innerText = n
 	var tab = div.querySelector("tbody")
 
-	if ('function' == typeof(r)) {
-		var g = r()
-	} else {
-		var g = r
-	}
-
 	title.addEventListener("click", function(e){
 		sibling=this.parentElement.nextElementSibling
 		this.setAttribute('show', sibling.hidden)
 		sibling.hidden=!sibling.hidden
-
-		if ('function' == typeof(r)) {
-			var g = r()
-		} else {
-			var g = r
-		}
 
 		if (sibling && sibling.querySelectorAll("tbody tr").length > 0) {
 			return
@@ -337,13 +364,7 @@ function do_group_statistics(n, r) {
 
 	if (g.length > 0 && g[g.length-1] == '+') {
 		g.pop(g.length-1)
-		var tr=document.createElement("tr")
-		tab.parentElement.appendChild(document.createElement('tfoot'))
-		tft = tab.parentElement.querySelector('tfoot')
-		tft.appendChild(tr)
-		for (var i=0; i<tab.previousElementSibling.querySelectorAll("th").length; i++) {
-			tr.appendChild(document.createElement("td"))
-		}
+		var tr = div.querySelector('tfoot > tr')
 		tr.firstElementChild.appendChild(document.createElement("input"))
 		tr.lastElementChild.appendChild(document.createElement("input"))
 		var bt = document.createElement('button')
@@ -740,6 +761,7 @@ window.chart = {
 			var labels = Array()
 			var rtable = src.querySelectorAll("table.colwidth")
 			var title = Array()
+			if (!rtable || rtable.length<1) return null
 			title.push(rtable[0].querySelector("table.tab1 tr.tab_unit > td").innerText.match(/上海市.+业主大会/)[0])
 			title.push(rtable[0].querySelectorAll("table td.TopTitle")[1].innerText.replace(/表$/,''))
 			for (var i=0; i<rtable.length; i++) {
@@ -771,6 +793,7 @@ window.chart = {
 			var labels = Array()
 			var rtable = src.querySelectorAll("table.colwidth")
 			var title = Array()
+			if (!rtable || rtable.length<1) return null
 			title.push(rtable[0].querySelector("table.tab1 tr.tab_unit > td").innerText.match(/上海市.+业主大会/)[0])
 			title.push(rtable[0].querySelectorAll("table td.TopTitle")[1].innerText.replace(/表$/,''))
 			for (var i=0; i<rtable.length; i++) {
@@ -892,9 +915,17 @@ window.chart = {
 	}
 }
 
-function chart_of_report(func) {
+function chart_of_report(func, label=null) {
 	var source = document.querySelector(".collect-info[func='" + func + ".do']")
 	if (!source) return
+
+	var chartData = {
+		labels: [],
+		datasets: []
+	}
+
+	var title = window.chart.parser[func](source, chartData)
+	if (!title) return
 
 	var div = document.getElementById(func)
 	if (!div) {
@@ -904,7 +935,7 @@ function chart_of_report(func) {
 		div.hidden = true
 		div.appendChild(document.createElement('span'))
 		div.appendChild(document.createElement('canvas'))
-		div.firstElementChild.innerText = 'X'
+		div.querySelector("span").innerText = 'X'
 		div.lastElementChild.id = 'canvas'
 		try {
 			var container = document.querySelector("#reports .m-account-detail")
@@ -928,19 +959,12 @@ function chart_of_report(func) {
 		s.setAttribute('target', func)
 	}
 
-	div.firstElementChild.addEventListener('click',function(e){
+	div.querySelector("span").addEventListener('click',function(e){
 		if (e.target.localName != 'span') return
 		this.parentElement.hidden = 'true'
 	})
 
 	var ctx = div.querySelector('canvas').getContext('2d')
-
-	var chartData = {
-		labels: [],
-		datasets: []
-	}
-
-	var title = window.chart.parser[func](source, chartData)
 
 	div.chart = new Chart(ctx, {
 		type: 'bar',
