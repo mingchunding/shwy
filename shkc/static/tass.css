@@ -770,7 +770,7 @@ div.chart {
 .chart > span {
     font-weight: bold;
     float: right;
-    margin: 10px 10px;
+    margin: 0px 10px;
 }
 
 @media screen and (min-resolution: 2.1dppx) {
