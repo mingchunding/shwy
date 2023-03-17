@@ -175,9 +175,9 @@ function fill_statistics_row(tr) {
 			html.push('<option>' + e + '</option>')
 		})
 		html.push('</select>')
-		tr.lastChild.innerHTML = html.join('\n');
+		tr.lastElementChild.innerHTML = html.join('\n');
 	} else if (sum[4].length > 0) {
-		tr.lastChild.innerText = sum[4][0]
+		tr.lastElementChild.innerText = sum[4][0]
 	}
 }
 
