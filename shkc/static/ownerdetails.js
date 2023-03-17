@@ -543,44 +543,31 @@ function createSearchBox() {
 	var th = tab.querySelector("thead")
 	if (!th) {
 		th = document.createElement("thead")
-		tab.appendChild(th)
+		tab.insertBefore(th,tab.querySelector('tbody'))
 	}
+	var sbox = [
+'		<tr>',
+'			<th><input class="tass" type="text" id="reqcode" value=".*"></th>',
+'			<th><input class="tass" type="text" id="amount"  value="0"></th>',
+'			<th><input class="tass" type="text" id="perfee"  value="0"></th>',
+'			<th><input class="tass" type="text" id="remain"  value="0"></th>',
+'			<th><span></span><input class="tass btn" type="button" id="filtergo" value="GO" disabled="true"></th>',
+'			<th><input class="tass" type="text" id="procode" value="--"></th>',
+'		</tr>',
+	]
+	th.innerHTML = '\n' + sbox.join('\n') + '\n'
+
 	tab.querySelectorAll("tbody th:first-child").forEach(function(h){
-		th.appendChild(h.parentElement)
+		th.insertBefore(h.parentElement, th.lastElementChild)
 	})
 
 	var title = document.querySelectorAll("p.title")[1]
 	title.appendChild(document.createElement("a"))
 
-	var searchBoxCell = th.querySelector("tr th input")
-	if (searchBoxCell) {
-		searchBoxCell.parentElement.parentElement.remove()
-	}
-
-	searchBoxRow = document.createElement("tr")
-	filter_values = [".*", "0", "0", "0", "0", "--"]
-	filter_names = ["reqcode", "amount", "perfee", "remain", "tstp", "procode"]
-	for (i = 0; i < th.firstElementChild.children.length; i++) {
-		t = document.createElement("input")
-		t.classList = "tass"
-		t.type = "text"
-		t.id = filter_names[i]
-		t.name = filter_names[i]
-		t.value = filter_values[i]
-		col = document.createElement("th")
-		if (i==4) col.appendChild(document.createElement('span'))
-		col.appendChild(t)
-		searchBoxRow.appendChild(col)
-	}
-
+	searchBoxRow = th.lastElementChild
 	searchBoxRow.children[4].firstElementChild.innerText =
 				document.querySelector("input[name=startDate]").value +
 		' - ' + document.querySelector("input[name=endDate").value + ' '
-	searchBoxRow.children[4].lastElementChild.id = "filtergo"
-	searchBoxRow.children[4].lastElementChild.type = "button"
-	searchBoxRow.children[4].lastElementChild.value = "GO"
-	searchBoxRow.children[4].lastElementChild.classList = "tass btn"
-	searchBoxRow.children[4].lastElementChild.disabled = true
 
 	searchBoxRow.children[0].lastChild.addEventListener("change", function(event) {
 		var btn = document.querySelector("input#filtergo")
@@ -701,15 +688,13 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 		sbar.children[3].classList.add('f-search-content')
 	}
 	var scfg = sbar.children[3]
-	scfg.innerText = ''
 	var cfgs = ['支取明细', '收入明细', '收支列表', '支取列表', '工程列表', '仅计我的', '工程统计', '工程详情', '财务报表', '浮动工具']
+	var html = Array()
 	for (var i=0; i<cfgs.length; i++) {
-		scfg.appendChild(document.createElement("span"))
-		scfg.children[i].innerText = cfgs[i]
-		scfg.children[i].insertBefore(document.createElement("input"), scfg.children[i].firstChild)
-		scfg.children[i].firstElementChild.type = 'checkbox'
-		scfg.children[i].firstElementChild.checked = (5!=i)
+		html.push('<span><input type="checkbox" checked>' + cfgs[i] + '</span>')
 	}
+	scfg.innerHTML = '\n' + html.join('\n') + '\n'
+	scfg.children[5].children[0].removeAttribute('checked')
 	scfg.insertBefore(document.createElement('br'), scfg.children[5])
 	scfg.firstElementChild.children[0].disabled = true
 
