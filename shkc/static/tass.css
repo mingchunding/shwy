@@ -641,6 +641,13 @@ input#startDate {
         top: 7px !important;
     }
 
+    #reports .title span:not([class]):before,
+    .m-increace-inquiry tr:last-child td.counting:after,
+    img:not([src]) {
+        width: 28px;
+        height: 28px;
+    }
+
     .f-search-content span:first-child,
     .f-search-content span:last-child,
     .details-statistics th:nth-child(3),
@@ -779,7 +786,7 @@ div.chart {
     }
 }
 
-.chart > span:hover {
+.chart > span {
     cursor: pointer
 }
 

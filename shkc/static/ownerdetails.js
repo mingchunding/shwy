@@ -344,8 +344,10 @@ function addEvents(type) {
 					progress.setAttribute('pre2', '项，剩余')
 					progress.setAttribute('done', thread)
 					e.target.parentElement.appendChild(progress)
+					item = e.target.parentElement.parentElement.nextElementSibling.querySelector("tbody tr:first-child")
 					e.target.remove()
-					get_details(thread)
+					if (item) get_details(thread, item)
+					else progress.remove()
 					return
 				}
 				var target = this.parentElement.nextElementSibling
@@ -518,7 +520,7 @@ function create_details_container() {
 	return container
 }
 
-function get_details(cnt=1) {
+function get_details(cnt=1, item) {
 	var container = document.getElementById("details-list")
 	if (!container) return
 
@@ -529,8 +531,6 @@ function get_details(cnt=1) {
 		div.classList.add('.m-account-detail')
 		container.appendChild(div)
 	}
-
-	var item = document.querySelector("form .m-collect-info tbody").firstElementChild
 
 	if (cnt > 1)
 		pull_project_multi(div, item, cnt)
@@ -694,7 +694,6 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 		html.push('<span><input type="checkbox" checked>' + cfgs[i] + '</span>')
 	}
 	scfg.innerHTML = '\n' + html.join('\n') + '\n'
-	scfg.children[5].children[0].removeAttribute('checked')
 	scfg.insertBefore(document.createElement('br'), scfg.children[5])
 	scfg.firstElementChild.children[0].disabled = true
 
@@ -706,11 +705,12 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 			scfg.querySelectorAll("input")[3].setAttribute('func', 'drawOfOwner')
 			scfg.querySelectorAll("input")[4].setAttribute('func', 'index_owner')
 			scfg.querySelectorAll("input")[5].setAttribute('func', 'onlymine')
+			scfg.querySelectorAll("input")[5].removeAttribute('checked')
 			scfg.querySelectorAll("input")[6].setAttribute('func', 'details-statistics')
 			scfg.querySelectorAll("input")[7].setAttribute('func', 'details-list')
 			scfg.querySelectorAll("input")[8].setAttribute('func', 'reports')
 			scfg.querySelectorAll("input")[9].setAttribute('func', 'floatbar')
-			scfg.querySelectorAll("input")[10].checked = false
+			scfg.querySelectorAll("input")[9].removeAttribute('checked')
 		} catch(e) { }
 		document.querySelectorAll("form .m-collect-info:not([hidden])").forEach(function(q){
 			q.classList.forEach(function(c){
@@ -776,10 +776,13 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 		addEvents("click")
 	}, 100)
 
-	wm=document.createElement("div")
-	wm.classList.add("watermark")
-	wm.innerText=document.title.replace(/(大修|维修).*$/,'')
-	document.body.append(wm)
+	wm=document.querySelector(".watermark")
+	if (!wm) {
+		wm=document.createElement("div")
+		wm.classList.add("watermark")
+		wm.innerText=document.title.replace(/(大修|维修).*$/,'')
+		document.body.append(wm)
+	}
 }
 
 function query_by_url(url, handler=null){
