@@ -172,10 +172,14 @@ function fill_statistics_row(tr) {
 	if (sum[4].length > 1) {
 		var html=['<select>']
 		sum[4].forEach(function(e) {
-			html.push('<option>' + e + '</option>')
+			html.push(
+'					<option>' + e + '</option>'
+			)
 		})
-		html.push('</select>')
-		tr.lastElementChild.innerHTML = html.join('\n');
+		html.push(
+'				</select>'
+		)
+		tr.lastElementChild.innerHTML = '\n' + html.join('\n');
 	} else if (sum[4].length > 0) {
 		tr.lastElementChild.innerText = sum[4][0]
 	}
