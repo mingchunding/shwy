@@ -120,7 +120,7 @@ function sum_of(n, t) {
 			// the project not related to me
 			if (document.onlymine && e.querySelectorAll("td")[2].childElementCount==0) return
 
-			if (n != '实施时间') {
+			if (n != '实施时间' && e.v[8].length > 0) {
 				if (e.v[8] < startDate || endDate < e.v[8]) return
 			}
 
@@ -455,7 +455,7 @@ function statistics() {
 		do_group_statistics("实施范围", [range_of_projs, '+'])
 		do_group_statistics("施工管理单位", companies)
 		do_group_statistics("实施时间", years).click()
-		do_group_statistics("建立日期", years)
+		do_group_statistics("建立日期", [2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023].reverse())
 	}, 10)
 }
 
@@ -671,7 +671,7 @@ function companies() {
 					 '上海屹宏电梯', '上海奔硕建筑']
 	var c = Array()
 	document.querySelectorAll("#details-list tr:nth-child(11) td:nth-child(2)").forEach(function(e) {
-		s = e.innerText.replace(/\n+/, '')
+		s = e.innerText.replace(/[ \n]+/g,'')
 		if (s.length < 0)
 			return
 		var newone = true
@@ -682,10 +682,11 @@ function companies() {
 			if (!c.includes(x))
 				c.push(x)
 		})
+		s = s.replace(/(防水)?[装潢饰自动化科技设备工程咨询管理服务技术安装责任有限网络股份]*(公司|中心|经营部|商行)(..分公司)?/,'')
 		if (newone && !c.includes(s))
 			c.push(s)
 	})
-	return c
+	return c.sort().reverse()
 }
 
 //console.clear()
