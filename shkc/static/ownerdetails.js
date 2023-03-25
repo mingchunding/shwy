@@ -376,6 +376,10 @@ function connect_item_and_project(container, item, id) {
 		try {
 			item.children[3].innerText = proj.querySelectorAll("td:not(.name)")[8].innerText
 		} catch(e) { console.log('fail to get data from project #' + proj.id, e) }
+		if (proj.querySelector("td:not(.name)").querySelectorAll('a[href^="#zq_"]').length > 0)
+			item.removeAttribute('hidden')
+		else
+			item.hidden = true
 		var tab = item.parentElement.parentElement
 		var title = tab.parentElement.parentElement.querySelector(".account-title p.title")
 		title.innerHTML = title.innerHTML.replace(/\d+ \/ \d+/,
@@ -697,7 +701,7 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 	scfg.insertBefore(document.createElement('br'), scfg.children[5])
 	scfg.firstElementChild.children[0].disabled = true
 
-	setTimeout(function(){
+	setTimeout(() => {
 		try {
 			scfg.querySelectorAll("input")[0].setAttribute('func', 'index_owner_zq')
 			scfg.querySelectorAll("input")[1].setAttribute('func', 'index_owner_sy')
