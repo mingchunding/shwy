@@ -384,15 +384,11 @@ function do_group_statistics(n, r) {
 			if (name.match(/组合统计/)) {
 				return
 			} else if (name.match(/实施范围/) && k[0]!='`' && k.match(/\d+号?$/)) try {
+				var r = ['江山道', '大浪湾道', '山林道', '维园道', '瀑布湾道', '康城道']
 				var road_name_map = {
-					j: '江山道', d: '大浪湾道', s: '山林道', w: '维园道', p: '瀑布湾道', k: '康城道',
-					J: '江山道', D: '大浪湾道', S: '山林道', W: '维园道', P: '瀑布湾道', K: '康城道',
-					江: '江山道',
-					大: '大浪湾道',
-					山: '山林道',
-					维: '维园道',
-					瀑: '瀑布湾道',
-					康: '康城道'
+					j:  r[0], d:  r[1], s:  r[2], w:  r[3], p:  r[4], k:  r[5],
+					J:  r[0], D:  r[1], S:  r[2], W:  r[3], P:  r[4], K:  r[5],
+					江: r[0], 大: r[1], 山: r[2], 维: r[3], 瀑: r[4], 康: r[5]
 				}
 				var road = road_name_map[k.match(/[^\d]+/)[0][0]]
 				var bldn = k.match(/\d+/)[0]
@@ -450,7 +446,10 @@ function statistics() {
 			已完成: '`e.v[15]==0`',
 			未完成: '`e.v[15]>0`',
 			未开始: '`e.v[14]==0`',
-			有冲正: '`e.v[16]>0`'}, '+'])
+			有冲正: '`e.v[16]>0`',
+			先实施: '`e.v[8].length>0 && e.v[8] <= e.v[0].replace(/(.{6}).*/,"20$1").replace(/(.{4})(.{2})/,"$1-$2-")`',
+			先审批: '`e.v[8].length>0 && e.v[8] >  e.v[0].replace(/(.{6}).*/,"20$1").replace(/(.{4})(.{2})/,"$1-$2-")`'
+		}, '+'])
 		do_group_statistics("工程类别", type_of_projs)
 		do_group_statistics("实施范围", [range_of_projs, '+'])
 		do_group_statistics("施工管理单位", companies)
