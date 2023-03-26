@@ -413,9 +413,10 @@ function statistics() {
 	if (dlist.children.length < 1) return
 
 	document.querySelector("#startDate").earliestValue = document.querySelector("#startDate").value
-	type_of_projs  = ['绿化', '补种', '水景', '道路', '花坛', '路灯', '消防', '监控',
+	type_of_projs  = ['绿化', '补种', '水景', '道路', '花坛', '路灯', '消防', '监控', '车库监控',
 					  {
 						  电梯维护: '电梯',
+						  电梯大修: '电梯大修',
 						  电梯更换:'电梯更换$'
 					  },
 					  '控制柜', '井', '控制板', '+']
