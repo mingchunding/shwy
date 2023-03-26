@@ -787,6 +787,14 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 		wm.innerText=document.title.replace(/(大修|维修).*$/,'')
 		document.body.append(wm)
 	}
+
+	document.querySelectorAll(".index_owner_zq tbody td:last-child").forEach((c)=>{
+		c.innerHTML = c.innerHTML.replace(/支取/g,'')
+	})
+	
+	document.querySelectorAll(".index_owner_zq td:last-child a").forEach((a)=>{
+		a.innerText = a.innerText.match(/\d+/)
+	})
 }
 
 function query_by_url(url, handler=null){
