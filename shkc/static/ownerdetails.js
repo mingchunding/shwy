@@ -548,8 +548,7 @@ function createSearchBox() {
 	if (!th) {
 		th = document.createElement("thead")
 		tab.insertBefore(th,tab.querySelector('tbody'))
-	}
-	var sbox = [
+		var sbox = [
 '		<tr>',
 '			<th><input class="tass" type="text" id="reqcode" value=".*"></th>',
 '			<th><input class="tass" type="text" id="amount"  value="0"></th>',
@@ -558,8 +557,9 @@ function createSearchBox() {
 '			<th><span></span><input class="tass btn" type="button" id="filtergo" value="GO" disabled="true"></th>',
 '			<th><input class="tass" type="text" id="procode" value="--"></th>',
 '		</tr>',
-	]
-	th.innerHTML = '\n' + sbox.join('\n') + '\n'
+		]
+		th.innerHTML = '\n' + sbox.join('\n') + '\n'
+	}
 
 	tab.querySelectorAll("tbody th:first-child").forEach(function(h){
 		th.insertBefore(h.parentElement, th.lastElementChild)

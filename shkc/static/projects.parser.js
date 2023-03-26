@@ -158,3 +158,11 @@ function unmask() {
 }
 //setTimeout(window.restore_projects_list, 100, window.shkc, 0, 10)
 mask("下载工程数据......")
+
+document.querySelectorAll(".index_owner_zq tbody td:last-child").forEach((c)=>{
+	c.innerHTML = c.innerHTML.replace(/支取/g,'')
+})
+
+document.querySelectorAll(".index_owner_zq td:last-child a").forEach((a)=>{
+	a.innerText = a.innerText.match(/\d+/)
+})
