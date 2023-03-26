@@ -183,7 +183,7 @@ form .m-account-detail th {
 }
 
 form .m-collect-info:nth-child(3) th:last-child {
-    min-width: 240px
+    /* min-width: 240px; */
 }
 
 form .m-collect-info:not(:nth-child(3)) th {
@@ -462,6 +462,16 @@ table.merged tbody td {
 #details-list table td {
     border: 1px solid #8ad9ff;
     padding: 10px
+}
+
+#details-list tr:nth-child(19) td {
+	text-align: right;
+	vertical-align: top;
+	font-size: 16px !important;
+}
+
+#details-list tr:nth-child(19) sup {
+	font-size: 12px !important;
 }
 
 #reports table.tab2 td {
