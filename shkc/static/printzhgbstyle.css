@@ -110,7 +110,7 @@ table.colwidth {max-width: 810px;}
 .tab_td_left { font-family: "宋体", "Arial", "Times New Roman"; font-size: 16px;  height: 35;text-align:left; }
 .tab_td_center { font-family: "宋体", "Arial", "Times New Roman"; font-size: 16px;  height: 35; text-align:center;}
 .tab_money {font-family: "宋体", "Arial", "Times New Roman";font-size: 16px;height: 35;text-align:right; padding-right: 5;}
-td.tab_money::after {content: ' 元'}}
+td.tab_money::after {content: ' 元';font-size: 16px !important;}}
 .tab_td_app{ font-family: "宋体", "Arial", "Times New Roman"; font-size: 10px;  }
 .tab_little { font-family: "宋体", "Arial", "Times New Roman"; font-size: 12px;  height: 35; }
 .tab_td_oneborder{font-family: "宋体", "Arial", "Times New Roman"; font-size: 16px;  

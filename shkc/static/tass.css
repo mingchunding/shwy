@@ -560,7 +560,7 @@ input#startDate {
     height: 150px;
     z-index: 999;
     text-align-last: justify;
-    font-size: 72px !important;
+    font-size: 64px !important;
     opacity: 0.4;
     color: #d0d0d0;
     /* text-shadow: 1px 1px #d0d0d0,-1px -1px #d0d0d0,1px -1px #d0d0d0,-1px 1px #d0d0d0; */
@@ -697,10 +697,10 @@ input#startDate {
         display: block
     }
 
-    .tab_remark,
-    .tab_remark td,
-    .tab_unit td {
-        font-size: 12px !important
+    div#reports .tab_remark,
+    div#reports .tab_remark td,
+    div#reports .tab_unit td {
+        font-size: 16px !important
     }
 
     div#reports td {

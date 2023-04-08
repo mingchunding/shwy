@@ -795,6 +795,10 @@ if (window.location.href.match(/wxzjquery\/ownMain.do$/)) {
 	document.querySelectorAll(".index_owner_zq td:last-child a").forEach((a)=>{
 		a.innerText = a.innerText.match(/\d+/)
 	})
+
+	document.querySelectorAll(".colwidth table.tab1:not(:first-child):last-child tbody tr:last-child td:last-child").forEach((c)=>{
+		c.innerText = c.innerText.replace(/打印日期：\d+年\d+月\d+日/,'打印日期：' + new Date().toISOString().replace(/(\d+)-(\d+)-(\d+)T.*/,'$1年$2月$3日'))
+	})
 }
 
 function query_by_url(url, handler=null){
