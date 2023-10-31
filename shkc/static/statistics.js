@@ -166,7 +166,7 @@ function fill_statistics_row(tr) {
 		else
 			tr.children[i + 1].innerText = sum[i].toFixed(2)
 	}
-	if (sum[sum.length-1] < 1) return
+//	if (sum[sum.length-1] < 1) return
 
 	tr.parentElement.parentElement.querySelector("thead tr").lastElementChild.innerText = '涉及施工施工管理单位'
 	if (sum[4].length > 1) {
